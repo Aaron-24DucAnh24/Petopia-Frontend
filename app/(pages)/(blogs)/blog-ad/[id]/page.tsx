@@ -15,15 +15,14 @@ import { useForm } from 'react-hook-form';
 import { Alert } from '@/src/components/general/Alert';
 
 const BlogAdPage = QueryProvider(({ params }: { params: { id: string } }) => {
-  // STATES
+  // States
   const [paymentTypes, setPaymentTypes] = useState<IPaymentTypesResponse[]>([]);
   const [showBtn, setShowBtn] = useState<boolean>(false);
-
   const [alertShow, setAlertShow] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string>('');
   const [alertFailed, setAlertFailed] = useState<boolean>(false);
 
-  // FORMS
+  // Forms
   const paymentForm = useForm<ICreatePaymentRequest>({
     defaultValues: {
       blogId: params.id,
@@ -32,12 +31,12 @@ const BlogAdPage = QueryProvider(({ params }: { params: { id: string } }) => {
     },
   });
 
-  // HANDLERS
+  // Handlers
   const handleCreatePayment = () => {
     createPaymentMutation.mutate(paymentForm.getValues());
   };
 
-  // QUERIES
+  // Queries
   useQuery<IApiResponse<IPaymentTypesResponse[]>>(
     [QUERY_KEYS.GET_AD_TYPES],
     () => getAdTypes(),
@@ -52,24 +51,22 @@ const BlogAdPage = QueryProvider(({ params }: { params: { id: string } }) => {
       refetchOnWindowFocus: false,
     }
   );
+  const createPaymentMutation = useMutation<IApiResponse<boolean>, ICreatePaymentRequest>(
+    createPayment,
+    {
+      onError: () => {
+        setAlertMessage('Thanh toán thất bại.');
+        setAlertFailed(true);
+        setAlertShow(true);
+      },
+      onSuccess: () => {
+        setAlertMessage('Thanh toán thành công. Xem hoá đơn được gửi qua email.');
+        setAlertFailed(false);
+        setAlertShow(true);
+      },
+    });
 
-  const createPaymentMutation = useMutation<
-    IApiResponse<boolean>,
-    ICreatePaymentRequest
-  >(createPayment, {
-    onError: () => {
-      setAlertMessage('Thanh toán thất bại.');
-      setAlertFailed(true);
-      setAlertShow(true);
-    },
-    onSuccess: () => {
-      setAlertMessage('Thanh toán thành công. Xem hoá đơn được gửi qua email.');
-      setAlertFailed(false);
-      setAlertShow(true);
-    },
-  });
-
-  // EFFECTS
+  // Effecrs
   useEffect(() => {
     if (paymentForm.watch('nonce') && paymentForm.watch('advertisementId')) {
       setShowBtn(true);
@@ -90,16 +87,17 @@ const BlogAdPage = QueryProvider(({ params }: { params: { id: string } }) => {
             </p>
           </div>
           <div className="space-y-8 lg:grid lg:grid-cols-4 sm:gap-6 xl:gap-10 lg:space-y-0">
-            {paymentTypes.map((paymentType,index) => {
-              return (
+            {
+              paymentTypes.map((paymentType, index) =>
                 <div
-                  className={`flex flex-col p-6 mx-auto max-w-lg text-center text-gray-900 rounded-lg border ${paymentForm.watch('advertisementId') === paymentType.id
-                    && 'border-yellow-300 border-spacing-1 bg-gray-100'
-                    } shadow hover:bg-gray-100 cursor-pointer`}
+                  className={
+                    `flex flex-col p-6 mx-auto max-w-lg text-center text-gray-900 rounded-lg border 
+                    ${paymentForm.watch('advertisementId') === paymentType.id && 'border-yellow-300 border-spacing-1 bg-gray-100'} 
+                    shadow hover:bg-gray-100 cursor-pointer`
+                  }
                   key={paymentType.id}
                   test-id={`payment-type-${index}`}
-                  onClick={() => paymentForm.setValue('advertisementId', paymentType.id)}
-                >
+                  onClick={() => paymentForm.setValue('advertisementId', paymentType.id)}>
                   <h3 className="mb-4 text-2xl font-semibold">
                     {paymentType.monthDuration} tháng
                   </h3>
@@ -108,29 +106,28 @@ const BlogAdPage = QueryProvider(({ params }: { params: { id: string } }) => {
                   </p>
                   <div className="flex justify-center items-baseline my-8">
                     <span className="mr-2 text-3xl font-extrabold">
-                      {paymentType.price
-                        .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}{' '}
-                      VND
+                      {
+                        paymentType.price
+                          .toString()
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                      }
+                      {' VND'}
                     </span>
                   </div>
                 </div>
-              );
-            })}
+              )
+            }
           </div>
         </div>
       </section>
-      <PaymentDropIn
-        setNonce={(nonce) => paymentForm.setValue('nonce', nonce)}
-      />
+      <PaymentDropIn setNonce={(nonce) => paymentForm.setValue('nonce', nonce)} />
       {showBtn && (
         <div className="flex justify-center mt-10">
           <div className="w-64">
             <QueryButton
               name={'Thanh toán'}
               isLoading={false}
-              action={handleCreatePayment}
-            />
+              action={handleCreatePayment} />
           </div>
         </div>
       )}
@@ -140,8 +137,7 @@ const BlogAdPage = QueryProvider(({ params }: { params: { id: string } }) => {
         setShow={setAlertShow}
         failed={alertFailed}
         action={() => window.location.replace(`/blog/${params.id}`)}
-        showCancel={false}
-      />
+        showCancel={false} />
     </div>
   );
 });

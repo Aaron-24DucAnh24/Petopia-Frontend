@@ -13,30 +13,33 @@ import Link from 'next/link';
 import { SEARCH_PARAMS } from '@/src/utils/constants';
 
 const ValidatePage = QueryProvider(() => {
+  // States
   const [showAlert, setShowALert] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string>('');
 
+  // Params
   const validateParams = useSearchParams();
   const email = validateParams.get(SEARCH_PARAMS.EMAIL);
   const validateRegisterToken = validateParams.get(SEARCH_PARAMS.VALIDATE_REGISTER_TOKEN);
 
+  // Queries
   const validateRegisterMutation = useMutation<IApiResponse<boolean>, IValidateRegisterRequest>(
     validateRegister,
     {
-      onError: (err) => {
-        setAlertMessage(getErrorMessage(err.data.errorCode.toString()));
+      onError: (error) => {
+        setAlertMessage(getErrorMessage(error.data.errorCode.toString()));
         setShowALert(true);
       }
     }
   );
 
+  // Effects
   useRunOnce(() => {
     email && validateRegisterToken && validateRegisterMutation.mutate({
       email,
       validateRegisterToken,
     });
   });
-
 
   return (
     <div className="flex items-center justify-center h-screen bg-yellow-300">
@@ -61,8 +64,7 @@ const ValidatePage = QueryProvider(() => {
         show={showAlert}
         setShow={setShowALert}
         message={alertMessage}
-        failed
-      />
+        failed />
     </div>
   );
 });

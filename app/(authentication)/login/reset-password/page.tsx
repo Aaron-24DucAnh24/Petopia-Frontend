@@ -13,15 +13,18 @@ import { useSearchParams } from 'next/navigation';
 import { FormEvent, useEffect, useState } from 'react';
 
 const ResetPasswordPage = QueryProvider(() => {
+  // States
   const [error, setError] = useState<string>('');
   const [alertShow, setAlertShow] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
+  // Params
   const validateParams = useSearchParams();
   const email = validateParams.get(SEARCH_PARAMS.EMAIL);
   const passwordToken = validateParams.get(SEARCH_PARAMS.PASSWORD_TOKEN);
 
+  // Queries
   const resetPasswordMutation = useMutation<IApiResponse<boolean>, IResetPasswordRequest>(
     resetPassword,
     {
@@ -35,6 +38,7 @@ const ResetPasswordPage = QueryProvider(() => {
     }
   );
 
+  // Handlers
   const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     !error && email && passwordToken && resetPasswordMutation.mutate({
@@ -44,6 +48,7 @@ const ResetPasswordPage = QueryProvider(() => {
     });
   };
 
+  // Effects
   useEffect(() => {
     checkPasswordFormat(password, setError);
   }, [password]);
@@ -60,23 +65,22 @@ const ResetPasswordPage = QueryProvider(() => {
             placeholder="Mật khẩu mới"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+            required />
           <button
             className="border border-black p-3 rounded-lg font-bold shadow-md bg-yellow-300 hover:bg-yellow-400 ml-2"
-            type='submit'
-          >
+            type='submit'>
             Xác nhận
           </button>
         </form>
-        {error && <div className='text-sm text-red-500 mt-2'>{error}</div>}
+        {
+          error && <div className='text-sm text-red-500 mt-2'>{error}</div>
+        }
       </div>
       <Alert
         message={alertMessage}
         show={alertShow}
         setShow={setAlertShow}
-        failed
-      />
+        failed />
     </div>
   );
 });

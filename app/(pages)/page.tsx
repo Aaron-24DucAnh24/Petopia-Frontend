@@ -9,8 +9,7 @@ export const metadata: Metadata = {
 
 export default function Home() {
   return (
-    <div>
-      {/* Hero */}
+    <>
       <div className="flex flex-col md:flex-row" data-testid="homepage-hero">
         <div className="basis-2/5 relative">
           <div className="relative h-96 w-96 md:h-[600px] md:w-[600px] bg-yellow-300 rounded-full">
@@ -18,8 +17,7 @@ export default function Home() {
               src={STATIC_URLS.CAT_HERO}
               alt="cat_hero"
               fill
-              className="mx-auto object-contain z-10"
-            />
+              className="mx-auto object-contain z-10" />
           </div>
           <div className="absolute top-12 right-5 bg-white p-4 rounded-lg shadow-lg z-20">
             Nhận nuôi
@@ -49,14 +47,12 @@ export default function Home() {
           </div>
         </div>
       </div>
-      {/* Introduction */}
       <div
         className="bg-cover bg-right bg-no-repeat p-5 md:p-20 space-y-5 "
         style={{
           backgroundImage: `url("${STATIC_URLS.CAT_INTRO}")`,
           height: '600px',
-        }}
-      >
+        }}>
         <div className="text-4xl sm:text-5xl md:text-6xl ">
           <div>Nơi từ bỏ</div>
           <div className="pl-6">
@@ -70,8 +66,6 @@ export default function Home() {
           chăm sóc, và chúng tôi cam kết cung cấp những cơ hội đó cho họ.
         </div>
       </div>
-
-      {/* Service */}
       <div className="flex flex-col items-center justify-center bg-orange-50 py-5 p-5">
         <div className="text-2xl md:text-4xl my-5 font-bold">
           Các dịch vụ của chúng tôi
@@ -83,8 +77,7 @@ export default function Home() {
                 src={STATIC_URLS.ADOPT}
                 alt="adopt pet"
                 fill
-                className="rounded-full object-cover"
-              ></Image>
+                className="rounded-full object-cover" />
             </div>
             <div className="font-medium flex text-center items-center justify-center ">
               Cho thú cưng
@@ -96,8 +89,7 @@ export default function Home() {
                 src={STATIC_URLS.RECEIVE}
                 alt="adopt pet"
                 fill
-                className="rounded-full object-cover"
-              ></Image>
+                className="rounded-full object-cover" />
             </div>
             <div className="font-medium flex text-center items-center justify-center w-full ">
               Nhận nuôi
@@ -109,8 +101,7 @@ export default function Home() {
                 src={STATIC_URLS.BLOG}
                 alt="adopt pet"
                 fill
-                className="rounded-full object-cover"
-              ></Image>
+                className="rounded-full object-cover" />
             </div>
             <div className="font-medium flex text-center items-center justify-center w-full ">
               Chia sẽ kiến thức
@@ -118,8 +109,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-
-      {/* Adopt step */}
       <div className="flex flex-col items-center justify-center p-4">
         <div className="text-2xl md:text-4xl my-5 font-bold">
           Quy trình nhận nuôi
@@ -130,8 +119,7 @@ export default function Home() {
               src={STATIC_URLS.CAT_AND_DOG}
               alt="cat and dog"
               height={400}
-              width={400}
-            ></Image>
+              width={400} />
             <div className="font-bold">Tìm boss</div>
             <div className="text-center">
               Tìm “boss” mà bạn ưng ý và phù hợp với bản thân.
@@ -142,8 +130,7 @@ export default function Home() {
               src={STATIC_URLS.CAT_ATRONAULT}
               alt="cat and dog"
               height={400}
-              width={400}
-            ></Image>
+              width={400} />
             <div className="font-bold ">Liên hệ</div>
             <div className="text-center">
               Nộp đơn cho chủ của thú cưng mà bạn muộn nhận.
@@ -154,8 +141,7 @@ export default function Home() {
               src={STATIC_URLS.CAT_VASE}
               alt="cat and dog"
               height={400}
-              width={400}
-            ></Image>
+              width={400} />
             <div className="font-bold">Cập nhật</div>
             <div className="text-center">
               Cập nhập tình trạng “boss” của bạn đến mọi người.
@@ -163,7 +149,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-      {/* CTA */}
-    </div>
+    </>
   );
 }

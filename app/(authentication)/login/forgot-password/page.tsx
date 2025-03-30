@@ -10,18 +10,19 @@ import { useMutation } from '@/src/utils/hooks';
 import { FormEvent, useState } from 'react';
 
 const ForgotPasswordPage = QueryProvider(() => {
+  // States
   const [email, setEmail] = useState<string>('');
   const [error, setError] = useState<string>('');
-
   const [alertShow, setAlertShow] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string>('');
   const [alertFailed, setAlertFailed] = useState<boolean>(false);
 
+  // Queries
   const forgotPasswordMutation = useMutation<IApiResponse<boolean>, string>(
     forgotPassword,
     {
-      onError: (err) => {
-        setAlertMessage(getErrorMessage(err.data.errorCode.toString()));
+      onError: (error) => {
+        setAlertMessage(getErrorMessage(error.data.errorCode.toString()));
         setAlertFailed(true);
         setAlertShow(true);
       },
@@ -33,11 +34,11 @@ const ForgotPasswordPage = QueryProvider(() => {
     }
   );
 
+  // Handlers
   const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     !error && forgotPasswordMutation.mutate(email);
   };
-
   const handleCheckEmail = () => {
     setError(isEmail(email) ? '' : 'Email không hợp lệ');
   };
@@ -53,25 +54,24 @@ const ForgotPasswordPage = QueryProvider(() => {
             className="bg-gray-50 border border-gray-300 flex-1 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-2/3 p-2.5 :bg-gray-700 "
             placeholder="Email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={e => setEmail(e.target.value)}
             required
-            onBlur={handleCheckEmail}
-          />
+            onBlur={handleCheckEmail} />
           <button
             className="border border-black p-3 rounded-lg font-bold shadow-md bg-yellow-300 hover:bg-yellow-400 ml-2"
-            type='submit'
-          >
+            type='submit'>
             Xác nhận
           </button>
         </form>
-        {error && <div className='text-sm text-red-500 mt-2'>{error}</div>}
+        {
+          error && <div className='text-sm text-red-500 mt-2'>{error}</div>
+        }
       </div>
       <Alert
         message={alertMessage}
         show={alertShow}
         setShow={setAlertShow}
-        failed={alertFailed}
-      />
+        failed={alertFailed} />
     </div>
   );
 });

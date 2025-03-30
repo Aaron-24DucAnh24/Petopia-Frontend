@@ -12,32 +12,37 @@ import { NoResultBackground } from '@/src/components/general/NoResultBackground'
 import BlogDetailSkeleton from '@/src/components/blog/BlogDetailSkeleton';
 import AdvertisementCarousel from '@/src/components/blog/AdvertisementCarousel';
 
-const page = observer(
-  QueryProvider(({ params }: { params: { id: string } }) => {
-    const [blogContent, setBlogContent] = useState<IBlogResponse>();
-    const [error, setError] = useState<boolean>(false);
-    const getBlogQuery = useQuery<IApiResponse<IBlogResponse>>(
-      [QUERY_KEYS.GET_BLOG_DETAIL, { id: params.id }],
-      () => getBlogDetail(params.id),
-      {
-        onSuccess: (res) => {
-          setBlogContent(res.data.data);
-        },
-        onError: () => {
-          // Handle error
-          setError(true);
-        },
-        refetchOnWindowFocus: false,
-      }
-    );
-    return (
-      <div>
-        <div className="container mx-auto my-10">
-          <div className="flex items-center justify-center mt-5">
-            <AdvertisementCarousel />
-          </div>
-          {getBlogQuery.isLoading && <BlogDetailSkeleton />}
-          {!getBlogQuery.isLoading && blogContent && (
+const page = observer(QueryProvider(({ params }: { params: { id: string } }) => {
+  // States
+  const [blogContent, setBlogContent] = useState<IBlogResponse>();
+  const [error, setError] = useState<boolean>(false);
+
+  // Queries
+  const getBlogQuery = useQuery<IApiResponse<IBlogResponse>>(
+    [QUERY_KEYS.GET_BLOG_DETAIL, { id: params.id }],
+    () => getBlogDetail(params.id),
+    {
+      onSuccess: (res) => {
+        setBlogContent(res.data.data);
+      },
+      onError: () => {
+        setError(true);
+      },
+      refetchOnWindowFocus: false,
+    }
+  );
+
+  return (
+    <div>
+      <div className="container mx-auto my-10">
+        <div className="flex items-center justify-center mt-5">
+          <AdvertisementCarousel />
+        </div>
+        {
+          getBlogQuery.isLoading && <BlogDetailSkeleton />
+        }
+        {
+          !getBlogQuery.isLoading && blogContent && (
             <BlogPage
               blogId={blogContent.id}
               userName={blogContent.userName}
@@ -45,16 +50,14 @@ const page = observer(
               htmlContent={blogContent.content}
               createdAt={blogContent.isCreatedAt}
               view={blogContent.view}
-              userImage={blogContent.userImage}
-            />
+              userImage={blogContent.userImage} />
           )}
-
-          {error && (
-            <NoResultBackground className="h-fit-screen w-full items-center" />
-          )}
-        </div>
+        {
+          error && <NoResultBackground className="h-fit-screen w-full items-center" />
+        }
       </div>
-    );
-  })
-);
+    </div>
+  );
+}));
+
 export default page;

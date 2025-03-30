@@ -6,24 +6,24 @@ import { useQuery } from '@/src/utils/hooks';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { AdoptionCard } from './AdoptionCard';
 
-export default function AdoptionCardList({
-  type,
-  notifyCount,
-  filter,
-}: {
+interface IAdoptionCardList {
   type: string;
   notifyCount?: Dispatch<SetStateAction<number>>;
   filter?: string;
-}) {
-  //STATES
+}
+
+export default function AdoptionCardList(props: IAdoptionCardList) {
+  const { type, notifyCount, filter } = props;
+
+  // States
   const [adoptCard, setAdoptCard] = useState<IAdoptCardResponse[]>([]);
 
-  //HANDLERS
+  // Handlers
   const handleIsSeen = () => {
     getAdoptCardQuery.refetch();
   };
 
-  //QUERIES
+  // Queries
   const getAdoptCardQuery = useQuery<IApiResponse<IAdoptCardResponse[]>>(
     [QUERY_KEYS.GET_ADOPT_CARD, filter],
     () => getAdoptCard(type),
@@ -51,19 +51,23 @@ export default function AdoptionCardList({
   return (
     <div>
       <div>
-        {getAdoptCardQuery.isLoading && <div>Loading...</div>}
-        {!getAdoptCardQuery.isLoading && adoptCard.length > 0 && (
-          <div className="flex flex-col gap-2">
-            {adoptCard.map((card) => (
-              <AdoptionCard
+        {
+          getAdoptCardQuery.isLoading && <div>Loading...</div>
+        }
+        {
+          !getAdoptCardQuery.isLoading
+          && adoptCard.length > 0
+          && <div className="flex flex-col gap-2">
+            {
+              adoptCard.map((card) => <AdoptionCard
                 key={card.id}
                 card={card}
                 refetch={handleIsSeen}
-                type={type}
-              />
-            ))}
+                type={type} />
+              )
+            }
           </div>
-        )}
+        }
       </div>
     </div>
   );

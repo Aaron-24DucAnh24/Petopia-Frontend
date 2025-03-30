@@ -14,8 +14,6 @@ export const STATIC_URLS = {
   CAT_VASE: '/img/Cat_throwing_vase.png',
   NO_RESULT: '/img/no-result.png',
   NO_AVATAR: '/img/no-avatar.png',
-  BANNER: '/img/Banner.png',
-  BLOG_BANNER: '/img/blog_banner.png',
   BLOG_CREATE_CARD: '/img/BlogCardCreate.jpg',
 };
 
@@ -144,7 +142,7 @@ export enum BLOG_CATEGORIES {
   PRODUCT,
   ART,
 }
-//////////////////////////////////////////////////////////////////
+
 export enum ORG_TYPE {
   RESCUE,
   BUSINESS,
