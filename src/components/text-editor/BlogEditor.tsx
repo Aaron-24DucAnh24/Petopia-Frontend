@@ -22,7 +22,7 @@ const BlogEditor = QueryProvider(({ id = '' }: { id?: string }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isAd, setIsAd] = useState<boolean>(false);
   const [showAdOption, setShowAdOption] = useState<boolean>(true);
-  const [action, setAction] = useState(() => () => {});
+  const [action, setAction] = useState(() => () => { });
 
   // FORMS
   const uploadImageForm = useForm<IUploadImage>({
@@ -171,9 +171,9 @@ const BlogEditor = QueryProvider(({ id = '' }: { id?: string }) => {
               editorElement.setAttribute('test-id', 'ckeditor');
             }
           })
-          .catch(() => {});
+          .catch(() => { });
       })
-      .catch(() => {});
+      .catch(() => { });
   });
 
   useEffect(() => {
@@ -266,7 +266,6 @@ const BlogEditor = QueryProvider(({ id = '' }: { id?: string }) => {
         )}
       </form>
       <Alert
-        testId="blog-create-alert"
         message={alertMessage}
         show={alertShow}
         setShow={setAlertShow}

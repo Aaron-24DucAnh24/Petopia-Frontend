@@ -1,5 +1,6 @@
 import { Inter } from 'next/font/google';
 import '../globals.css';
+import '../datepicker.css';
 import { Navbar } from '@/src/components/nav';
 import { Footer } from '@/src/components/general/Footer';
 

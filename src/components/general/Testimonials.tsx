@@ -2,7 +2,7 @@ export default function Testimonials({ description, show }: { description: strin
   return (
     <>
       {
-        show && <section className="p-5 my-5 md:px-10 border w-full rounded-xl divide-y-2 divide-yellow-400">
+        show && <section className="p-5 md:px-10 border w-full rounded-xl divide-y-2 divide-yellow-400">
           <div className="mx-auto text-center">
             <figure className=" mx-auto">
               <svg

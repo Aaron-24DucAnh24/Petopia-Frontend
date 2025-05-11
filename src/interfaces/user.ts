@@ -25,6 +25,7 @@ export interface IUserInfoReponse {
   image: string;
   role: USER_ROLE;
   phone: string;
+  birthDate: Date;
 }
 export interface IResetPasswordRequest {
   email: string;
@@ -32,7 +33,7 @@ export interface IResetPasswordRequest {
   password: string;
 }
 
-export interface IChangePasswordResponse {
+export interface IChangePasswordRequest {
   newPassword: string;
   oldPassword: string;
 }
@@ -45,9 +46,11 @@ export interface IUserUpdate {
   districtCode: string;
   wardCode: string;
   street: string;
-
+  birthDate: Date;
   website: string;
   description: string;
+  organizationName: string;
+  type: ORG_TYPE;
 }
 
 export interface ICurrentUserCoreResponse {

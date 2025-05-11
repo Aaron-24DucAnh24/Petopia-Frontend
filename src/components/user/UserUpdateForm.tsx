@@ -1,217 +1,409 @@
-import AddressDropdown from './AddressDropdown';
 import { useForm } from 'react-hook-form';
-import { ChangeEvent, useState } from 'react';
-import { useMutation } from '../../utils/hooks';
+import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
+import { useMutation, useQuery } from '../../utils/hooks';
 import { IApiResponse } from '../../interfaces/common';
 import { updateUser } from '../../services/user.api';
 import { Alert } from '../general/Alert';
-import { USER_ROLE } from '@/src/utils/constants';
 import QueryButton from '../general/QueryButton';
 import { IUserInfoReponse, IUserUpdate } from '@/src/interfaces/user';
 import { getErrorMessage } from '@/src/helpers/getErrorMessage';
+import Button from '../general/Button';
+import { ILocationRequest, ILocationResponse } from '@/src/interfaces/pet';
+import { LOCATION_LEVEL, ORG_TYPE, PET_ORG_TYPE_OPTION, QUERY_KEYS, USER_ROLE } from '@/src/utils/constants';
+import { getProvince } from '@/src/services/pet.api';
+import { AddressInput } from './AddressInput';
+import { useStores } from '@/src/stores';
+import { DatePicker } from '../general/DatePicker';
+import { ValidatorManager } from '@/src/utils/ValidatorManager';
+import { ValueText } from '@/src/utils/ValueText';
+import { SelectInput } from '../general/SelectInput';
 
-export default function UserUpdateForm({
-  userInfo,
-  show,
-  onSuccess,
-}: {
+interface IUserUpdateForm {
   userInfo: IUserInfoReponse;
   show: boolean;
   onSuccess: () => void;
-}) {
+  setShowEdit: Dispatch<SetStateAction<boolean>>,
+}
+
+export const UserUpdateForm = (props: IUserUpdateForm) => {
+  const {
+    userInfo,
+    show,
+    onSuccess,
+    setShowEdit,
+  } = props;
+
   // STATES
   const [alertMessage, setAlertMessage] = useState<string>('');
   const [alertShow, setAlertShow] = useState<boolean>(false);
   const [alertFail, setAlertFail] = useState<boolean>(false);
+  const [provinces, setProvinces] = useState<ILocationResponse[]>([]);
+  const [districts, setDistricts] = useState<ILocationResponse[]>([]);
+  const [wards, setWards] = useState<ILocationResponse[]>([]);
+  const { userStore } = useStores();
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   // FORMS
-  const { getValues, setValue, watch } = useForm<IUserUpdate>({
-    defaultValues: {
-      phone: userInfo?.phone || '',
-      provinceCode: userInfo?.provinceCode || '',
-      districtCode: userInfo?.districtCode || '',
-      lastName: userInfo?.attributes.lastName || 'Họ',
-      firstName: userInfo?.attributes.firstName || 'Tên',
-      website: userInfo?.attributes.website || '',
-      description: userInfo?.attributes.description || 'Mô tả',
-      wardCode: userInfo?.wardCode || '',
-      street: userInfo?.street || '',
-    },
+  const {
+    getValues,
+    setValue,
+    watch,
+    formState: { isDirty },
+    reset } = useForm<IUserUpdate>({
+      defaultValues: {
+        phone: userInfo?.phone || '',
+        provinceCode: userInfo?.provinceCode || '',
+        districtCode: userInfo?.districtCode || '',
+        lastName: userInfo?.attributes.lastName || '',
+        firstName: userInfo?.attributes.firstName || '',
+        website: userInfo?.attributes.website || '',
+        description: userInfo?.attributes.description || '',
+        wardCode: userInfo?.wardCode || '',
+        street: userInfo?.street || '',
+        birthDate: userInfo?.birthDate || new Date(),
+        organizationName: userInfo?.attributes.organizationName || '',
+        type: userInfo?.attributes.type || ORG_TYPE.OTHER,
+      },
+    });
+
+  const locationForm = useForm<ILocationRequest>({
+    defaultValues: { Level: LOCATION_LEVEL.PROVINCE },
   });
 
-  // QUERIES
-  const updateUserMutation = useMutation<
-    IApiResponse<IUserInfoReponse>,
-    IUserUpdate
-  >(updateUser, {
-    onError: (err) => {
-      setAlertMessage(getErrorMessage(err.data.errorCode.toString()));
-      setAlertFail(true);
-      setAlertShow(true);
-    },
-    onSuccess: () => {
-      setAlertMessage('Cập nhật thông tin thành công');
-      setAlertFail(false);
-      setAlertShow(true);
-      onSuccess();
-    },
-  });
+  const updateUserMutation = useMutation<IApiResponse<IUserInfoReponse>, IUserUpdate>(
+    updateUser,
+    {
+      onError: (err) => {
+        setAlertMessage(getErrorMessage(err.data.errorCode.toString()));
+        setAlertFail(true);
+        setAlertShow(true);
+      },
+      onSuccess: async () => {
+        setAlertMessage('Cập nhật thông tin thành công');
+        setAlertFail(false);
+        setAlertShow(true);
+        reset(getValues());
+        onSuccess();
+        await userStore.fetchUserContext();
+      },
+    });
+
+  const locationQuery = useQuery<IApiResponse<ILocationResponse[]>>(
+    [
+      QUERY_KEYS.GET_LOCATION,
+      locationForm.watch('Code'),
+      locationForm.watch('Level'),
+    ],
+    () => getProvince(locationForm.getValues()),
+    {
+      onSuccess: (res) => {
+        switch (locationForm.getValues('Level')) {
+          case LOCATION_LEVEL.PROVINCE:
+            setProvinces(res.data.data);
+            if (watch('provinceCode')) {
+              locationForm.setValue('Code', watch('provinceCode'));
+              locationForm.setValue('Level', LOCATION_LEVEL.DISTRICT);
+            }
+            break;
+          case LOCATION_LEVEL.DISTRICT:
+            setDistricts(res.data.data);
+            setWards([]);
+            if (watch('districtCode')) {
+              locationForm.setValue('Code', watch('districtCode'));
+              locationForm.setValue('Level', LOCATION_LEVEL.WARD);
+            }
+            break;
+          case LOCATION_LEVEL.WARD:
+            setWards(res.data.data);
+            break;
+        }
+      },
+      refetchOnWindowFocus: false,
+      enabled: show,
+    }
+  );
 
   // HANDLERS
   const handleSubmit = async (event: ChangeEvent<HTMLFormElement>) => {
+    if (locationQuery.isLoading) return;
     event.preventDefault();
-    updateUserMutation.mutate(getValues());
+
+    console.log(getValues());
+
+    const validatingResult = userInfo.role === USER_ROLE.ORGANIZATION
+      ? ValidatorManager.userUpdateOrganizationValidator.validate(getValues())
+      : ValidatorManager.userUpdateIndividualValidator.validate(getValues());
+    setErrors(validatingResult.errors);
+
+    if (validatingResult.isValid) {
+      updateUserMutation.mutateAsync(getValues());
+    }
   };
+
+  const handleLocationChange = (level: LOCATION_LEVEL, code: string) => {
+    switch (level) {
+      case LOCATION_LEVEL.PROVINCE:
+        if (code != getValues('provinceCode')) {
+          setValue('provinceCode', code, { shouldDirty: true });
+          setValue('districtCode', '', { shouldDirty: true });
+          setValue('wardCode', '', { shouldDirty: true });
+          locationForm.setValue('Code', code);
+          locationForm.setValue('Level', LOCATION_LEVEL.DISTRICT);
+        }
+        break;
+      case LOCATION_LEVEL.DISTRICT:
+        if (code != getValues('districtCode')) {
+          setValue('districtCode', code, { shouldDirty: true });
+          setValue('wardCode', '', { shouldDirty: true });
+          locationForm.setValue('Code', code);
+          locationForm.setValue('Level', LOCATION_LEVEL.WARD);
+        }
+        break;
+      case LOCATION_LEVEL.WARD:
+        if (code != getValues('wardCode')) {
+          setValue('wardCode', code, { shouldDirty: true });
+        }
+        break;
+    }
+  };
+
+  if (!show) return <></>;
 
   return (
     <>
-      {show && (
-        <form className="md:px-10" onSubmit={handleSubmit}>
-          <div className="flex flex-col py-4">
-            {userInfo.role !== USER_ROLE.ORGANIZATION && (
-              <div className="flex flex-row gap-3">
-                <div className="mb-4 w-full">
-                  <label
-                    className="block text-gray-700 text-lg font-bold mb-2"
-                    htmlFor="firstName"
-                  >
-                    Tên
-                  </label>
-                  <input
-                    test-id="user-profile-first-name-input"
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="firstName"
-                    type="text"
-                    required
-                    onChange={(e) => setValue('firstName', e.target.value)}
-                    value={watch('firstName')}
-                  />
-                </div>
-                <div className="mb-4 w-full">
-                  <label
-                    className="block text-gray-700 text-lg font-bold mb-2"
-                    htmlFor="lastName"
-                  >
-                    Họ
-                  </label>
-                  <input
-                    test-id="user-profile-last-name-input"
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="lastName"
-                    type="text"
-                    required
-                    onChange={(e) => setValue('lastName', e.target.value)}
-                    value={watch('lastName')}
-                  />
-                </div>
-              </div>
-            )}
-            {userInfo.role === USER_ROLE.ORGANIZATION && (
+      <form
+        className="md:px-5 md:py-2 border w-full rounded-xl divide-y-2"
+        onSubmit={handleSubmit}>
+        {
+          userInfo.role === USER_ROLE.ORGANIZATION
+            ? (
               <>
-                <div className="flex flex-row gap-3">
-                  <div className="mb-4 w-full">
-                    <label
-                      className="block text-gray-700 text-lg font-bold mb-2"
-                      htmlFor="website"
-                    >
-                      Website
-                    </label>
+                <div className='grid grid-cols-3 py-2'>
+                  <label className="text-gray-500 text-md flex items-center" htmlFor='orgName'>
+                    Tên tổ chức:
+                  </label>
+                  <div className='col-span-2'>
                     <input
-                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      id="website"
+                      test-id="user-profile-org-name"
+                      className="border-gray-300 border-2 bg-gray-100 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:border-yellow-400 focus:outline-none focus:ring-0 focus:bg-white"
+                      id="orgName"
                       type="text"
-                      onChange={(e) => setValue('website', e.target.value)}
-                      value={watch('website')}
-                    />
+                      onChange={(e) => setValue('organizationName', e.target.value, { shouldDirty: true })}
+                      value={watch('organizationName')} />
+                    <span className="text-sm text-red-500 mt-2">{errors['organizationName']}</span>
                   </div>
                 </div>
-                <div className="flex flex-row gap-3">
-                  <div className="mb-4 w-full">
-                    <label
-                      className="block text-gray-700 text-lg font-bold mb-2"
-                      htmlFor="description"
-                    >
-                      Mô tả
-                    </label>
-                    <input
-                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      id="description"
-                      type="text"
-                      required
-                      onChange={(e) => setValue('description', e.target.value)}
+
+                <div className='grid grid-cols-3 py-2'>
+                  <label className="text-gray-500 text-md flex items-center" htmlFor='orgType'>
+                    Loại hình:
+                  </label>
+                  <div className='col-span-2'>
+                    <SelectInput
+                      onChange={(value) => setValue('type', parseInt(value), { shouldDirty: true })}
+                      options={new ValueText(PET_ORG_TYPE_OPTION.map(option => ({ value: option.value.toString(), text: option.label })))}
+                      defaultValue={watch('type').toString()} />
+                    <span className="text-sm text-red-500 mt-2">{errors['type']}</span>
+                  </div>
+                </div>
+
+                <div className='grid grid-cols-3 py-2'>
+                  <label className="text-gray-500 text-md flex items-center" htmlFor='orgDesc'>
+                    Mô tả:
+                  </label>
+                  <div className='col-span-2'>
+                    <textarea
+                      className="border-gray-300 border-2 bg-gray-100 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:border-yellow-400 focus:outline-none focus:ring-0 focus:bg-white min-h-[80px]"
+                      test-id="user-profile-org-desc"
+                      id="orgDesc"
                       value={watch('description')}
-                    />
+                      onChange={(e) => {
+                        setValue('description', e.target.value, { shouldDirty: true });
+                      }} />
+                    <span className="text-sm text-red-500 mt-2">{errors['description']}</span>
+                  </div>
+                </div>
+
+                <div className='grid grid-cols-3 py-2'>
+                  <label className="text-gray-500 text-md flex items-center" htmlFor='orgWebsite'>
+                    Website:
+                  </label>
+
+                  <div className="col-span-2">
+                    <input
+                      test-id="user-profile-org-website"
+                      className="border-gray-300 border-2 bg-gray-100 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:border-yellow-400 focus:outline-none focus:ring-0 focus:bg-white"
+                      id="orgWebsite"
+                      type="text"
+                      onChange={(e) => setValue('website', e.target.value, { shouldDirty: true })}
+                      value={watch('website')} />
+                    <span className="text-sm text-red-500 mt-2">{errors['website']}</span>
                   </div>
                 </div>
               </>
-            )}
-            <div className="flex flex-row gap-3">
-              <div className="mb-4 w-full">
-                <label
-                  className="block text-gray-700 text-lg font-bold mb-2"
-                  htmlFor="username"
-                >
-                  Số điện thoại
-                </label>
-                <input
-                  test-id="user-profile-phone-input"
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="username"
-                  type="text"
-                  required
-                  onChange={(e) => setValue('phone', e.target.value)}
-                  value={watch('phone')}
-                />
-              </div>
-            </div>
-            <AddressDropdown
-              districtCode={watch('districtCode')}
-              provinceCode={watch('provinceCode')}
-              wardCode={watch('wardCode')}
-              setProvinceCode={(code: string) => {
-                setValue('provinceCode', code);
-              }}
-              setDistrictCode={(code: string) => {
-                setValue('districtCode', code);
-              }}
-              setWardCode={(code: string) => {
-                setValue('wardCode', code);
-              }}
-            />
-            <div className="mb-4">
-              <label
-                className="block text-gray-700 text-lg font-bold mb-2"
-                htmlFor="username"
-              >
-                Số nhà
-              </label>
-              <input
-                test-id="user-profile-street-input"
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="username"
-                type="text"
-                required
-                onChange={(e) => setValue('street', e.target.value)}
-                value={watch('street')}
-              />
-            </div>
+            )
+            : (
+              <>
+                <div className='grid grid-cols-3 py-2'>
+                  <label className="text-gray-500 text-md flex items-center" htmlFor='firstName'>
+                    Họ:
+                  </label>
+
+                  <div className="col-span-2">
+                    <input
+                      test-id="user-profile-first-name-input"
+                      className="border-gray-300 border-2 bg-gray-100 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:border-yellow-400 focus:outline-none focus:ring-0 focus:bg-white"
+                      id="firstName"
+                      type="text"
+                      onChange={(e) => setValue('firstName', e.target.value, { shouldDirty: true })}
+                      value={watch('firstName')} />
+                    <span className="text-sm text-red-500 mt-2">{errors['firstName']}</span>
+                  </div>
+                </div>
+
+
+                <div className='grid grid-cols-3 py-2'>
+                  <label className="text-gray-500 text-md flex items-center" htmlFor='lastName'>
+                    Tên:
+                  </label>
+
+                  <div className="col-span-2">
+                    <input
+                      test-id="user-profile-last-name-input"
+                      className="border-gray-300 border-2 bg-gray-100 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:border-yellow-400 focus:outline-none focus:ring-0 focus:bg-white"
+                      id="lastName"
+                      type="text"
+                      onChange={(e) => setValue('lastName', e.target.value, { shouldDirty: true })}
+                      value={watch('lastName')} />
+                    <span className="text-sm text-red-500 mt-2">{errors['lastName']}</span>
+                  </div>
+                </div>
+
+
+                <div className='grid grid-cols-3 py-2'>
+                  <label className="text-gray-500 text-md flex items-center" htmlFor='lastName'>
+                    Ngày sinh:
+                  </label>
+                  <div className='col-span-2'>
+                    <DatePicker
+                      className="border-gray-300 border-2 bg-gray-100 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:border-yellow-400 focus:outline-none focus:ring-0 focus:bg-white"
+                      value={watch('birthDate')}
+                      onChange={(date) => date && setValue('birthDate', date, { shouldDirty: true })} />
+                    <span className="text-sm text-red-500 mt-2">{errors['birthDate']}</span>
+                  </div>
+                </div>
+              </>
+            )
+        }
+
+        <div className='grid grid-cols-3 py-2'>
+          <label className="text-gray-500 text-md flex items-center" htmlFor='phone'>
+            Số điện thoại:
+          </label>
+
+          <div className="col-span-2">
+            <input
+              test-id="user-profile-phone-input"
+              className="border-gray-300 border-2 bg-gray-100 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:border-yellow-400 focus:outline-none focus:ring-0 focus:bg-white"
+              id="phone"
+              type="tel"
+              onChange={(e) => setValue('phone', e.target.value, { shouldDirty: true })}
+              value={watch('phone')} />
+            <span className="text-sm text-red-500 mt-2">{errors['phone']}</span>
           </div>
-          <div className="flex justify-center mt-5">
-            <QueryButton
-              testId="user-update-button"
-              name={'Xác nhận'}
-              isLoading={updateUserMutation.isLoading}
-            />
+        </div>
+
+
+        <div className='grid grid-cols-3 py-2'>
+          <label className="text-gray-500 text-md flex items-center" htmlFor='province'>
+            Tỉnh/thành phố:
+          </label>
+
+          <div className="col-span-2">
+            <AddressInput
+              testId="province-input-dropdown"
+              options={new ValueText(provinces.map(province => ({ text: province.name, value: province.code })))}
+              onChange={handleLocationChange}
+              value={watch('provinceCode')}
+              level={LOCATION_LEVEL.PROVINCE}
+              isLoading={locationQuery.isLoading} />
+            <span className="text-sm text-red-500 mt-2">{errors['provinceCode']}</span>
           </div>
-        </form>
-      )}
+        </div>
+
+
+        <div className='grid grid-cols-3 py-2'>
+          <label className="text-gray-500 text-md flex items-center" htmlFor='district'>
+            Quận/huyện:
+          </label>
+
+          <div className="col-span-2">
+            <AddressInput
+              testId="district-input-dropdown"
+              options={new ValueText(districts.map(district => ({ text: district.name, value: district.code })))}
+              onChange={handleLocationChange}
+              value={watch('districtCode')}
+              level={LOCATION_LEVEL.DISTRICT}
+              isLoading={locationQuery.isLoading} />
+            <span className="text-sm text-red-500 mt-2">{errors['districtCode']}</span>
+          </div>
+        </div>
+
+
+        <div className='grid grid-cols-3 py-2'>
+          <label className="text-gray-500 text-md flex items-center" htmlFor='ward'>
+            Xã/phường:
+          </label>
+
+          <div className="col-span-2">
+            <AddressInput
+              testId="ward-input-dropdown"
+              options={new ValueText(wards.map(ward => ({ text: ward.name, value: ward.code })))}
+              onChange={handleLocationChange}
+              value={watch('wardCode')}
+              level={LOCATION_LEVEL.WARD}
+              isLoading={locationQuery.isLoading} />
+            <span className="text-sm text-red-500 mt-2">{errors['wardCode']}</span>
+          </div>
+        </div>
+
+        <div className='grid grid-cols-3 py-2'>
+          <label className="text-gray-500 text-md flex items-center" htmlFor='street'>
+            Địa chỉ chi tiết:
+          </label>
+
+          <div className="col-span-2">
+            <input
+              test-id="user-profile-street-input"
+              className="border-gray-300 border-2 bg-gray-100 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:border-yellow-400 focus:outline-none focus:ring-0 focus:bg-white"
+              id="street"
+              type="text"
+              onChange={(e) => setValue('street', e.target.value, { shouldDirty: true })}
+              value={watch('street')} />
+            <span className="text-sm text-red-500 mt-2">{errors['street']}</span>
+          </div>
+        </div>
+
+
+        <div className="flex justify-center border-none mt-2 space-x-2">
+          <QueryButton
+            testId="user-update-button"
+            name={'Xác nhận'}
+            isLoading={updateUserMutation.isLoading || locationQuery.isLoading}
+            isDisabled={!isDirty} />
+          <Button
+            name={'Huỷ'}
+            action={() => setShowEdit(false)} />
+        </div>
+      </form>
+
       <Alert
-      testId='user-update-alert'
         message={alertMessage}
         show={alertShow}
         setShow={setAlertShow}
         failed={alertFail}
-      />
+        action={() => !alertFail && setShowEdit(false)}
+        showCancel={false} />
     </>
   );
-}
+};

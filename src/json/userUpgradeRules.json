@@ -1,0 +1,39 @@
+{
+  "entityName": {
+    "required": true,
+    "maxLength": 128
+  },
+  "organizationName": {
+    "required": true,
+    "maxLength": 128
+  },
+  "phone": {
+    "required": true,
+    "type": "phone"
+  },
+  "provinceCode": {
+    "required": true
+  },
+  "districtCode": {
+    "required": true
+  },
+  "wardCode": {
+    "required": true
+  },
+  "street": {
+    "required": true,
+    "maxLength": 512
+  },
+  "website": {
+    "required": true,
+    "type": "url"
+  },
+  "taxCode": {
+    "required": true,
+    "maxLength": 20
+  },
+  "description": {
+    "required": true,
+    "maxLength": 512
+  }
+}

@@ -55,8 +55,7 @@ export const GoogleRecaptcha = (props: IGoogleRecaptcha) => {
           sitekey={siteKey}
           size='normal'
           onChange={handleOnchange}
-          onExpired={() => setToken('')}
-        />
+          onExpired={() => setToken('')} />
       }
     </div>
   );

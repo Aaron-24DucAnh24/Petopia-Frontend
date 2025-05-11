@@ -28,3 +28,8 @@ export interface IUploadImage {
   showImages: string[];
   files: File[];
 }
+
+export interface IValidatingResult {
+  isValid: boolean;
+  errors: Record<string, string>;
+}

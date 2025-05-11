@@ -58,8 +58,7 @@ export const NavNotificationBlock = () => {
       <button
         ref={buttonRef}
         className="flex flex-col items-center bg-yellow-300 rounded-full h-8 w-8 py-2 px-4 hover:bg-yellow-400"
-        onClick={handleButtonClick}
-      >
+        onClick={handleButtonClick}>
         <MdNotifications color="#000000" />
       </button>
 
@@ -72,40 +71,39 @@ export const NavNotificationBlock = () => {
       {showNotifications && (
         <div
           ref={divRef}
-          className="absolute shadow-lg bg-white py-2 z-[1000] right-0 min-w-full rounded-lg w-[380px] max-h-[500px] overflow-auto"
-        >
+          className="absolute shadow-lg bg-white py-2 z-[1000] right-0 min-w-full rounded-lg w-[380px] max-h-[500px] overflow-auto">
           <div className="flex items-center justify my-4 px-4">
             <p
               className="text-xs text-blue-500 cursor-pointer"
-              onClick={clearAll}
-            >
+              onClick={clearAll}>
               Xóa tất cả
             </p>
           </div>
-          {notifications.length === 0 ? (
-            <p className="text-sm text-gray-400 px-4">Không có thông báo mới</p>
-          ) : (
-            <ul className="divide-y">
-              {notifications.map((notification) => (
-                <li
-                  key={notification.id}
-                  className="py-4 px-4 flex items-center hover:bg-gray-50 text-black text-sm cursor-pointer"
-                >
-                  <div className="ml-6">
-                    <h3 className="text-sm text-[#333] font-semibold">
-                      {notification.title}
-                    </h3>
-                    <p className="text-xs text-gray-400 mt-2">
-                      {notification.content}
-                    </p>
-                    <p className="text-xs text-blue-500 leading-3 mt-2">
-                      {getTimeAgo(notification.isCreatedAt)}
-                    </p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
+          {notifications.length === 0
+            ? (
+              <p className="text-sm text-gray-400 px-4">Không có thông báo mới</p>
+            )
+            : (
+              <ul className="divide-y">
+                {notifications.map((notification) => (
+                  <li
+                    key={notification.id}
+                    className="py-4 px-4 flex items-center hover:bg-gray-50 text-black text-sm cursor-pointer">
+                    <div className="ml-6">
+                      <h3 className="text-sm text-[#333] font-semibold">
+                        {notification.title}
+                      </h3>
+                      <p className="text-xs text-gray-400 mt-2">
+                        {notification.content}
+                      </p>
+                      <p className="text-xs text-blue-500 leading-3 mt-2">
+                        {getTimeAgo(notification.isCreatedAt)}
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
         </div>
       )}
     </div>

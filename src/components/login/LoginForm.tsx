@@ -17,11 +17,15 @@ import { IApiResponse } from '@/src/interfaces/common';
 import { googleLogin, login } from '@/src/services/authentication.api';
 import { getErrorMessage } from '@/src/helpers/getErrorMessage';
 import QueryButton from '../general/QueryButton';
+import { getCurrentUserCore } from '@/src/services/user.api';
+import { ICurrentUserCoreResponse } from '@/src/interfaces/user';
+import { useStores } from '@/src/stores';
 
 export const LoginForm = QueryProvider(() => {
   // STATES
   const [showAlert, setShowALert] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string>('');
+  const { userStore } = useStores();
 
   // FORMS
   const { getValues, setValue } = useForm<ILoginRequest>({
@@ -37,13 +41,18 @@ export const LoginForm = QueryProvider(() => {
     loginMutation.mutate(getValues());
   };
 
-  const handleOnLoginSuccess = (data: ILoginResponse) => {
+  const handleOnLoginSuccess = async (data: ILoginResponse) => {
+    // Set token
     setCookie(COOKIES_NAME.ACCESS_TOKEN_SERVER, data.accessToken, {
       expires: new Date(data.accessTokenExpiredDate),
     });
     setCookie(COOKIES_NAME.REFRESH_TOKEN_SERVER, data.accessToken, {
       expires: new Date(data.accessTokenExpiredDate),
     });
+
+    await userStore.fetchUserContext();
+
+    // Redirect
     const redirect = getCookie(COOKIES_NAME.REDIRECT);
     if (redirect) {
       deleteCookie(COOKIES_NAME.REDIRECT);
@@ -54,28 +63,28 @@ export const LoginForm = QueryProvider(() => {
   };
 
   // LOGIN
-  const loginMutation = useMutation<
-    IApiResponse<ILoginResponse>,
-    ILoginRequest
-  >(login, {
-    onError: (err) => {
-      setAlertMessage(getErrorMessage(err.data.errorCode.toString()));
-      setShowALert(true);
-    },
-    onSuccess: (res) => handleOnLoginSuccess(res.data.data),
-  });
+  const loginMutation = useMutation<IApiResponse<ILoginResponse>, ILoginRequest>(
+    login,
+    {
+      onError: (err) => {
+        setAlertMessage(getErrorMessage(err.data.errorCode.toString()));
+        setShowALert(true);
+      },
+      onSuccess: (res) => handleOnLoginSuccess(res.data.data),
+    }
+  );
 
   // LOGIN WITH GOOGLE
-  const googleLoginMutation = useMutation<
-    IApiResponse<ILoginResponse>,
-    IGoogleLoginRequest
-  >(googleLogin, {
-    onError: (err) => {
-      setAlertMessage(getErrorMessage(err.data.errorCode.toString()));
-      setShowALert(true);
-    },
-    onSuccess: (res) => handleOnLoginSuccess(res.data.data),
-  });
+  const googleLoginMutation = useMutation<IApiResponse<ILoginResponse>, IGoogleLoginRequest>(
+    googleLogin,
+    {
+      onError: (err) => {
+        setAlertMessage(getErrorMessage(err.data.errorCode.toString()));
+        setShowALert(true);
+      },
+      onSuccess: (res) => handleOnLoginSuccess(res.data.data),
+    }
+  );
 
   return (
     <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto my-auto h-screen">
@@ -94,8 +103,7 @@ export const LoginForm = QueryProvider(() => {
             <div>
               <label
                 htmlFor="email"
-                className="block mb-2 text-sm font-medium text-gray-900 "
-              >
+                className="block mb-2 text-sm font-medium text-gray-900 ">
                 Email của bạn
               </label>
               <input
@@ -105,14 +113,12 @@ export const LoginForm = QueryProvider(() => {
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 :bg-gray-700 "
                 placeholder="name@company.com"
                 required
-                onChange={(e) => setValue('email', e.target.value)}
-              />
+                onChange={(e) => setValue('email', e.target.value)} />
             </div>
             <div>
               <label
                 htmlFor="password"
-                className="block mb-2 text-sm font-medium text-gray-900 "
-              >
+                className="block mb-2 text-sm font-medium text-gray-900 ">
                 Mật khẩu
               </label>
               <input
@@ -122,34 +128,24 @@ export const LoginForm = QueryProvider(() => {
                 placeholder="••••••••"
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
                 required
-                onChange={(e) => setValue('password', e.target.value)}
-              />
+                onChange={(e) => setValue('password', e.target.value)} />
             </div>
             <div className="flex items-center justify-between">
               <Link
                 className="text-sm font-medium text-primary-600 hover:underline "
-                href="/login/forgot-password"
-              >
+                href="/login/forgot-password">
                 Quên mật khẩu?
               </Link>
             </div>
-            <QueryButton
-              name={'Đăng nhập'}
-              isLoading={loginMutation.isLoading}
-            />
+            <QueryButton name={'Đăng nhập'} isLoading={loginMutation.isLoading} />
 
-            <GoogleLoginButton
-              onSuccess={(tokenId) =>
-                googleLoginMutation.mutate({ tokenId: tokenId })
-              }
-            />
+            <GoogleLoginButton onSuccess={(tokenId) => googleLoginMutation.mutate({ tokenId: tokenId })} />
 
             <p className="text-sm font-light text-gray-500 ">
               Chưa có tài khoản?{' '}
               <Link
                 href="/register"
-                className="font-medium text-primary-600 hover:underline "
-              >
+                className="font-medium text-primary-600 hover:underline ">
                 Đăng ký
               </Link>
             </p>
@@ -160,8 +156,7 @@ export const LoginForm = QueryProvider(() => {
         show={showAlert}
         setShow={setShowALert}
         message={alertMessage}
-        failed
-      />
+        failed />
     </div>
   );
 });

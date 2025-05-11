@@ -1,30 +1,27 @@
 'use client';
 import Link from 'next/link';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Alert } from '../general/Alert';
 import { GoogleRecaptcha } from './GoogleRecaptcha';
-import ClipLoader from 'react-spinners/ClipLoader';
 import { QueryProvider } from '../general/QueryProvider';
 import { IRegisterForm, IRegisterRequest } from '@/src/interfaces/authentication';
-import { checkPasswordFormat, checkPasswords, isEmail } from '@/src/helpers/inputValidator';
 import { useMutation } from '@/src/utils/hooks';
 import { register } from '@/src/services/authentication.api';
 import { IApiResponse } from '@/src/interfaces/common';
 import { getErrorMessage } from '@/src/helpers/getErrorMessage';
 import { publish } from '@/src/services/event';
 import { EVENT_NAMES } from '@/src/utils/constants';
+import { DatePicker } from '../general/DatePicker';
+import { ValidatorManager } from '@/src/utils/ValidatorManager';
+import QueryButton from '../general/QueryButton';
 
-export const RegisterForm = QueryProvider(() => {
-  // FORM ERROR STATES
-  const [errorEmail, setErrorEmail] = useState<string>('');
-  const [errorPassword, setErrorPassword] = useState<string>('');
-  const [errorConfirm, setErrorConfirm] = useState<string>('');
-
-  // ALERT STATES
+export default QueryProvider(() => {
+  // STATES
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const [alertFailed, setAlertFailed] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string>('');
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   // REGISTER FORM
   const { getValues, setValue, watch } = useForm<IRegisterForm>({
@@ -35,21 +32,20 @@ export const RegisterForm = QueryProvider(() => {
       password: '',
       confirmPassword: '',
       googleRecaptchaToken: '',
+      birthDate: null,
     },
   });
 
-  const isDisabled = () => {
-    return errorConfirm || errorEmail || errorPassword ? true : false;
-  };
-
-  // EVENT HANDLING FUNCTIONS
-  const handleValidateEmail = (email: string) => {
-    setErrorEmail(isEmail(email) ? '' : 'Email không hợp lệ');
-  };
-
+  // HANDLERS
   const handleSubmit = (event: ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
-    registerMutation.mutate(getValues());
+
+    const validatingResult = ValidatorManager.userRegisterValidator.validate(getValues());
+    setErrors(validatingResult.errors);
+
+    if (validatingResult.isValid) {
+      registerMutation.mutate(getValues());
+    }
   };
 
   // REGISTER MUTATION
@@ -72,21 +68,14 @@ export const RegisterForm = QueryProvider(() => {
     }
   );
 
-  // PASSWORD VALIDATORS
-  useEffect(() => {
-    checkPasswords(getValues('password'), getValues('confirmPassword'), setErrorConfirm);
-    checkPasswordFormat(getValues('password'), setErrorPassword);
-  }, [watch('confirmPassword'), watch('password')]);
-
   return (
-    <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto my-auto h-screen">
-      <div className="w-full bg-white rounded-lg shadow  md:mt-0 sm:max-w-md xl:p-0 ">
-        <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+    <div className="flex items-center justify-center w-full h-full">
+      <div className="bg-white rounded-lg shadow w-full sm:max-w-xl h-[90%] overflow-auto">
+        <div className="p-6 space-y-4 md:space-y-6 sm:p-8 w-full">
           <div className="flex justify-between">
             <div>
               <h2 className="">
-                <span className="text-yellow-300 font-bold">Pet</span>opia xin
-                chào
+                <span className="text-yellow-300 font-bold">Pet</span>opia xin chào
               </h2>
               <h1 className="text-4xl font-bold leading-tight tracking-tight text-gray-900 md:text-4xl ">
                 Đăng ký
@@ -100,118 +89,94 @@ export const RegisterForm = QueryProvider(() => {
             </div>
           </div>
           <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
-            {/* Họ */}
             <div>
               <label
                 htmlFor="text"
-                className="block mb-2 text-sm font-medium text-gray-900 "
-              >
-                Họ của bạn
+                className="block mb-2 text-sm font-medium text-gray-900 ">
+                Họ
               </label>
               <input
-                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 :bg-gray-700 "
+                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
                 type="text"
                 id="lastName"
-                required
-                placeholder="Nguyễn Văn"
-                onChange={(e) => setValue('lastName', e.target.value)}
-              />
+                onChange={(e) => setValue('lastName', e.target.value)} />
+              <span className="text-sm text-red-500 mt-2">{errors['lastName']}</span>
             </div>
-            {/* Tên */}
+
             <div>
               <label
                 htmlFor="text"
-                className="block mb-2 text-sm font-medium text-gray-900 "
-              >
-                Tên của bạn
+                className="block mb-2 text-sm font-medium text-gray-900 ">
+                Tên
               </label>
               <input
                 type="text"
                 id="firstName"
-                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 :bg-gray-700 "
-                placeholder="A"
-                required
-                onChange={(e) => setValue('firstName', e.target.value)}
-              />
+                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                onChange={(e) => setValue('firstName', e.target.value)} />
+              <span className="text-sm text-red-500 mt-2">{errors['firstName']}</span>
             </div>
-            {/* Email */}
+
+            <div>
+              <label
+                htmlFor="text"
+                className="block mb-2 text-sm font-medium text-gray-900 ">
+                Ngày sinh
+              </label>
+              <DatePicker
+                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5"
+                value={watch('birthDate')}
+                onChange={(date) => setValue('birthDate', date)} />
+              <span className="text-sm text-red-500 mt-2">{errors['birthDate']}</span>
+            </div>
+
             <div>
               <label
                 htmlFor="email"
-                className="block mb-2 text-sm font-medium text-gray-900 "
-              >
-                Email của bạn
+                className="block mb-2 text-sm font-medium text-gray-900 ">
+                Email
               </label>
               <input
-                type="email"
-                name="email"
+                type="text"
                 id="email"
-                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 :bg-gray-700 "
-                placeholder="name@company.com"
-                onChange={(e) => setValue('email', e.target.value)}
-                onBlur={(e) => handleValidateEmail(e.target.value)}
-                required
-              />
-              <span className="text-sm text-red-500 mt-2">{errorEmail}</span>
+                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                onChange={(e) => setValue('email', e.target.value)} />
+              <span className="text-sm text-red-500 mt-2">{errors['email']}</span>
             </div>
-            {/* Mật khẩu */}
+
             <div>
               <label
                 htmlFor="password"
-                className="block mb-2 text-sm font-medium text-gray-900 "
-              >
+                className="block mb-2 text-sm font-medium text-gray-900 ">
                 Mật khẩu
               </label>
               <input
                 type="password"
-                name="password"
                 id="password"
-                placeholder="••••••••"
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
-                onChange={(e) => setValue('password', e.target.value)}
-                required
-              />
-              <span className="text-sm text-red-500 mt-2">{errorPassword}</span>
+                onChange={(e) => setValue('password', e.target.value)} />
+              <span className="text-sm text-red-500 mt-2">{errors['password']}</span>
             </div>
+
             <div>
               <label
                 htmlFor="password"
-                className="block mb-2 text-sm font-medium text-gray-900 "
-              >
+                className="block mb-2 text-sm font-medium text-gray-900 ">
                 Nhập lại mật khẩu
               </label>
               <input
                 type="password"
-                name="confirmPassword"
                 id="confirmPassword"
-                placeholder="••••••••"
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
-                onChange={(e) => setValue('confirmPassword', e.target.value)}
-                required
-              />
-              <span className="text-sm text-red-500 mt-2">{errorConfirm}</span>
+                onChange={(e) => setValue('confirmPassword', e.target.value)} />
+              <span className="text-sm text-red-500 mt-2">{errors['confirmPassword']}</span>
             </div>
 
             <GoogleRecaptcha setToken={(value) => setValue('googleRecaptchaToken', value)} />
 
-            <button
-              type="submit"
-              className={`
-                w-full text-black bg-yellow-300 hover:bg-primary-700 focus:ring-4 focus:outline-none 
-                focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center  
-                ${isDisabled() && 'cursor-not-allowed'}`}
-              disabled={isDisabled()}
-            >
-              Đăng ký
-              <span className='ml-2 leading-5'>
-                <ClipLoader
-                  color={'#000000'}
-                  loading={registerMutation.isLoading}
-                  size={14}
-                  aria-label="Loading Spinner"
-                  data-testid="loader"
-                /></span>
-            </button>
+            <QueryButton
+              name={'Đăng ký'}
+              isLoading={registerMutation.isLoading} />
           </form>
         </div>
       </div>
@@ -219,8 +184,7 @@ export const RegisterForm = QueryProvider(() => {
         message={alertMessage}
         show={showAlert}
         setShow={setShowAlert}
-        failed={alertFailed}
-      />
+        failed={alertFailed} />
     </div>
   );
 });

@@ -1,0 +1,25 @@
+{
+  "firstName": {
+    "required": true,
+    "maxLength": 128
+  },
+  "lastName": {
+    "required": true,
+    "maxLength": 128
+  },
+  "birthDate": {
+    "required": true
+  },
+  "email": {
+    "required": true,
+    "type": "email"
+  },
+  "password": {
+    "required": true,
+    "minLength": 8,
+    "maxLength": 128
+  },
+  "confirmPassword": {
+    "confirm": "password"
+  }
+}

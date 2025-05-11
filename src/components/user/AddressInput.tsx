@@ -1,38 +1,35 @@
-import { ILocationResponse } from '@/src/interfaces/pet';
-import React, { useEffect } from 'react';
-import { FilterDropDown } from '../general/FilterDropdown';
+import { LOCATION_LEVEL } from '@/src/utils/constants';
+import { SelectInput } from '../general/SelectInput';
+import { ValueText } from '@/src/utils/ValueText';
 
 interface IAddressInput {
   testId: string;
-  options: ILocationResponse[];
-  onChange: (code: string) => void;
-  title: string;
+  options: ValueText;
+  onChange: (level: LOCATION_LEVEL, code: string) => void;
   value: string;
-  isLocationLoading: boolean;
   level: number;
-  currentLevel: number;
+  isLoading: boolean;
 }
 
-export const AddressInput = ({
-  testId,
-  options,
-  onChange,
-  value,
-  level,
-  currentLevel,
-  isLocationLoading,
-}: IAddressInput) => {
+export const AddressInput = (props: IAddressInput) => {
+  const {
+    options,
+    onChange,
+    level,
+    value,
+    isLoading,
+  } = props;
 
-  useEffect(() => {
-    !isLocationLoading && level === currentLevel && onChange(value);
-  }, [isLocationLoading]);
+  // HANDLERS
+  const handleOnChange = (value: string) => {
+    onChange(level, value);
+  };
 
   return (
-    <FilterDropDown
-      options={options.map(option => ({ value: option.code, label: option.name }))}
-      value={value}
-      setValue={onChange}
-      testId={testId}
-    />
+    options && <SelectInput
+      onChange={handleOnChange}
+      options={options}
+      defaultValue={value}
+      isLoading={isLoading} />
   );
 };

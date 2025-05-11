@@ -47,27 +47,24 @@ export const ReportBlock = (props: IReportBlock) => {
         modal
         overlayStyle={{ background: 'rgba(0, 0, 0, 0.5)' }}
         open={showReport}
-        onClose={() => setShowReport(false)}
-      >
+        onClose={() => setShowReport(false)}>
         <ReportForm
           id={id}
           type={type}
-          handleClose={() => setShowReport(false)}
-        />
+          handleClose={() => setShowReport(false)} />
       </Popup>
 
       <button
-        className="hover:bg-gray-100 p-2 rounded-full border"
-        onClick={() => getPreReportQuery.refetch()}
-      >
-        <GoReport size={30} className="" />
+        className="hover:bg-gray-100 p-2 rounded-full border border-red-600"
+        onClick={() => getPreReportQuery.refetch()}>
+        <GoReport size={30} color='#dc2626' />
       </button>
+
       <Alert
         message={alertMessage}
         show={alertShow}
         setShow={setAlertShow}
-        failed={alertFailed}
-      />
+        failed={alertFailed} />
     </>
   );
 };

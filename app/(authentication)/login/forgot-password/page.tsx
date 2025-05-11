@@ -3,10 +3,10 @@
 import { Alert } from '@/src/components/general/Alert';
 import { QueryProvider } from '@/src/components/general/QueryProvider';
 import { getErrorMessage } from '@/src/helpers/getErrorMessage';
-import { isEmail } from '@/src/helpers/inputValidator';
 import { IApiResponse } from '@/src/interfaces/common';
 import { forgotPassword } from '@/src/services/user.api';
 import { useMutation } from '@/src/utils/hooks';
+import { StringUtil } from '@/src/utils/StringUtil';
 import { FormEvent, useState } from 'react';
 
 const ForgotPasswordPage = QueryProvider(() => {
@@ -37,10 +37,12 @@ const ForgotPasswordPage = QueryProvider(() => {
   // Handlers
   const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    !error && forgotPasswordMutation.mutate(email);
-  };
-  const handleCheckEmail = () => {
-    setError(isEmail(email) ? '' : 'Email không hợp lệ');
+    setError('');
+    if (!StringUtil.IsEmail(email)) {
+      setError('Vui lòng nhập địa chỉ email hợp lệ');
+      return;
+    }
+    forgotPasswordMutation.mutate(email);
   };
 
   return (
@@ -55,17 +57,14 @@ const ForgotPasswordPage = QueryProvider(() => {
             placeholder="Email"
             value={email}
             onChange={e => setEmail(e.target.value)}
-            required
-            onBlur={handleCheckEmail} />
+            required />
           <button
             className="border border-black p-3 rounded-lg font-bold shadow-md bg-yellow-300 hover:bg-yellow-400 ml-2"
             type='submit'>
             Xác nhận
           </button>
         </form>
-        {
-          error && <div className='text-sm text-red-500 mt-2'>{error}</div>
-        }
+        <span className='text-sm text-red-500 mt-2'>{error}</span>
       </div>
       <Alert
         message={alertMessage}

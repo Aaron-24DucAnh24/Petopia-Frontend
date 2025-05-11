@@ -3,14 +3,14 @@
 import { Alert } from '@/src/components/general/Alert';
 import { QueryProvider } from '@/src/components/general/QueryProvider';
 import { getErrorMessage } from '@/src/helpers/getErrorMessage';
-import { checkPasswordFormat } from '@/src/helpers/inputValidator';
 import { IApiResponse } from '@/src/interfaces/common';
 import { IResetPasswordRequest } from '@/src/interfaces/user';
 import { resetPassword } from '@/src/services/user.api';
 import { SEARCH_PARAMS } from '@/src/utils/constants';
 import { useMutation } from '@/src/utils/hooks';
+import { StringUtil } from '@/src/utils/StringUtil';
 import { useSearchParams } from 'next/navigation';
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useState } from 'react';
 
 const ResetPasswordPage = QueryProvider(() => {
   // States
@@ -41,17 +41,19 @@ const ResetPasswordPage = QueryProvider(() => {
   // Handlers
   const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    setError('');
+    if (!StringUtil.IsPassword(password)) {
+      setError('Vui lòng nhập mật khẩu tối thiểu 8 ký tự');
+      return;
+    }
+
     !error && email && passwordToken && resetPasswordMutation.mutate({
       email: email,
       resetPasswordToken: passwordToken,
       password: password,
     });
   };
-
-  // Effects
-  useEffect(() => {
-    checkPasswordFormat(password, setError);
-  }, [password]);
 
   return (
     <div className="flex items-center justify-center h-screen bg-yellow-300">
@@ -72,9 +74,7 @@ const ResetPasswordPage = QueryProvider(() => {
             Xác nhận
           </button>
         </form>
-        {
-          error && <div className='text-sm text-red-500 mt-2'>{error}</div>
-        }
+        <span className='text-sm text-red-500 mt-2'>{error}</span>
       </div>
       <Alert
         message={alertMessage}

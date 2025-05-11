@@ -7,7 +7,6 @@ import {
 } from '@/src/utils/constants';
 import { useMutation, useQuery } from '@/src/utils/hooks';
 import React, { useState } from 'react';
-import AddressDropdown from '../user/AddressDropdown';
 import { useForm } from 'react-hook-form';
 import { IUserInfoReponse } from '@/src/interfaces/user';
 import { usePathname } from 'next/navigation';
@@ -146,22 +145,6 @@ export const PetAdoptForm = observer(({ handleClose }: { handleClose: () => void
                   className="w-full p-2 border border-gray-300 rounded-lg" />
               </div>
               <div className="flex flex-col space-y-2 col-span-2">
-                {
-                  userInfo
-                  && <AddressDropdown
-                    districtCode={watch('districtCode')}
-                    provinceCode={watch('provinceCode')}
-                    wardCode={watch('wardCode')}
-                    setProvinceCode={(code: string) => {
-                      setValue('provinceCode', code);
-                    }}
-                    setDistrictCode={(code: string) => {
-                      setValue('districtCode', code);
-                    }}
-                    setWardCode={(code: string) => {
-                      setValue('wardCode', code);
-                    }} />
-                }
               </div>
               <div className="flex flex-col space-y-2 col-span-2">
                 <label htmlFor="owner-address" className="text-sm font-medium">
@@ -253,7 +236,6 @@ export const PetAdoptForm = observer(({ handleClose }: { handleClose: () => void
         </form>
       }
       <Alert
-        testId='adopt-form-alert'
         failed={alertFail}
         message={alertMessage}
         show={alertShow}

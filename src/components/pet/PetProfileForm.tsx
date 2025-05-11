@@ -7,7 +7,6 @@ import { QueryProvider } from '../general/QueryProvider';
 import FormUploadImage from './FormUploadImage';
 import FormPetDetail from './FormPetDetail';
 import FormRules from './FormRules';
-import { isEmpty, isNotChecked } from '@/src/helpers/inputValidator';
 import { Alert } from '../general/Alert';
 import {
   ICreatePetProfileRequest,
@@ -19,6 +18,7 @@ import { getPetDetail, postPet, updatePet } from '@/src/services/pet.api';
 import { GIVE_PET_STEP, QUERY_KEYS } from '@/src/utils/constants';
 import { postImage } from '@/src/helpers/postImage';
 import { GivePetHeaderBar } from './GivePetHeaderBar';
+import { StringUtil } from '@/src/utils/StringUtil';
 
 const PetProfileForm = QueryProvider(
   ({ id = '' }: { id?: string; handleClose?: () => void }) => {
@@ -92,15 +92,19 @@ const PetProfileForm = QueryProvider(
       }
     };
 
+    const isNotChecked = (value: number) => {
+      return value === -1;
+    };
+
     const validateInputs = () => {
       let errorMessage = '';
 
       errorMessage +=
         getValues('showImages').length == 0 ? 'Ảnh không được để trống;\n' : '';
-      errorMessage += isEmpty(getValues('name'))
+      errorMessage += StringUtil.IsEmpty(getValues('name'))
         ? 'Tên không được để trống;\n'
         : '';
-      errorMessage += isEmpty(getValues('description'))
+      errorMessage += StringUtil.IsEmpty(getValues('description'))
         ? 'Mô tả không được để trống;\n'
         : '';
       errorMessage += isNotChecked(getValues('sex'))
@@ -224,7 +228,6 @@ const PetProfileForm = QueryProvider(
         )}
 
         <Alert
-          testId='give-pet-form-alert'
           message={error || 'Tạo hồ sơ thú cưng thành công'}
           show={showAlert}
           setShow={setShowAlert}

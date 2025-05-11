@@ -1,9 +1,5 @@
-import { IApiErrorResponse } from '@/src/interfaces/common';
 import { useClickOutside } from '@/src/utils/hooks';
-import { AxiosResponse } from 'axios';
 import { useEffect, useRef, useState } from 'react';
-import { BsStars } from 'react-icons/bs';
-import { UseQueryResult } from 'react-query';
 
 interface IFilterDropDownOption {
   label: string;
@@ -11,21 +7,16 @@ interface IFilterDropDownOption {
 }
 
 interface IFilterDropDown {
-  testId?: string;
   options: IFilterDropDownOption[];
   value: string;
   setValue: (value: string) => void;
-  title?: string;
-  disabled?: boolean;
 }
 
 export const FilterDropDown = (props: IFilterDropDown) => {
   const {
-    title = '',
     options,
     value,
     setValue,
-    disabled,
   } = props;
 
   // STATES
@@ -66,35 +57,29 @@ export const FilterDropDown = (props: IFilterDropDown) => {
   }, [options]);
 
   return (
-    <div className="relative inline-block text-left">
-      {title && (
-        <div className="text-sm flex font-medium mb-2">
-          {title}
+    <div className="flex w-full">
+      <div>
+        {value}
+      </div>
+      <div
+        ref={listRef}
+        className="w-full absolute text-center max-h-80 overflow-y-auto mt-2 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 ">
+        <div className="py-1" role="menu">
+          {displayedOptions.map((option, index) => (
+            <div
+              test-id="dropdown-option"
+              key={index}
+              className="block px-4 py-2 text-sm text-black hover:bg-gray-100 cursor-pointer"
+              role="menuitem"
+              onClick={() => {
+                setValue(option.value);
+                setShowDropdown(false);
+              }}>
+              {option.label}
+            </div>
+          ))}
         </div>
-      )}
-      {showDropdown && options.length !== 0 && (
-        <div
-          ref={listRef}
-          className="w-full absolute text-center max-h-80 overflow-y-auto mt-2 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 "
-        >
-          <div className="py-1" role="menu">
-            {displayedOptions.map((option, index) => (
-              <div
-                test-id="dropdown-option"
-                key={index}
-                className="block px-4 py-2 text-sm text-black hover:bg-gray-100 cursor-pointer"
-                role="menuitem"
-                onClick={() => {
-                  setValue(option.value);
-                  setShowDropdown(false);
-                }}
-              >
-                {option.label}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+      </div>
     </div>
   );
 };

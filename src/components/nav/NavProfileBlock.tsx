@@ -8,15 +8,15 @@ import Image from 'next/image';
 import { useRef, useState } from 'react';
 import { NavNotificationBlock } from './NavNotificationBlock';
 
-export const NavProfileBlock = ({
-  image,
-  name,
-  email
-}: {
-  image: string | null,
+interface INavProfileBlock {
+  image: string,
   name: string,
   email: string,
-}) => {
+}
+
+export const NavProfileBlock = (props: INavProfileBlock) => {
+  const { image, name, email } = props;
+
   // STATES
   const [isOpenProfile, setIsOpenProfile] = useState(false);
 
@@ -48,44 +48,31 @@ export const NavProfileBlock = ({
           test-id="user-picture-button"
           className="flex text-sm bg-gray-800 rounded-full overflow-hidden md:me-0 focus:ring-4 focus:ring-gray-300 w-8 h-8 relative"
           onClick={() => setIsOpenProfile(!isOpenProfile)}
-          ref={buttonRef}
-        >
+          ref={buttonRef}>
           <Image
             className="object-cover"
             alt="user photo"
             src={image || STATIC_URLS.NO_AVATAR}
-            fill
-          />
+            fill />
         </button>
-        <div
-          ref={optionsRef}
-          className={`absolute right-0 top-10 z-50 ${isOpenProfile ? '' : 'hidden'
-            } text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow `}
-        >
+        {isOpenProfile &&
           <div
-            test-id="user-profile-link"
-            className="px-4 py-3 select-none cursor-pointer"
-            onClick={() => window.location.replace('/user')}
-          >
-            <span className="block text-sm text-gray-900 ">
-              {name}
-            </span>
-            <span className="block text-sm  text-gray-500 truncate ">
-              {email}
-            </span>
+            ref={optionsRef}
+            className='absolute right-0 top-10 z-50 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow'>
+            <div
+              test-id="user-profile-link"
+              className="px-4 py-3 select-none cursor-pointer"
+              onClick={() => window.location.replace('/user')}>
+              <span className="block text-sm text-gray-900 ">{name}</span>
+              <span className="block text-sm  text-gray-500 truncate ">{email}</span>
+            </div>
+            <a className="block px-4 py-2 text-sm hover:bg-gray-100 cursor-pointer text-red-500"
+              onClick={() => logoutMutation.mutate(undefined)}>
+              Đăng xuất
+            </a>
           </div>
-          <ul className="py-2">
-            <li>
-              <a
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
-                onClick={() => logoutMutation.mutate(undefined)}
-              >
-                Đăng xuất
-              </a>
-            </li>
-          </ul>
-        </div>
+        }
       </div>
-    </div>
+    </div >
   );
 };

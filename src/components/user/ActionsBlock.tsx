@@ -1,92 +1,72 @@
-import Popup from 'reactjs-popup';
-import { UserUpgradeForm } from './UserUpgradeForm';
 import Link from 'next/link';
-import { FaRegEdit } from 'react-icons/fa';
-import { useQuery } from '@/src/utils/hooks';
-import { IApiResponse } from '@/src/interfaces/common';
-import { QUERY_KEYS } from '@/src/utils/constants';
-import { getPreUpgrade } from '@/src/services/user.api';
-import { Dispatch, SetStateAction, useState } from 'react';
-import { Alert } from '../general/Alert';
+import { useClickOutside } from '@/src/utils/hooks';
+import { Dispatch, SetStateAction, useRef, useState } from 'react';
+import { SlOptions } from 'react-icons/sl';
 
 interface IActionsBlock {
-  showUpgradeButton: boolean;
   setShowEdit: Dispatch<SetStateAction<boolean>>;
+  setShowUpgrade: Dispatch<SetStateAction<boolean>>;
+  allowUpgrade: boolean;
 }
 
 export const ActionsBlock = (props: IActionsBlock) => {
-  const { showUpgradeButton, setShowEdit } = props;
+  const { setShowEdit, setShowUpgrade, allowUpgrade } = props;
 
   // STATES
-  const [alowUpgrade, setAllowUpgrade] = useState<boolean>(false);
-  const [showUpgradeForm, setShowUpgradeForm] = useState<boolean>(false);
-  const [showAlert, setShowAlert] = useState<boolean>(false);
+  const [showOptions, setShowOptions] = useState<boolean>(false);
 
-  // HANDLERS
-  const handleClickUpgrade = () => {
-    if (alowUpgrade) {
-      setShowUpgradeForm(true);
-    } else {
-      setShowAlert(true);
-    }
-  };
-
-  // QUERIES
-  const preUpgradeQuery = useQuery<IApiResponse<boolean>>(
-    [QUERY_KEYS.GET_PRE_UPGRADE],
-    getPreUpgrade,
-    {
-      onSuccess: (res) => {
-        setAllowUpgrade(res.data.data);
-      },
-      refetchOnWindowFocus: false,
-    }
-  );
+  // EFFECTS
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const divRef = useRef<HTMLDivElement>(null);
+  useClickOutside(() => {
+    setShowOptions(false);
+  }, [buttonRef, divRef]);
 
   return (
-    <div className="mt-5 w-full flex flex-col md:flex-row items-end justify-end gap-2 md:gap-3">
-      {showUpgradeButton && !preUpgradeQuery.isLoading && (
-        <div>
+    <div className='relative'>
+      <div className='flex justify-end'>
+        <button
+          ref={buttonRef}
+          className='flex justify-center items-center text-sm bg-gray-100 ring-1 ring-gray-300 hover:ring-2 rounded-full overflow-hidden w-8 h-8 relative'
+          onClick={() => setShowOptions(prev => !prev)}>
+          <SlOptions color='#000' />
+        </button>
+      </div>
+
+      {showOptions && (
+        <div
+          ref={divRef}
+          className='absolute shadow-lg bg-white right-9 top-0 w-60 rounded-lg border flex flex-col items-start overflow-hidden'>
           <button
-          test-id="show-upgrade-button"
-            className="w-fit border border-black hover:bg-gray-100 font-medium rounded-lg text-md md:text-lg px-5 py-2.5 text-center"
-            onClick={handleClickUpgrade}
-          >
-            Trở thành cộng tác viên
+            test-id="show-edit-button"
+            onClick={() => {
+              setShowEdit((prev) => !prev);
+              setShowOptions(false);
+            }}
+            className="flex items-center w-full justify-center px-2 pt-1 font-thin text-gray-700 border-b hover:bg-yellow-300 hover:font-normal">
+            {'Thay đổi thông tin'}
           </button>
-          <Popup
-            modal
-            open={showUpgradeForm}
-            onClose={() => setShowUpgradeForm(false)}
-            overlayStyle={{ background: 'rgba(0, 0, 0, 0.5)' }}
-          >
-            <UserUpgradeForm handleClose={() => setShowUpgradeForm(false)} />
-          </Popup>
+
+          <Link
+            href={'user/change-password'}
+            className="flex items-center w-full justify-center px-2 pt-1 font-thin text-gray-700 border-b hover:bg-yellow-300 hover:font-normal">
+            {'Đổi mật khẩu'}
+          </Link>
+
+          {allowUpgrade && (
+            <button
+              test-id="show-upgrade-button"
+              className="flex items-center w-full justify-center px-2 pt-1 font-thin text-gray-700 border-b hover:bg-yellow-300 hover:font-normal"
+              onClick={() => {
+                setShowUpgrade((prev) => !prev);
+                setShowEdit(false);
+                setShowOptions(false);
+              }}>
+              {'Đăng ký thông tin tổ chức'}
+            </button>
+          )}
         </div>
       )}
-
-      <Link
-        href={'user/change-password'}
-        className="w-fit border border-black bg-yellow-300 hover:bg-yellow-400 font-medium rounded-lg text-md md:text-lg px-5 py-2.5 text-center"
-      >
-        Đổi mật khẩu
-      </Link>
-
-      <button
-        test-id="show-edit-button"
-        onClick={() => setShowEdit((pre) => !pre)}
-        className="border border-black bg-yellow-300 hover:bg-yellow-400 px-5 py-2.5 text-center rounded-lg"
-      >
-        <FaRegEdit className="text-2xl md:right-10" />
-      </button>
-
-      <Alert
-        testId="already-submit-org-alert"
-        failed={true}
-        message={'Bạn đã gửi yêu cầu cộng tác viên rồi!'}
-        show={showAlert}
-        setShow={setShowAlert}
-      />
     </div>
   );
 };

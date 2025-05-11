@@ -8,6 +8,7 @@ export interface IRegisterRequest {
   email: string;
   password: string;
   googleRecaptchaToken: string;
+  birthDate: Date | null;
 }
 
 export interface ILoginRequest {

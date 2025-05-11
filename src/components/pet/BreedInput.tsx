@@ -1,30 +1,18 @@
 import React, { useEffect } from 'react';
 import { useQuery } from '@/src/utils/hooks';
 import { PET_SPECIES, QUERY_KEYS } from '@/src/utils/constants';
-import { IApiErrorResponse, IApiResponse } from '@/src/interfaces/common';
+import { IApiResponse } from '@/src/interfaces/common';
 import { getBreed } from '@/src/services/pet.api';
 import { UseFormSetValue, UseFormWatch } from 'react-hook-form';
-import {
-  ICreatePetProfileRequest,
-  IPredictResponse,
-} from '@/src/interfaces/pet';
+import { ICreatePetProfileRequest } from '@/src/interfaces/pet';
 import { FilterDropDown } from '../general/FilterDropdown';
-import { UseQueryResult } from 'react-query';
-import { AxiosResponse } from 'axios';
 
 export default function BreedInput({
   setValue,
   watch,
-  aiQuery,
-  enableAI,
 }: {
   setValue: UseFormSetValue<ICreatePetProfileRequest>;
   watch: UseFormWatch<ICreatePetProfileRequest>;
-  aiQuery?: UseQueryResult<
-    AxiosResponse<IPredictResponse, any>,
-    AxiosResponse<IApiErrorResponse, any>
-  >;
-  enableAI: boolean;
 }) {
   // QUERY
   const getBreedQuery = useQuery<IApiResponse<string[]>>(
@@ -50,14 +38,9 @@ export default function BreedInput({
     <>
       {watch('species') != PET_SPECIES.OTHER && (
         <FilterDropDown
-          testId="dropdown-option-breed"
-          disabled={getBreedQuery.isLoading}
           options={watch('listBreed')?.map((e) => ({ label: e, value: e }))}
           value={watch('breed')}
           setValue={(value: string) => setValue('breed', value)}
-          title="Chọn giống"
-          aiQuery={aiQuery}
-          enableAI={enableAI}
         />
       )}
     </>

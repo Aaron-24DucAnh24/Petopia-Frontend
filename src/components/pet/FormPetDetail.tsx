@@ -4,13 +4,11 @@ import ControlForm from './ControlForm';
 import {
   GIVE_PET_STEP,
   PET_SELECT,
-  PET_SPECIES,
   PET_SPECIES_FILTER,
   QUERY_KEYS,
 } from '@/src/utils/constants';
 import {
   ICreatePetProfileRequest,
-  IPredictResponse,
   IVaccine,
 } from '@/src/interfaces/pet';
 import BreedInput from './BreedInput';
@@ -37,22 +35,6 @@ export default function FormPetDetail({
   const [vaccines, setVaccines] = useState<IVaccine[]>();
   const formData = new FormData();
   formData.append('', watch('files')[0]);
-
-  const getPetBreed = useQuery<IPredictResponse, FormData>(
-    [QUERY_KEYS.GET_PET_BREED_AI],
-    () => predict(formData),
-    {
-      onSuccess: (res) => {
-        setValue('predictedBreed', res.data.breed);
-        setValue(
-          'species',
-          res.data.animalType == 'Dog' ? PET_SPECIES.DOG : PET_SPECIES.CAT
-        );
-      },
-      enabled: watch('files').length > 0 && enableAI,
-      refetchOnWindowFocus: false,
-    }
-  );
 
   useQuery<IApiResponse<IVaccine[]>>(
     [QUERY_KEYS.GET_VACCINE],
@@ -94,14 +76,10 @@ export default function FormPetDetail({
             label="Loài"
             value="species"
             options={{ ...PET_SPECIES_FILTER, kind: 'species' }.items}
-            aiQuery={getPetBreed}
-            enableAI={enableAI}
           />
           <BreedInput
             watch={watch}
             setValue={setValue}
-            aiQuery={getPetBreed}
-            enableAI={enableAI}
           />
           {PET_SELECT.map((filter) => (
             <AttributeSelect
@@ -112,7 +90,6 @@ export default function FormPetDetail({
               label={filter.label}
               value={filter.kind}
               options={filter.items}
-              aiQuery={getPetBreed}
             />
           ))}
           {vaccines && watch('isVaccinated') == 0 && (

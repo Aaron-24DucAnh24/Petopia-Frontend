@@ -1,0 +1,30 @@
+{
+  "firstName": {
+    "required": true,
+    "maxLength": 128
+  },
+  "lastName": {
+    "required": true,
+    "maxLength": 128
+  },
+  "birthDate": {
+    "required": true
+  },
+  "phone": {
+    "required": true,
+    "type": "phone"
+  },
+  "provinceCode": {
+    "required": true
+  },
+  "districtCode": {
+    "required": true
+  },
+  "wardCode": {
+    "required": true
+  },
+  "street": {
+    "required": true,
+    "maxLength": 512
+  }
+}
