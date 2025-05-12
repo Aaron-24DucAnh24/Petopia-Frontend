@@ -6,7 +6,7 @@ import { useQuery } from '@/src/utils/hooks';
 import { IApiResponse } from '@/src/interfaces/common';
 import { QUERY_KEYS, REPORT_ENTITY } from '@/src/utils/constants';
 import { getPreReport } from '@/src/services/user.api';
-import { Alert } from './Alert';
+import { Alert } from './general/Alert';
 
 interface IReportBlock {
   id: string,

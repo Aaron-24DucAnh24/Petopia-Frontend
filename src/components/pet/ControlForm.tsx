@@ -1,5 +1,5 @@
 import { FaLongArrowAltLeft, FaLongArrowAltRight } from 'react-icons/fa';
-import QueryButton from '../general/QueryButton';
+import QueryButton from '../common/button/QueryButton';
 import { GIVE_PET_STEP } from '@/src/utils/constants';
 
 export default function ControlForm({

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert } from '../general/Alert';
+import { Alert } from '../common/general/Alert';
 import { LOCATION_LEVEL, ORG_TYPE, PET_ORG_TYPE_OPTION, QUERY_KEYS } from '@/src/utils/constants';
 import { useForm } from 'react-hook-form';
 import { IOrgUpgradeRequest } from '@/src/interfaces/org';
@@ -8,14 +8,15 @@ import { useStores } from '@/src/stores';
 import { useMutation, useQuery } from '@/src/utils/hooks';
 import { IApiResponse } from '@/src/interfaces/common';
 import { upgradeToOrg } from '@/src/services/user.api';
-import QueryButton from '../general/QueryButton';
+import QueryButton from '../common/button/QueryButton';
 import { getErrorMessage } from '@/src/helpers/getErrorMessage';
 import { AddressInput } from './AddressInput';
 import { ILocationRequest, ILocationResponse } from '@/src/interfaces/pet';
 import { getProvince } from '@/src/services/pet.api';
 import { ValidatorManager } from '@/src/utils/ValidatorManager';
 import { ValueText } from '@/src/utils/ValueText';
-import { SelectInput } from '../general/SelectInput';
+import { SelectInput } from '../common/input/SelectInput';
+import { Input } from '../common/input/Input';
 
 interface IUserUpgradeForm {
   onClose: () => void,
@@ -165,76 +166,76 @@ export const UserUpgradeForm = observer((props: IUserUpgradeForm) => {
           <div className="overflow-auto h-full w-full">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 p-4">
               <div className="flex flex-col space-y-1">
-                <label
-                  htmlFor="org-name"
-                  className="text-gray-700 text-base font-bold">
+                <label htmlFor="inputOrganizationName" className="text-gray-700 text-base font-bold w-fit block">
                   Tên tổ chức
                 </label>
-                <input
-                  test-id="org-name"
-                  id="org-name"
-                  name="org-name"
-                  type="text"
-                  onChange={(e) => {
-                    setValue('organizationName', e.target.value);
-                  }}
-                  className="border-gray-300 border-2 bg-gray-100 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:border-yellow-400 focus:outline-none focus:ring-0 focus:bg-white col-span-2 h-10" />
-                <span className="text-sm text-red-500 mt-2">{errors['organizationName']}</span>
+                <Input
+                  id='inputOrganizationName'
+                  onChange={(value) => setValue('organizationName', value)}
+                  value={watch('organizationName')}
+                  error={errors['organizationName']} />
               </div>
 
               <div className="flex flex-col space-y-1">
-                <label
-                  htmlFor="owner-name"
-                  className="text-gray-700 text-base font-bold">
+                <label htmlFor="inputEntityName" className="text-gray-700 text-base font-bold w-fit block">
                   Tên pháp nhân
                 </label>
-                <input
-                  test-id="org-owner-name"
-                  id="owner-name"
-                  name="owner-name"
-                  type="text"
-                  onChange={(e) => {
-                    setValue('entityName', e.target.value);
-                  }}
-                  className="border-gray-300 border-2 bg-gray-100 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:border-yellow-400 focus:outline-none focus:ring-0 focus:bg-white col-span-2 h-10" />
-                <span className="text-sm text-red-500 mt-2">{errors['entityName']}</span>
+                <Input
+                  id='inputEntityName'
+                  onChange={(value) => setValue('entityName', value)}
+                  value={watch('entityName')}
+                  error={errors['entityName']} />
               </div>
 
               <div className="flex flex-col space-y-1">
-                <label
-                  htmlFor="org-phone"
-                  className="text-gray-700 text-base font-bold">
+                <label htmlFor="inputPhone" className="text-gray-700 text-base font-bold w-fit block">
                   Số điện thoại
                 </label>
-                <input
-                  test-id="org-phone"
-                  id="org-phone"
-                  name="org-phone"
+                <Input
+                  id="inputPhone"
                   type="tel"
-                  onChange={(e) => {
-                    setValue('phone', e.target.value);
-                  }}
-                  className="border-gray-300 border-2 bg-gray-100 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:border-yellow-400 focus:outline-none focus:ring-0 focus:bg-white col-span-2 h-10" />
-                <span className="text-sm text-red-500 mt-2">{errors['phone']}</span>
+                  onChange={(value) => setValue('phone', value)}
+                  value={watch('phone')}
+                  error={errors['phone']} />
               </div>
 
               <div className="flex flex-col space-y-1">
-                <label
-                  htmlFor="org-email"
-                  className="text-gray-700 text-base font-bold">
+                <label htmlFor="inputEmail" className="text-gray-700 text-base font-bold w-fit block">
                   Email
                 </label>
-                <input
-                  test-id="org-email"
-                  id="org-email"
+                <Input
+                  id="inputEmail"
                   type="email"
                   value={watch('email')}
                   disabled
-                  className="border-gray-300 border-2 bg-gray-100 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:border-yellow-400 focus:outline-none focus:ring-0 focus:bg-white col-span-2 h-10" />
+                  error={errors['email']}
+                  onChange={() => { }} />
               </div>
 
               <div className="flex flex-col space-y-1">
-                <label className="text-gray-700 text-base font-bold">Tỉnh/thành phố</label>
+                <label htmlFor="inputWebsite" className="text-gray-700 text-base font-bold w-fit block">
+                  Website
+                </label>
+                <Input
+                  id="inputWebsite"
+                  onChange={(value) => setValue('website', value)}
+                  value={watch('website')}
+                  error={errors['website']} />
+              </div>
+
+              <div className="flex flex-col space-y-1">
+                <label htmlFor="inputTaxCode" className="text-gray-700 text-base font-bold w-fit block">
+                  Mã số thuế
+                </label>
+                <Input
+                  id="inputTaxCode"
+                  onChange={(value) => setValue('taxCode', value)}
+                  value={watch('taxCode')}
+                  error={errors['taxCode']} />
+              </div>
+
+              <div className="flex flex-col space-y-1">
+                <label className="text-gray-700 text-base font-bold w-fit block">Tỉnh/thành phố</label>
                 <AddressInput
                   testId="province-input-dropdown"
                   options={new ValueText(provinces.map(ward => ({ text: ward.name, value: ward.code })))}
@@ -246,7 +247,7 @@ export const UserUpgradeForm = observer((props: IUserUpgradeForm) => {
               </div>
 
               <div className="flex flex-col space-y-1">
-                <label className="text-gray-700 text-base font-bold">Huyện/quận</label>
+                <label className="text-gray-700 text-base font-bold w-fit block">Huyện/quận</label>
                 <AddressInput
                   testId="district-input-dropdown"
                   options={new ValueText(districts.map(ward => ({ text: ward.name, value: ward.code })))}
@@ -258,7 +259,7 @@ export const UserUpgradeForm = observer((props: IUserUpgradeForm) => {
               </div>
 
               <div className="flex flex-col space-y-1">
-                <label className="text-gray-700 text-base font-bold">Xã/phường</label>
+                <label className="text-gray-700 text-base font-bold w-fit block">Xã/phường</label>
                 <AddressInput
                   testId="ward-input-dropdown"
                   options={new ValueText(wards.map(ward => ({ text: ward.name, value: ward.code })))}
@@ -270,61 +271,7 @@ export const UserUpgradeForm = observer((props: IUserUpgradeForm) => {
               </div>
 
               <div className="flex flex-col space-y-1">
-                <label
-                  htmlFor="org-address"
-                  className="text-gray-700 text-base font-bold">
-                  Số nhà, tên đường
-                </label>
-                <input
-                  test-id="org-street"
-                  id="org-address"
-                  name="org-address"
-                  type="text"
-                  onChange={(e) => {
-                    setValue('street', e.target.value);
-                  }}
-                  className="border-gray-300 border-2 bg-gray-100 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:border-yellow-400 focus:outline-none focus:ring-0 focus:bg-white col-span-2 h-10" />
-                <span className="text-sm text-red-500 mt-2">{errors['street']}</span>
-              </div>
-
-              <div className="flex flex-col space-y-1">
-                <label
-                  htmlFor="link"
-                  className="text-gray-700 text-base font-bold">
-                  Website
-                </label>
-                <input
-                  test-id="org-website"
-                  id="link"
-                  type="text"
-                  onChange={(e) => {
-                    setValue('website', e.target.value);
-                  }}
-                  className="border-gray-300 border-2 bg-gray-100 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:border-yellow-400 focus:outline-none focus:ring-0 focus:bg-white col-span-2 h-10" />
-                <span className="text-sm text-red-500 mt-2">{errors['website']}</span>
-              </div>
-
-              <div className="flex flex-col space-y-1">
-                <label
-                  htmlFor="tax-code"
-                  className="text-gray-700 text-base font-bold">
-                  Mã số thuế
-                </label>
-                <input
-                  test-id="org-tax-code"
-                  id="tax-code"
-                  name="tax-code"
-                  onChange={(e) => {
-                    setValue('taxCode', e.target.value);
-                  }}
-                  className="border-gray-300 border-2 bg-gray-100 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:border-yellow-400 focus:outline-none focus:ring-0 focus:bg-white col-span-2 h-10" />
-                <span className="text-sm text-red-500 mt-2">{errors['taxCode']}</span>
-              </div>
-
-              <div className="flex flex-col space-y-1">
-                <label
-                  htmlFor="org-type"
-                  className="text-gray-700 text-base font-bold">
+                <label className="text-gray-700 text-base font-bold w-fit block">
                   Loại tổ chức
                 </label>
                 <SelectInput
@@ -335,20 +282,26 @@ export const UserUpgradeForm = observer((props: IUserUpgradeForm) => {
               </div>
 
               <div className="flex flex-col space-y-1 col-span-2">
-                <label
-                  htmlFor="org-mission"
-                  className="text-gray-700 text-base font-bold">
+                <label htmlFor="inputStreet" className="text-gray-700 text-base font-bold w-fit block">
+                  Số nhà, tên đường
+                </label>
+                <Input
+                  id="inputStreet"
+                  onChange={(value) => setValue('street', value)}
+                  value={watch('street')}
+                  error={errors['street']} />
+              </div>
+
+              <div className="flex flex-col space-y-1 col-span-2">
+                <label htmlFor="org-mission" className="text-gray-700 text-base font-bold w-fit block">
                   Giới thiệu về tổ chức
                 </label>
-                <textarea
-                  test-id="org-mission"
+                <Input
                   id="org-mission"
-                  name="org-mission"
-                  onChange={(e) => {
-                    setValue('description', e.target.value);
-                  }}
-                  className="border-gray-300 border-2 bg-gray-100 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:border-yellow-400 focus:outline-none focus:ring-0 focus:bg-white col-span-2 h-full min-h-[80px]" />
-                <span className="text-sm text-red-500 mt-2">{errors['description']}</span>
+                  type="textarea"
+                  onChange={(value) => setValue('description', value)}
+                  value={watch('description')}
+                  error={errors['description']} />
               </div>
 
               <div className="col-span-2 flex items-center">

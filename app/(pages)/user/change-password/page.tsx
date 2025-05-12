@@ -6,9 +6,9 @@ import { useMutation } from '@/src/utils/hooks';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { getErrorMessage } from '@/src/helpers/getErrorMessage';
-import { QueryProvider } from '@/src/components/general/QueryProvider';
-import { Alert } from '@/src/components/general/Alert';
-import QueryButton from '@/src/components/general/QueryButton';
+import { QueryProvider } from '@/src/components/common/provider/QueryProvider';
+import { Alert } from '@/src/components/common/general/Alert';
+import QueryButton from '@/src/components/common/button/QueryButton';
 import { StringUtil } from '@/src/utils/StringUtil';
 
 const page = QueryProvider(() => {
@@ -76,7 +76,7 @@ const page = QueryProvider(() => {
             <div>
               <label
                 htmlFor="old-password"
-                className="block mb-2 text-sm font-medium text-gray-900 ">
+                className="block mb-2 w-fit block mb-2 text-sm font-medium text-gray-900  ">
                 Mật khẩu cũ
               </label>
               <input
@@ -91,7 +91,7 @@ const page = QueryProvider(() => {
             <div>
               <label
                 htmlFor="new-password"
-                className="block mb-2 text-sm font-medium text-gray-900 ">
+                className="block mb-2 w-fit block mb-2 text-sm font-medium text-gray-900  ">
                 Mật khẩu mới
               </label>
               <input

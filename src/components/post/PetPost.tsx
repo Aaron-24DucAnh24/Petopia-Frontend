@@ -23,8 +23,8 @@ import {
   likePost,
   sendCommentPost,
 } from '@/src/services/post.api';
-import ImageCarousel from '@/src/components/general/Carousel';
-import CommentSkeleton from '../general/CommentSkeleton';
+import ImageCarousel from '@/src/components/common/Carousel';
+import CommentSkeleton from '../common/CommentSkeleton';
 import { useStores } from '@/src/stores';
 
 export default function PetPost({
@@ -162,9 +162,8 @@ export default function PetPost({
             <div className="flex flex-row items-center">
               <button
                 onClick={handleLikeButton}
-                className={`heart ${isAnimating ? 'is_animating' : ''} ${
-                  isLiked ? 'liked' : ''
-                }`}
+                className={`heart ${isAnimating ? 'is_animating' : ''} ${isLiked ? 'liked' : ''
+                  }`}
               ></button>
               <div className="font-medium -ml-4 text-gray-400">{post.like}</div>
             </div>
@@ -207,9 +206,8 @@ export default function PetPost({
                     value={commentContent}
                   />
                   <button
-                    className={`absolute h-full right-0 top-0 p-3 flex items-center justify-center ${
-                      commentContent === '' ? '' : 'hover:text-blue-500'
-                    } `}
+                    className={`absolute h-full right-0 top-0 p-3 flex items-center justify-center ${commentContent === '' ? '' : 'hover:text-blue-500'
+                      } `}
                     type="submit"
                     disabled={commentContent === ''}
                   >

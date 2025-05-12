@@ -3,14 +3,14 @@ import uploadAdapter from './UploadAdapter';
 import { IBlog, IBlogResponse, IBlogUpdate } from '@/src/interfaces/blog';
 import { useForm } from 'react-hook-form';
 import { BLOG_CATEGORIES_OPTION, QUERY_KEYS } from '@/src/utils/constants';
-import Dropzone from '../general/Dropzone';
+import Dropzone from '../common/Dropzone';
 import { IApiResponse, IUploadImage } from '@/src/interfaces/common';
 import { postImage } from '@/src/helpers/postImage';
 import { getBlogDetail, postBlog, updateBlog } from '@/src/services/blog.api';
 import { useMutation, useQuery, useRunOnce } from '@/src/utils/hooks';
-import { QueryProvider } from '../general/QueryProvider';
-import { Alert } from '../general/Alert';
-import QueryButton from '../general/QueryButton';
+import { QueryProvider } from '../common/provider/QueryProvider';
+import { Alert } from '../common/general/Alert';
+import QueryButton from '../common/button/QueryButton';
 
 const BlogEditor = QueryProvider(({ id = '' }: { id?: string }) => {
   // STATE

@@ -3,9 +3,9 @@ import Link from 'next/link';
 import { ChangeEvent, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { GoogleLoginButton } from './GoogleLoginButton';
-import { Alert } from '../general/Alert';
+import { Alert } from '../common/general/Alert';
 import { deleteCookie, getCookie, setCookie } from 'cookies-next';
-import { QueryProvider } from '../general/QueryProvider';
+import { QueryProvider } from '../common/provider/QueryProvider';
 import {
   IGoogleLoginRequest,
   ILoginRequest,
@@ -16,10 +16,9 @@ import { useMutation } from '@/src/utils/hooks';
 import { IApiResponse } from '@/src/interfaces/common';
 import { googleLogin, login } from '@/src/services/authentication.api';
 import { getErrorMessage } from '@/src/helpers/getErrorMessage';
-import QueryButton from '../general/QueryButton';
-import { getCurrentUserCore } from '@/src/services/user.api';
-import { ICurrentUserCoreResponse } from '@/src/interfaces/user';
+import QueryButton from '../common/button/QueryButton';
 import { useStores } from '@/src/stores';
+import { Input } from '../common/input/Input';
 
 export const LoginForm = QueryProvider(() => {
   // STATES
@@ -28,7 +27,7 @@ export const LoginForm = QueryProvider(() => {
   const { userStore } = useStores();
 
   // FORMS
-  const { getValues, setValue } = useForm<ILoginRequest>({
+  const { getValues, setValue, watch } = useForm<ILoginRequest>({
     defaultValues: {
       email: '',
       password: '',
@@ -102,33 +101,27 @@ export const LoginForm = QueryProvider(() => {
           <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
             <div>
               <label
-                htmlFor="email"
-                className="block mb-2 text-sm font-medium text-gray-900 ">
+                htmlFor="inputEmail"
+                className="w-fit block mb-2 text-sm font-medium text-gray-900  ">
                 Email của bạn
               </label>
-              <input
-                test-id="login-email-input"
-                type="email"
-                id="email"
-                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 :bg-gray-700 "
-                placeholder="name@company.com"
-                required
-                onChange={(e) => setValue('email', e.target.value)} />
+              <Input
+                id='inputEmail'
+                type='email'
+                onChange={(value) => setValue('email', value)}
+                value={watch('email')} />
             </div>
             <div>
               <label
-                htmlFor="password"
-                className="block mb-2 text-sm font-medium text-gray-900 ">
+                htmlFor="inputPassword"
+                className="w-fit block mb-2 text-sm font-medium text-gray-900  ">
                 Mật khẩu
               </label>
-              <input
-                test-id="login-password-input"
-                type="password"
-                id="password"
-                placeholder="••••••••"
-                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
-                required
-                onChange={(e) => setValue('password', e.target.value)} />
+              <Input
+                id='inputPassword'
+                type='password'
+                onChange={(value) => setValue('password', value)}
+                value={watch('password')} />
             </div>
             <div className="flex items-center justify-between">
               <Link

@@ -92,7 +92,7 @@ export default function Dropdown({
                       />
                       <label
                         htmlFor={`checkbox-item-${option.id}`}
-                        className="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
+                        className="w-full ms-2 w-fit block mb-2  rounded dark:text-gray-300"
                       >
                         {option.name}
                       </label>

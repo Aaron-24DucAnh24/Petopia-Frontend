@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { CiEdit } from 'react-icons/ci';
 import Popup from 'reactjs-popup';
 import { MdDelete } from 'react-icons/md';
-import { Alert } from '../general/Alert';
+import { Alert } from '../common/general/Alert';
 import { useMutation } from '@/src/utils/hooks';
 import { deleteBlog } from '@/src/services/blog.api';
 import BlogEditor from '../text-editor/BlogEditor';
@@ -82,7 +82,7 @@ const BlogCard = ({
             <div className="p-2 md:p-4">
               {/* Title */}
               <h2
-                test-id={testId+'-title'}
+                test-id={testId + '-title'}
                 className="text-lg font-bold mb-2 line-clamp-2"
               >
                 {title}
@@ -102,7 +102,7 @@ const BlogCard = ({
               <button
                 className="p-2 bg-gray-200 rounded-full hover:bg-gray-300"
                 onClick={handleEdit}
-                test-id={testId+'-edit'}
+                test-id={testId + '-edit'}
               >
                 <CiEdit size={20} />
               </button>

@@ -5,7 +5,7 @@ import { IApiResponse } from '@/src/interfaces/common';
 import { getBreed } from '@/src/services/pet.api';
 import { UseFormSetValue, UseFormWatch } from 'react-hook-form';
 import { ICreatePetProfileRequest } from '@/src/interfaces/pet';
-import { FilterDropDown } from '../general/FilterDropdown';
+import { FilterDropDown } from '../common/FilterDropdown';
 
 export default function BreedInput({
   setValue,

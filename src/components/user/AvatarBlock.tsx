@@ -4,7 +4,7 @@ import { updateAvatar } from '@/src/services/user.api';
 import { STATIC_URLS } from '@/src/utils/constants';
 import { useMutation } from '@/src/utils/hooks';
 import { ChangeEvent, useRef, useState } from 'react';
-import { Alert } from '../general/Alert';
+import { Alert } from '../common/general/Alert';
 import { useStores } from '@/src/stores';
 
 interface IAvatarBlock {

@@ -7,7 +7,7 @@ import { AxiosResponse } from 'axios';
 import { UseQueryResult } from 'react-query';
 import { deletePost } from '@/src/services/post.api';
 import { useMutation } from '@/src/utils/hooks';
-import { Alert } from './Alert';
+import { Alert } from './general/Alert';
 
 export function CarouselDefault({
   posts,
@@ -49,9 +49,8 @@ export function CarouselDefault({
               {new Array(length).fill('').map((_, i) => (
                 <span
                   key={i}
-                  className={` block h-1 cursor-pointer rounded-2xl transition-all content-[''] ${
-                    activeIndex === i ? 'w-8 bg-black' : 'w-4 bg-gray-300'
-                  }`}
+                  className={` block h-1 cursor-pointer rounded-2xl transition-all content-[''] ${activeIndex === i ? 'w-8 bg-black' : 'w-4 bg-gray-300'
+                    }`}
                   onClick={() => setActiveIndex(i)}
                 />
               ))}

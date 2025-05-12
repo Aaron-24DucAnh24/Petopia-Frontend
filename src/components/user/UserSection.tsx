@@ -3,9 +3,9 @@ import { useState } from 'react';
 import { useQuery } from '../../utils/hooks';
 import { IApiResponse } from '../../interfaces/common';
 import { QUERY_KEYS, STATIC_URLS } from '../../utils/constants';
-import { QueryProvider } from '../general/QueryProvider';
+import { QueryProvider } from '../common/provider/QueryProvider';
 import { getPreUpgrade, getUserInfo } from '@/src/services/user.api';
-import UserSkeleton from '../general/UserSkeleton';
+import UserSkeleton from '../common/UserSkeleton';
 import TabbedTable from './TabbedTable';
 import { AvatarBlock } from './AvatarBlock';
 import { NameRoleBlock } from './NameRoleBlock';
@@ -16,15 +16,15 @@ import { UserUpdateForm } from './UserUpdateForm';
 import Popup from 'reactjs-popup';
 import { UserUpgradeForm } from './UserUpgradeForm';
 
-export const UserInformation = QueryProvider(() => {
-  // STATES
+export const UserSection = QueryProvider(() => {
+  // States
   const [showEdit, setShowEdit] = useState(false);
   const [showUpgrade, setShowUpgrade] = useState(false);
   const [userInfo, setUserInfo] = useState<IUserInfoReponse>();
   const [image, setImage] = useState<string>(STATIC_URLS.NO_AVATAR);
   const [allowUpgrade, setAllowUpgrade] = useState<boolean>(false);
 
-  // QUERIES
+  // Get user information
   const getUserQuery = useQuery<IApiResponse<IUserInfoReponse>>(
     [QUERY_KEYS.GET_CURRENT_USER],
     getUserInfo,
@@ -37,6 +37,7 @@ export const UserInformation = QueryProvider(() => {
     }
   );
 
+  // Check if can upgrade account
   useQuery<IApiResponse<boolean>>(
     [QUERY_KEYS.GET_PRE_UPGRADE],
     getPreUpgrade,

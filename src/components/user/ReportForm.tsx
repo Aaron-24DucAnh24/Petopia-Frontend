@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import QueryButton from '../general/QueryButton';
+import QueryButton from '../common/button/QueryButton';
 import { REPORT_ENTITY, REPORT_TYPE } from '@/src/utils/constants';
 import { useForm } from 'react-hook-form';
 import { IReportRequest } from '@/src/interfaces/user';
 import { IApiResponse } from '@/src/interfaces/common';
 import { report } from '@/src/services/user.api';
 import { useMutation } from '@/src/utils/hooks';
-import { Alert } from '../general/Alert';
+import { Alert } from '../common/general/Alert';
 
 export default function ReportForm({
   id,

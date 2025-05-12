@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { QueryProvider } from '../general/QueryProvider';
+import { QueryProvider } from '../common/provider/QueryProvider';
 import ListCards from './ListCards';
 import { getOtherUserInfo } from '@/src/services/user.api';
 import { IUserInfoReponse } from '@/src/interfaces/user';
@@ -14,11 +14,11 @@ import {
 import { useForm } from 'react-hook-form';
 import { IPetResponse } from '@/src/interfaces/pet';
 import { getPetsByUser } from '@/src/services/pet.api';
-import Pagination from '../general/Pagination';
-import UserSkeleton from '../general/UserSkeleton';
+import Pagination from '../common/general/Pagination';
+import UserSkeleton from '../common/UserSkeleton';
 import { NameRoleBlock } from './NameRoleBlock';
 import Image from 'next/image';
-import { ReportBlock } from '../general/ReportBlock';
+import { ReportBlock } from '../common/ReportBlock';
 import { UserInfomationBlock } from './UserInformationBlock';
 
 export const OtherUserInformation = QueryProvider(({ userId }: { userId: string }) => {

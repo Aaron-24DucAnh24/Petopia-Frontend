@@ -1,8 +1,8 @@
 import { Inter } from 'next/font/google';
 import '../globals.css';
 import '../datepicker.css';
-import { Navbar } from '@/src/components/nav';
-import { Footer } from '@/src/components/general/Footer';
+import { Navbar } from '@/src/components/common/navigator';
+import { Footer } from '@/src/components/common/general/Footer';
 
 const inter = Inter({ subsets: ['latin'] });
 

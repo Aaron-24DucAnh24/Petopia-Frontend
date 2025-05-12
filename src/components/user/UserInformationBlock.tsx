@@ -1,10 +1,10 @@
 import { IUserInfoReponse } from '@/src/interfaces/user';
 import { format } from 'date-fns';
-import Testimonials from '../general/Testimonials';
 import { USER_ROLE } from '@/src/utils/constants';
 import { ValueTextManager } from '@/src/utils/ValueTextManager';
 import Link from 'next/link';
 import { StringUtil } from '@/src/utils/StringUtil';
+import Testimonials from '../common/Testimonials';
 
 interface IUserInformationBlock {
   userInfo: IUserInfoReponse,

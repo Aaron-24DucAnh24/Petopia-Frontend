@@ -3,7 +3,7 @@ import { getPaymentToken } from '@/src/services/payment.api';
 import { useEffect, useState } from 'react';
 import { IApiResponse } from '@/src/interfaces/common';
 import { QUERY_KEYS } from '@/src/utils/constants';
-import { Alert } from '../general/Alert';
+import { Alert } from '../common/general/Alert';
 import * as braintree from 'braintree-web-drop-in';
 
 export default function PaymentDropIn({

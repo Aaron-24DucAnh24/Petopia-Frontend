@@ -2,9 +2,9 @@
 import Link from 'next/link';
 import { ChangeEvent, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Alert } from '../general/Alert';
+import { Alert } from '../common/general/Alert';
 import { GoogleRecaptcha } from './GoogleRecaptcha';
-import { QueryProvider } from '../general/QueryProvider';
+import { QueryProvider } from '../common/provider/QueryProvider';
 import { IRegisterForm, IRegisterRequest } from '@/src/interfaces/authentication';
 import { useMutation } from '@/src/utils/hooks';
 import { register } from '@/src/services/authentication.api';
@@ -12,9 +12,10 @@ import { IApiResponse } from '@/src/interfaces/common';
 import { getErrorMessage } from '@/src/helpers/getErrorMessage';
 import { publish } from '@/src/services/event';
 import { EVENT_NAMES } from '@/src/utils/constants';
-import { DatePicker } from '../general/DatePicker';
+import { DatePicker } from '../common/input/DatePicker';
 import { ValidatorManager } from '@/src/utils/ValidatorManager';
-import QueryButton from '../general/QueryButton';
+import QueryButton from '../common/button/QueryButton';
+import { Input } from '../common/input/Input';
 
 export default QueryProvider(() => {
   // STATES
@@ -91,40 +92,40 @@ export default QueryProvider(() => {
           <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
             <div>
               <label
-                htmlFor="text"
-                className="block mb-2 text-sm font-medium text-gray-900 ">
+                htmlFor="inputLastName"
+                className="w-fit block mb-2 text-sm font-medium text-gray-900  ">
                 Họ
               </label>
-              <input
-                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
-                type="text"
-                id="lastName"
-                onChange={(e) => setValue('lastName', e.target.value)} />
-              <span className="text-sm text-red-500 mt-2">{errors['lastName']}</span>
+              <Input
+                id='inputLastName'
+                containerClassName='col-span-2'
+                onChange={(value) => setValue('lastName', value)}
+                value={watch('lastName')}
+                error={errors['lastName']} />
             </div>
 
             <div>
               <label
                 htmlFor="text"
-                className="block mb-2 text-sm font-medium text-gray-900 ">
+                className="w-fit block mb-2 text-sm font-medium text-gray-900  ">
                 Tên
               </label>
-              <input
-                type="text"
-                id="firstName"
-                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                onChange={(e) => setValue('firstName', e.target.value)} />
-              <span className="text-sm text-red-500 mt-2">{errors['firstName']}</span>
+              <Input
+                id='inputFirstName'
+                containerClassName='col-span-2'
+                onChange={(value) => setValue('firstName', value)}
+                value={watch('firstName')}
+                error={errors['firstName']} />
             </div>
 
             <div>
               <label
-                htmlFor="text"
-                className="block mb-2 text-sm font-medium text-gray-900 ">
+                htmlFor="dpBirthDate"
+                className="w-fit block mb-2 text-sm font-medium text-gray-900  ">
                 Ngày sinh
               </label>
               <DatePicker
-                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 p-2.5"
+                id='dpBirthDate'
                 value={watch('birthDate')}
                 onChange={(date) => setValue('birthDate', date)} />
               <span className="text-sm text-red-500 mt-2">{errors['birthDate']}</span>
@@ -132,44 +133,46 @@ export default QueryProvider(() => {
 
             <div>
               <label
-                htmlFor="email"
-                className="block mb-2 text-sm font-medium text-gray-900 ">
+                htmlFor="inputEmail"
+                className="w-fit block mb-2 text-sm font-medium text-gray-900  ">
                 Email
               </label>
-              <input
-                type="text"
-                id="email"
-                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                onChange={(e) => setValue('email', e.target.value)} />
-              <span className="text-sm text-red-500 mt-2">{errors['email']}</span>
+              <Input
+                id='inputEmail'
+                containerClassName='col-span-2'
+                onChange={(value) => setValue('email', value)}
+                value={watch('email')}
+                error={errors['email']} />
             </div>
 
             <div>
               <label
-                htmlFor="password"
-                className="block mb-2 text-sm font-medium text-gray-900 ">
+                htmlFor="inputPassword"
+                className="w-fit block mb-2 text-sm font-medium text-gray-900  ">
                 Mật khẩu
               </label>
-              <input
-                type="password"
-                id="password"
-                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
-                onChange={(e) => setValue('password', e.target.value)} />
-              <span className="text-sm text-red-500 mt-2">{errors['password']}</span>
+              <Input
+                id='inputPassword'
+                type='password'
+                containerClassName='col-span-2'
+                onChange={(value) => setValue('password', value)}
+                value={watch('password')}
+                error={errors['password']} />
             </div>
 
             <div>
               <label
-                htmlFor="password"
-                className="block mb-2 text-sm font-medium text-gray-900 ">
+                htmlFor="inputConfirmPassword"
+                className="w-fit block mb-2 text-sm font-medium text-gray-900  ">
                 Nhập lại mật khẩu
               </label>
-              <input
-                type="password"
-                id="confirmPassword"
-                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
-                onChange={(e) => setValue('confirmPassword', e.target.value)} />
-              <span className="text-sm text-red-500 mt-2">{errors['confirmPassword']}</span>
+              <Input
+                id='inputConfirmPassword'
+                type='password'
+                containerClassName='col-span-2'
+                onChange={(value) => setValue('confirmPassword', value)}
+                value={watch('confirmPassword')}
+                error={errors['confirmPassword']} />
             </div>
 
             <GoogleRecaptcha setToken={(value) => setValue('googleRecaptchaToken', value)} />

@@ -3,7 +3,7 @@ import { IPetResponse } from '@/src/interfaces/pet';
 import Image from 'next/image';
 import Link from 'next/link';
 import { MdDelete } from 'react-icons/md';
-import { Alert } from '../general/Alert';
+import { Alert } from '../common/general/Alert';
 import { useState } from 'react';
 import { useMutation } from '@/src/utils/hooks';
 import { deletePet } from '@/src/services/pet.api';

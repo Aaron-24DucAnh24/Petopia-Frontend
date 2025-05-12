@@ -13,7 +13,7 @@ import { useState } from 'react';
 import { PetCard } from '../search/PetCard';
 import { IPetDetailResponse, IPetResponse } from '@/src/interfaces/pet';
 import { getPetDetail } from '@/src/services/pet.api';
-import { Alert } from '../general/Alert';
+import { Alert } from '../common/general/Alert';
 import Link from 'next/link';
 import { FaRegUserCircle } from 'react-icons/fa';
 

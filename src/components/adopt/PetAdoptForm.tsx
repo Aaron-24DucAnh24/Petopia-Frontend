@@ -10,7 +10,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { IUserInfoReponse } from '@/src/interfaces/user';
 import { usePathname } from 'next/navigation';
-import { Alert } from '../general/Alert';
+import { Alert } from '../common/general/Alert';
 import { preCheckAdoption, sendAdoptRequest } from '@/src/services/adopt.api';
 import { IAdoptPetRequest } from '@/src/interfaces/adopt';
 import { getErrorMessage } from '@/src/helpers/getErrorMessage';

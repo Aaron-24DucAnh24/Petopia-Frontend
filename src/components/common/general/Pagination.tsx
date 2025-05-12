@@ -1,5 +1,5 @@
 import { UseFormReturn } from 'react-hook-form';
-import { IPaginationModel } from '../../interfaces/common';
+import { IPaginationModel } from '../../../interfaces/common';
 import { useEffect } from 'react';
 
 interface IPagination {
@@ -57,7 +57,7 @@ export default function Pagination(props: IPagination) {
     return result;
   };
 
-  useEffect(() => {}, [watch('pageIndex')]);
+  useEffect(() => { }, [watch('pageIndex')]);
 
   return show ? (
     <div>

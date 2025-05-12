@@ -3,11 +3,11 @@ import { ChangeEvent, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQuery } from '@/src/utils/hooks';
 import { IApiResponse } from '@/src/interfaces/common';
-import { QueryProvider } from '../general/QueryProvider';
+import { QueryProvider } from '../common/provider/QueryProvider';
 import FormUploadImage from './FormUploadImage';
 import FormPetDetail from './FormPetDetail';
 import FormRules from './FormRules';
-import { Alert } from '../general/Alert';
+import { Alert } from '../common/general/Alert';
 import {
   ICreatePetProfileRequest,
   ICreatePetResponse,

@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useStores } from '@/src/stores';
-import { QueryProvider } from '../general/QueryProvider';
+import { QueryProvider } from '../provider/QueryProvider';
 import { NavProfileBlock } from './NavProfileBlock';
 import { NavOptionsBlock } from './NavOptionsBlock';
 import Link from 'next/link';

@@ -1,5 +1,5 @@
 import { LOCATION_LEVEL } from '@/src/utils/constants';
-import { SelectInput } from '../general/SelectInput';
+import { SelectInput } from '../common/input/SelectInput';
 import { ValueText } from '@/src/utils/ValueText';
 
 interface IAddressInput {

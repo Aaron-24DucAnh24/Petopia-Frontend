@@ -11,7 +11,7 @@ import { IApiResponse, IPaginationModel } from '@/src/interfaces/common';
 import { useQuery } from '@/src/utils/hooks';
 import { getPetsByUser } from '@/src/services/pet.api';
 import { QUERY_KEYS, USER_ROLE } from '@/src/utils/constants';
-import Pagination from '../general/Pagination';
+import Pagination from '../common/general/Pagination';
 import { countNotify } from '@/src/services/adopt.api';
 import { NotifySortBlock } from '../adopt/NotifySortBlock';
 import { IBlogResponse } from '@/src/interfaces/blog';
@@ -143,22 +143,21 @@ export default function TabbedTable({
           </li>
           {(userInfo?.role === USER_ROLE.ORGANIZATION ||
             userInfo?.role === USER_ROLE.SYSTEM_ADMIN) && (
-            <li>
-              <button
-              test-id="blog-tab"
-                className={`${
-                  tab === TAB.BLOG ? activeTab : inactiveTab
-                } relative`}
-                onClick={() => setTab(TAB.BLOG)}
-              >
-                <RiUserReceived2Fill
-                  className={`${tab === TAB.BLOG ? activeIcon : inactiveIcon}`}
-                />
-                Bài viết
-                <span className="hidden md:inline-block ml-1">Của bạn</span>
-              </button>
-            </li>
-          )}
+              <li>
+                <button
+                  test-id="blog-tab"
+                  className={`${tab === TAB.BLOG ? activeTab : inactiveTab
+                    } relative`}
+                  onClick={() => setTab(TAB.BLOG)}
+                >
+                  <RiUserReceived2Fill
+                    className={`${tab === TAB.BLOG ? activeIcon : inactiveIcon}`}
+                  />
+                  Bài viết
+                  <span className="hidden md:inline-block ml-1">Của bạn</span>
+                </button>
+              </li>
+            )}
           <li>
             <button
               className={`${tab === TAB.SENT ? activeTab : inactiveTab}`}
@@ -173,15 +172,13 @@ export default function TabbedTable({
           </li>
           <li>
             <button
-              className={`${
-                tab === TAB.IMCOMMING ? activeTab : inactiveTab
-              } relative`}
+              className={`${tab === TAB.IMCOMMING ? activeTab : inactiveTab
+                } relative`}
               onClick={() => setTab(TAB.IMCOMMING)}
             >
               <RiUserReceived2Fill
-                className={`${
-                  tab === TAB.IMCOMMING ? activeIcon : inactiveIcon
-                }`}
+                className={`${tab === TAB.IMCOMMING ? activeIcon : inactiveIcon
+                  }`}
               />
               {notifyCount > 0 && (
                 <div>

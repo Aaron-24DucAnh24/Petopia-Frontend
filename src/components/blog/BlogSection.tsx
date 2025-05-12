@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import BlogCard from './BlogCard';
-import Pagination from '../general/Pagination';
+import Pagination from '../common/general/Pagination';
 import { getBlogs } from '@/src/services/blog.api';
 import { useForm } from 'react-hook-form';
 import { IApiResponse, IPaginationModel } from '@/src/interfaces/common';
@@ -13,10 +13,10 @@ import {
 } from '@/src/utils/constants';
 import { IBlogCardResponse, IBlogResponse } from '@/src/interfaces/blog';
 import { useQuery } from '@/src/utils/hooks';
-import { QueryProvider } from '../general/QueryProvider';
-import CardSkeleton from '../general/CardSkeleton';
+import { QueryProvider } from '../common/provider/QueryProvider';
+import CardSkeleton from '../common/CardSkeleton';
 import AdvertisementCarousel from './AdvertisementCarousel';
-import { SortBlock } from '../general/SortBlock';
+import { SortBlock } from '../common/general/SortBlock';
 
 const BlogSection = QueryProvider(() => {
   const [selectedCategory, setSelectedCategory] = useState<
@@ -80,9 +80,8 @@ const BlogSection = QueryProvider(() => {
                 <li
                   test-id={'blog-category-filter-option'}
                   key={index}
-                  className={`mr-5 cursor-pointer ${
-                    selectedCategory === category.value ? 'underline' : ''
-                  }`}
+                  className={`mr-5 cursor-pointer ${selectedCategory === category.value ? 'underline' : ''
+                    }`}
                   onClick={() => {
                     setSelectedCategory(category.value);
                   }}

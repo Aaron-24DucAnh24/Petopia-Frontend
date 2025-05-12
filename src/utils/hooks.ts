@@ -16,7 +16,7 @@ import {
   useRef
 } from 'react';
 
-/*----------------------------- USE MUTATION ----------------------------- */
+// Use mutation
 export function useMutation<TData = any, TVariables = any, TContext = unknown>(
   mutationFn: any,
   options?: Omit<
@@ -27,7 +27,7 @@ export function useMutation<TData = any, TVariables = any, TContext = unknown>(
   return useMutationLib(mutationFn, options);
 }
 
-/*------------------------------ USE QUERY ------------------------------ */
+// Use query
 export function useQuery<TData = any, TQueryFnData = any, TQueryKey extends QueryKey = QueryKey>(
   queryKey: TQueryKey,
   queryFn: any,
@@ -39,7 +39,7 @@ export function useQuery<TData = any, TQueryFnData = any, TQueryKey extends Quer
   return useQueryLib(queryKey, queryFn, options);
 }
 
-/*----------------------------- USE RUN ONCE ---------------------------- */
+// Use run once
 export const useRunOnce = (fn: () => any) => {
   const triggered = useRef<boolean>(false);
 
@@ -54,7 +54,7 @@ export const useRunOnce = (fn: () => any) => {
   return null;
 };
 
-/*--------------------------- USE CLICK OUTSIDE ------------------------- */
+// Use click outside
 export const useClickOutside = (
   action: () => void,
   dependencyList: RefObject<HTMLElement>[]

@@ -1,4 +1,4 @@
-import { UserInformation } from '@/src/components/user/UserInformation';
+import { UserSection } from '@/src/components/user/UserSection';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function page() {
   return (
     <div>
-      <UserInformation />
+      <UserSection />
     </div>
   );
 }

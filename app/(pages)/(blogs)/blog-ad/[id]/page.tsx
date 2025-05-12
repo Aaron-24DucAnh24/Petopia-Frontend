@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@/src/utils/hooks';
-import { QueryProvider } from '@/src/components/general/QueryProvider';
+import { QueryProvider } from '@/src/components/common/provider/QueryProvider';
 import PaymentDropIn from '@/src/components/payment/PaymentDropIn';
 import { IApiResponse } from '@/src/interfaces/common';
 import {
@@ -10,9 +10,9 @@ import {
 } from '@/src/interfaces/payment';
 import { createPayment, getAdTypes } from '@/src/services/payment.api';
 import { QUERY_KEYS } from '@/src/utils/constants';
-import QueryButton from '@/src/components/general/QueryButton';
+import QueryButton from '@/src/components/common/button/QueryButton';
 import { useForm } from 'react-hook-form';
-import { Alert } from '@/src/components/general/Alert';
+import { Alert } from '@/src/components/common/general/Alert';
 
 const BlogAdPage = QueryProvider(({ params }: { params: { id: string } }) => {
   // States

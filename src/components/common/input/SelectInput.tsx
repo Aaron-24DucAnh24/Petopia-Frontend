@@ -48,14 +48,14 @@ export const SelectInput = (props: ISelectInput) => {
     <div className="relative">
       {!isLoading ? (
         <input
-          className='border-gray-300 border-2 bg-gray-100 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:border-yellow-400 focus:outline-none focus:ring-0 focus:bg-white'
+          className='border-gray-300 border bg-gray-50 rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:border-yellow-400 focus:outline-none focus:ring-0 focus:bg-white'
           value={keywords}
           disabled={isDisabled}
           onChange={(e) => setKeywords(e.target.value)}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setTimeout(() => setIsFocused(false), 150)} />
       ) : (
-        <span className='border-gray-300 border-2 bg-gray-100 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:border-yellow-400 focus:outline-none focus:ring-0 focus:bg-white'>
+        <span className='border-gray-300 border bg-gray-50 rounded-lg w-full py-2 px-3 text-gray-700 leading-tight'>
           <ClipLoader
             color="#000000"
             loading={isLoading}

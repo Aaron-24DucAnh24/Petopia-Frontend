@@ -1,7 +1,7 @@
 import React from 'react';
-import { LoginForm } from '@/src/components/login/LoginForm';
-import { Background } from '@/src/components/general/Background';
+import { LoginForm } from '@/src/components/authentication/LoginForm';
 import { Metadata } from 'next';
+import { Background } from '@/src/components/common/general/Background';
 
 export const metadata: Metadata = {
   title: 'Đăng nhập - Petopia',

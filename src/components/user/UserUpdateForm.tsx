@@ -3,20 +3,21 @@ import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
 import { useMutation, useQuery } from '../../utils/hooks';
 import { IApiResponse } from '../../interfaces/common';
 import { updateUser } from '../../services/user.api';
-import { Alert } from '../general/Alert';
-import QueryButton from '../general/QueryButton';
+import { Alert } from '../common/general/Alert';
+import QueryButton from '../common/button/QueryButton';
 import { IUserInfoReponse, IUserUpdate } from '@/src/interfaces/user';
 import { getErrorMessage } from '@/src/helpers/getErrorMessage';
-import Button from '../general/Button';
+import Button from '../common/button/Button';
 import { ILocationRequest, ILocationResponse } from '@/src/interfaces/pet';
 import { LOCATION_LEVEL, ORG_TYPE, PET_ORG_TYPE_OPTION, QUERY_KEYS, USER_ROLE } from '@/src/utils/constants';
 import { getProvince } from '@/src/services/pet.api';
 import { AddressInput } from './AddressInput';
 import { useStores } from '@/src/stores';
-import { DatePicker } from '../general/DatePicker';
+import { DatePicker } from '../common/input/DatePicker';
 import { ValidatorManager } from '@/src/utils/ValidatorManager';
 import { ValueText } from '@/src/utils/ValueText';
-import { SelectInput } from '../general/SelectInput';
+import { SelectInput } from '../common/input/SelectInput';
+import { Input } from '../common/input/Input';
 
 interface IUserUpdateForm {
   userInfo: IUserInfoReponse;
@@ -179,23 +180,19 @@ export const UserUpdateForm = (props: IUserUpdateForm) => {
             ? (
               <>
                 <div className='grid grid-cols-3 py-2'>
-                  <label className="text-gray-500 text-md flex items-center" htmlFor='orgName'>
+                  <label className="text-gray-500 text-md flex items-center">
                     Tên tổ chức:
                   </label>
-                  <div className='col-span-2'>
-                    <input
-                      test-id="user-profile-org-name"
-                      className="border-gray-300 border-2 bg-gray-100 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:border-yellow-400 focus:outline-none focus:ring-0 focus:bg-white"
-                      id="orgName"
-                      type="text"
-                      onChange={(e) => setValue('organizationName', e.target.value, { shouldDirty: true })}
-                      value={watch('organizationName')} />
-                    <span className="text-sm text-red-500 mt-2">{errors['organizationName']}</span>
-                  </div>
+                  <Input
+                    id='inputOrganizationName'
+                    containerClassName='col-span-2 flex flex-row'
+                    onChange={(value) => setValue('organizationName', value, { shouldDirty: true })}
+                    value={watch('organizationName')}
+                    error={errors['organizationName']} />
                 </div>
 
                 <div className='grid grid-cols-3 py-2'>
-                  <label className="text-gray-500 text-md flex items-center" htmlFor='orgType'>
+                  <label className="text-gray-500 text-md flex items-center">
                     Loại hình:
                   </label>
                   <div className='col-span-2'>
@@ -208,7 +205,7 @@ export const UserUpdateForm = (props: IUserUpdateForm) => {
                 </div>
 
                 <div className='grid grid-cols-3 py-2'>
-                  <label className="text-gray-500 text-md flex items-center" htmlFor='orgDesc'>
+                  <label className="text-gray-500 text-md flex items-center">
                     Mô tả:
                   </label>
                   <div className='col-span-2'>
@@ -225,68 +222,53 @@ export const UserUpdateForm = (props: IUserUpdateForm) => {
                 </div>
 
                 <div className='grid grid-cols-3 py-2'>
-                  <label className="text-gray-500 text-md flex items-center" htmlFor='orgWebsite'>
+                  <label className="text-gray-500 text-md flex items-center">
                     Website:
                   </label>
-
-                  <div className="col-span-2">
-                    <input
-                      test-id="user-profile-org-website"
-                      className="border-gray-300 border-2 bg-gray-100 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:border-yellow-400 focus:outline-none focus:ring-0 focus:bg-white"
-                      id="orgWebsite"
-                      type="text"
-                      onChange={(e) => setValue('website', e.target.value, { shouldDirty: true })}
-                      value={watch('website')} />
-                    <span className="text-sm text-red-500 mt-2">{errors['website']}</span>
-                  </div>
+                  <Input
+                    id='inputWebsite'
+                    containerClassName='col-span-2 flex flex-row'
+                    onChange={(value) => setValue('website', value, { shouldDirty: true })}
+                    value={watch('website')}
+                    error={errors['website']} />
                 </div>
               </>
             )
             : (
               <>
                 <div className='grid grid-cols-3 py-2'>
-                  <label className="text-gray-500 text-md flex items-center" htmlFor='firstName'>
+                  <label className="text-gray-500 text-md flex items-center">
                     Họ:
                   </label>
-
-                  <div className="col-span-2">
-                    <input
-                      test-id="user-profile-first-name-input"
-                      className="border-gray-300 border-2 bg-gray-100 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:border-yellow-400 focus:outline-none focus:ring-0 focus:bg-white"
-                      id="firstName"
-                      type="text"
-                      onChange={(e) => setValue('firstName', e.target.value, { shouldDirty: true })}
-                      value={watch('firstName')} />
-                    <span className="text-sm text-red-500 mt-2">{errors['firstName']}</span>
-                  </div>
+                  <Input
+                    id='inputFirstName'
+                    containerClassName='col-span-2 flex flex-row'
+                    onChange={(value) => setValue('firstName', value, { shouldDirty: true })}
+                    value={watch('firstName')}
+                    error={errors['firstName']} />
                 </div>
 
 
                 <div className='grid grid-cols-3 py-2'>
-                  <label className="text-gray-500 text-md flex items-center" htmlFor='lastName'>
+                  <label className="text-gray-500 text-md flex items-center">
                     Tên:
                   </label>
-
-                  <div className="col-span-2">
-                    <input
-                      test-id="user-profile-last-name-input"
-                      className="border-gray-300 border-2 bg-gray-100 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:border-yellow-400 focus:outline-none focus:ring-0 focus:bg-white"
-                      id="lastName"
-                      type="text"
-                      onChange={(e) => setValue('lastName', e.target.value, { shouldDirty: true })}
-                      value={watch('lastName')} />
-                    <span className="text-sm text-red-500 mt-2">{errors['lastName']}</span>
-                  </div>
+                  <Input
+                    id='inputLastName'
+                    containerClassName='col-span-2 flex flex-row'
+                    onChange={(value) => setValue('lastName', value, { shouldDirty: true })}
+                    value={watch('lastName')}
+                    error={errors['lastName']} />
                 </div>
 
 
                 <div className='grid grid-cols-3 py-2'>
-                  <label className="text-gray-500 text-md flex items-center" htmlFor='lastName'>
+                  <label className="text-gray-500 text-md flex items-center">
                     Ngày sinh:
                   </label>
                   <div className='col-span-2'>
                     <DatePicker
-                      className="border-gray-300 border-2 bg-gray-100 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:border-yellow-400 focus:outline-none focus:ring-0 focus:bg-white"
+                      id='dpBirthDate'
                       value={watch('birthDate')}
                       onChange={(date) => date && setValue('birthDate', date, { shouldDirty: true })} />
                     <span className="text-sm text-red-500 mt-2">{errors['birthDate']}</span>
@@ -297,28 +279,23 @@ export const UserUpdateForm = (props: IUserUpdateForm) => {
         }
 
         <div className='grid grid-cols-3 py-2'>
-          <label className="text-gray-500 text-md flex items-center" htmlFor='phone'>
+          <label className="text-gray-500 text-md flex items-center">
             Số điện thoại:
           </label>
-
-          <div className="col-span-2">
-            <input
-              test-id="user-profile-phone-input"
-              className="border-gray-300 border-2 bg-gray-100 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:border-yellow-400 focus:outline-none focus:ring-0 focus:bg-white"
-              id="phone"
-              type="tel"
-              onChange={(e) => setValue('phone', e.target.value, { shouldDirty: true })}
-              value={watch('phone')} />
-            <span className="text-sm text-red-500 mt-2">{errors['phone']}</span>
-          </div>
+          <Input
+            id='inputPhone'
+            type='tel'
+            containerClassName='col-span-2 flex flex-row'
+            onChange={(value) => setValue('phone', value, { shouldDirty: true })}
+            value={watch('phone')}
+            error={errors['phone']} />
         </div>
 
 
         <div className='grid grid-cols-3 py-2'>
-          <label className="text-gray-500 text-md flex items-center" htmlFor='province'>
+          <label className="text-gray-500 text-md flex items-center">
             Tỉnh/thành phố:
           </label>
-
           <div className="col-span-2">
             <AddressInput
               testId="province-input-dropdown"
@@ -333,10 +310,9 @@ export const UserUpdateForm = (props: IUserUpdateForm) => {
 
 
         <div className='grid grid-cols-3 py-2'>
-          <label className="text-gray-500 text-md flex items-center" htmlFor='district'>
+          <label className="text-gray-500 text-md flex items-center">
             Quận/huyện:
           </label>
-
           <div className="col-span-2">
             <AddressInput
               testId="district-input-dropdown"
@@ -351,10 +327,9 @@ export const UserUpdateForm = (props: IUserUpdateForm) => {
 
 
         <div className='grid grid-cols-3 py-2'>
-          <label className="text-gray-500 text-md flex items-center" htmlFor='ward'>
+          <label className="text-gray-500 text-md flex items-center">
             Xã/phường:
           </label>
-
           <div className="col-span-2">
             <AddressInput
               testId="ward-input-dropdown"
@@ -368,20 +343,15 @@ export const UserUpdateForm = (props: IUserUpdateForm) => {
         </div>
 
         <div className='grid grid-cols-3 py-2'>
-          <label className="text-gray-500 text-md flex items-center" htmlFor='street'>
+          <label className="text-gray-500 text-md flex items-center">
             Địa chỉ chi tiết:
           </label>
-
-          <div className="col-span-2">
-            <input
-              test-id="user-profile-street-input"
-              className="border-gray-300 border-2 bg-gray-100 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:border-yellow-400 focus:outline-none focus:ring-0 focus:bg-white"
-              id="street"
-              type="text"
-              onChange={(e) => setValue('street', e.target.value, { shouldDirty: true })}
-              value={watch('street')} />
-            <span className="text-sm text-red-500 mt-2">{errors['street']}</span>
-          </div>
+          <Input
+            id='inputStreet'
+            containerClassName='col-span-2 flex flex-row'
+            onChange={(value) => setValue('street', value, { shouldDirty: true })}
+            value={watch('street')}
+            error={errors['street']} />
         </div>
 
 

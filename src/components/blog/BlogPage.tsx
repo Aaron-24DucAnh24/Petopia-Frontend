@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { IoEye } from 'react-icons/io5';
-import { ReportBlock } from '../general/ReportBlock';
+import { ReportBlock } from '../common/ReportBlock';
 import { REPORT_ENTITY } from '@/src/utils/constants';
 
 interface Props {

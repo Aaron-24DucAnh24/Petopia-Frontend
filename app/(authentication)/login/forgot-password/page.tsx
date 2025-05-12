@@ -1,7 +1,7 @@
 'use client';
 
-import { Alert } from '@/src/components/general/Alert';
-import { QueryProvider } from '@/src/components/general/QueryProvider';
+import { Alert } from '@/src/components/common/general/Alert';
+import { QueryProvider } from '@/src/components/common/provider/QueryProvider';
 import { getErrorMessage } from '@/src/helpers/getErrorMessage';
 import { IApiResponse } from '@/src/interfaces/common';
 import { forgotPassword } from '@/src/services/user.api';

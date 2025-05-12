@@ -1,13 +1,13 @@
 import { useForm } from 'react-hook-form';
 import { IApiResponse, IUploadImage } from '@/src/interfaces/common';
-import Dropzone from '../general/Dropzone';
+import Dropzone from '../common/Dropzone';
 import { IPostPetPost } from '@/src/interfaces/post';
 import { postImage } from '@/src/helpers/postImage';
 import { useMutation } from '@/src/utils/hooks';
 import { createPost } from '@/src/services/post.api';
 import { useState } from 'react';
-import { Alert } from '../general/Alert';
-import QueryButton from '../general/QueryButton';
+import { Alert } from '../common/general/Alert';
+import QueryButton from '../common/button/QueryButton';
 
 export default function CreatePetPostForm({
   petId,
