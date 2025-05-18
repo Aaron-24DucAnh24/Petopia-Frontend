@@ -53,3 +53,7 @@ input[type='search']::-webkit-search-results-decoration {
     background-position: right;
   }
 }
+
+.ck-focused {
+  border-color: #facc15 !important;
+}

@@ -117,7 +117,12 @@ const page = observer(QueryProvider(({ params }: { params: { id: string } }) => 
                     {
                       petDetail.isOrgOwned
                       && <Tooltip content="Cộng tác viên">
-                        <Button className="p-0 shadow-none">
+                        <Button className="p-0 shadow-none"
+                          placeholder={undefined}
+                          onResize={undefined}
+                          onResizeCapture={undefined}
+                          onPointerEnterCapture={undefined}
+                          onPointerLeaveCapture={undefined}>
                           <FaShieldDog color="green" size={25} />
                         </Button>
                       </Tooltip>

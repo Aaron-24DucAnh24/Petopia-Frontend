@@ -16,7 +16,6 @@ import {
 } from '@/src/interfaces/pet';
 import { getPetDetail, postPet, updatePet } from '@/src/services/pet.api';
 import { GIVE_PET_STEP, QUERY_KEYS } from '@/src/utils/constants';
-import { postImage } from '@/src/helpers/postImage';
 import { GivePetHeaderBar } from './GivePetHeaderBar';
 import { StringUtil } from '@/src/utils/StringUtil';
 
@@ -83,10 +82,10 @@ const PetProfileForm = QueryProvider(
         const filesArray = Array.from(files);
         await Promise.all(
           filesArray.map(async (file) => {
-            const formData = new FormData();
-            formData.append('image', file);
-            const url: string = await postImage(formData);
-            url && setValue('images', [...getValues('images'), url]);
+            // const formData = new FormData();
+            // formData.append('image', file);
+            // const url: string = await postImage(formData);
+            // url && setValue('images', [...getValues('images'), url]);
           })
         );
       }

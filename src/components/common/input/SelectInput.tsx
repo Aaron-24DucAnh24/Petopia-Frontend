@@ -4,6 +4,7 @@ import { IoMdCloseCircle } from 'react-icons/io';
 import { ClipLoader } from 'react-spinners';
 
 interface ISelectInput {
+  id?: string;
   onChange: (value: string) => void;
   options: ValueText;
   defaultValue: string;
@@ -14,6 +15,7 @@ interface ISelectInput {
 
 export const SelectInput = (props: ISelectInput) => {
   const {
+    id,
     onChange,
     options,
     defaultValue,
@@ -48,6 +50,7 @@ export const SelectInput = (props: ISelectInput) => {
     <div className="relative">
       {!isLoading ? (
         <input
+          id={id}
           className='border-gray-300 border bg-gray-50 rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:border-yellow-400 focus:outline-none focus:ring-0 focus:bg-white'
           value={keywords}
           disabled={isDisabled}

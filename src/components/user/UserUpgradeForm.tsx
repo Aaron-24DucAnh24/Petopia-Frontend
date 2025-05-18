@@ -17,6 +17,7 @@ import { ValidatorManager } from '@/src/utils/ValidatorManager';
 import { ValueText } from '@/src/utils/ValueText';
 import { SelectInput } from '../common/input/SelectInput';
 import { Input } from '../common/input/Input';
+import { HTMLArea } from '../common/input/HTMLArea';
 
 interface IUserUpgradeForm {
   onClose: () => void,
@@ -296,12 +297,13 @@ export const UserUpgradeForm = observer((props: IUserUpgradeForm) => {
                 <label htmlFor="org-mission" className="text-gray-700 text-base font-bold w-fit block">
                   Giới thiệu về tổ chức
                 </label>
-                <Input
-                  id="org-mission"
-                  type="textarea"
-                  onChange={(value) => setValue('description', value)}
+                <HTMLArea
+                  id={'inputDescription'}
                   value={watch('description')}
-                  error={errors['description']} />
+                  setValue={(html) => {
+                    setValue('description', html);
+                  }} />
+                <span className="text-sm text-red-500 mt-2">{errors['description']}</span>
               </div>
 
               <div className="col-span-2 flex items-center">

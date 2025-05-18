@@ -8,7 +8,7 @@ import { UseFormReturn } from 'react-hook-form';
 import { PetFilterCard } from './PetFilterCard';
 
 interface IFilterBar {
-  filterForm: UseFormReturn<IPetFilterRequest, any, undefined>;
+  filterForm: UseFormReturn<IPetFilterRequest, any, IPetFilterRequest>;
   disable: boolean;
 }
 
@@ -73,16 +73,14 @@ export const PetFilterBar = (props: IFilterBar) => {
             disabled={disable || getBreedQuery.isLoading}
             handleSetSpecies={handleSetSpecies}
             filterForm={filterForm}
-            isMobile={false}
-          />
+            isMobile={false} />
           {filter.id === 1 && breedFilter !== undefined && (
             <PetFilterCard
               filter={breedFilter}
               disabled={disable || getBreedQuery.isLoading}
               handleSetSpecies={handleSetSpecies}
               filterForm={filterForm}
-              isMobile={false}
-            />
+              isMobile={false} />
           )}
         </div>
       ))}

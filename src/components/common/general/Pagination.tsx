@@ -3,7 +3,7 @@ import { IPaginationModel } from '../../../interfaces/common';
 import { useEffect } from 'react';
 
 interface IPagination {
-  paginationForm: UseFormReturn<IPaginationModel, any, undefined>;
+  paginationForm: UseFormReturn<IPaginationModel, any, IPaginationModel>;
   disable: boolean;
   show: boolean;
 }

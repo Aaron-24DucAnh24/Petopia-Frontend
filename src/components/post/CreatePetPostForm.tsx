@@ -2,7 +2,6 @@ import { useForm } from 'react-hook-form';
 import { IApiResponse, IUploadImage } from '@/src/interfaces/common';
 import Dropzone from '../common/Dropzone';
 import { IPostPetPost } from '@/src/interfaces/post';
-import { postImage } from '@/src/helpers/postImage';
 import { useMutation } from '@/src/utils/hooks';
 import { createPost } from '@/src/services/post.api';
 import { useState } from 'react';
@@ -52,12 +51,12 @@ export default function CreatePetPostForm({
         filesArray.map(async (file) => {
           const formData = new FormData();
           formData.append('image', file);
-          const url: string = await postImage(formData);
-          url &&
-            createPostForm.setValue('images', [
-              ...createPostForm.getValues('images'),
-              url,
-            ]);
+          // const url: string = await postImage(formData);
+          // url &&
+          //   createPostForm.setValue('images', [
+          //     ...createPostForm.getValues('images'),
+          //     url,
+          //   ]);
         })
       );
     }

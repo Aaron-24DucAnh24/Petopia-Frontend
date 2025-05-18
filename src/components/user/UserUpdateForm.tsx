@@ -18,6 +18,7 @@ import { ValidatorManager } from '@/src/utils/ValidatorManager';
 import { ValueText } from '@/src/utils/ValueText';
 import { SelectInput } from '../common/input/SelectInput';
 import { Input } from '../common/input/Input';
+import { HTMLArea } from '../common/input/HTMLArea';
 
 interface IUserUpdateForm {
   userInfo: IUserInfoReponse;
@@ -197,6 +198,7 @@ export const UserUpdateForm = (props: IUserUpdateForm) => {
                   </label>
                   <div className='col-span-2'>
                     <SelectInput
+                      id='inputOrganizationType'
                       onChange={(value) => setValue('type', parseInt(value), { shouldDirty: true })}
                       options={new ValueText(PET_ORG_TYPE_OPTION.map(option => ({ value: option.value.toString(), text: option.label })))}
                       defaultValue={watch('type').toString()} />
@@ -209,13 +211,11 @@ export const UserUpdateForm = (props: IUserUpdateForm) => {
                     Mô tả:
                   </label>
                   <div className='col-span-2'>
-                    <textarea
-                      className="border-gray-300 border-2 bg-gray-100 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:border-yellow-400 focus:outline-none focus:ring-0 focus:bg-white min-h-[80px]"
-                      test-id="user-profile-org-desc"
-                      id="orgDesc"
+                    <HTMLArea
+                      id={'inputDescription'}
                       value={watch('description')}
-                      onChange={(e) => {
-                        setValue('description', e.target.value, { shouldDirty: true });
+                      setValue={(html) => {
+                        setValue('description', html, { shouldDirty: true });
                       }} />
                     <span className="text-sm text-red-500 mt-2">{errors['description']}</span>
                   </div>

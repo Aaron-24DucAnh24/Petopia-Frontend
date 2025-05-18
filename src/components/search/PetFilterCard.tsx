@@ -6,7 +6,7 @@ import { UseFormReturn } from 'react-hook-form';
 interface IPetFilterCard {
   filter: IPetFilter;
   disabled: boolean;
-  filterForm: UseFormReturn<IPetFilterRequest, any, undefined>;
+  filterForm: UseFormReturn<IPetFilterRequest, any, IPetFilterRequest>;
   handleSetSpecies: (speciesList: PET_SPECIES[]) => void;
   isMobile: boolean;
   testId?: string;
@@ -91,8 +91,8 @@ export const PetFilterCard = (props: IPetFilterCard) => {
     <div
       key={filter.id}
       className={`${isMobile
-          ? 'border-t border-gray-200 px-4 py-6'
-          : 'border-b border-gray-200 py-6'
+        ? 'border-t border-gray-200 px-4 py-6'
+        : 'border-b border-gray-200 py-6'
         }`}
     >
       <h3

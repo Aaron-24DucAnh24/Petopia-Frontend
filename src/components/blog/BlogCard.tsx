@@ -9,7 +9,7 @@ import { MdDelete } from 'react-icons/md';
 import { Alert } from '../common/general/Alert';
 import { useMutation } from '@/src/utils/hooks';
 import { deleteBlog } from '@/src/services/blog.api';
-import BlogEditor from '../text-editor/BlogEditor';
+// import BlogEditor from '../text-editor/BlogEditor';
 import { UseQueryResult } from 'react-query';
 import { AxiosResponse } from 'axios';
 import { IApiErrorResponse, IApiResponse } from '@/src/interfaces/common';
@@ -113,7 +113,7 @@ const BlogCard = ({
                 className="w-full p-5 mb-5 bg-gray-50 rounded-lg overflow-auto"
                 style={{ maxHeight: '400px' }}
               >
-                <BlogEditor id={id} />
+                {/* <BlogEditor id={id} /> */}
               </div>
             </div>
           </Popup>

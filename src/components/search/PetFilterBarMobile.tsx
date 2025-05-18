@@ -15,7 +15,7 @@ export function PetFilterBarMobile({
 }: {
   showFilterMobile: boolean;
   setShowFilterMobile: (showFilterMobile: boolean) => void;
-  filterForm: UseFormReturn<IPetFilterRequest, any, undefined>;
+  filterForm: UseFormReturn<IPetFilterRequest, any, IPetFilterRequest>;
   disable: boolean;
 }) {
   const [species, setSpecies] = useState<PET_SPECIES>();
@@ -75,42 +75,34 @@ export function PetFilterBarMobile({
   if (!showFilterMobile) return null;
   return (
     <div className="relative z-40 lg:hidden" role="dialog">
-      {/* <!-- Off-canvas menu backdrop, show/hide based on off-canvas menu state. --> */}
       <div className="fixed inset-0 bg-black bg-opacity-25"></div>
 
       <div className="fixed inset-0 z-40 flex">
-        {/* <!-- Off-canvas menu, show/hide based on off-canvas menu state. --> */}
         <div
           ref={divRef}
-          className="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-white py-4 pb-12 shadow-xl"
-        >
+          className="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-white py-4 pb-12 shadow-xl">
           <div className="flex items-center justify-between px-4">
             <h2 className="text-lg font-medium text-gray-900">Filters</h2>
-            {/* <!-- Close button --> */}
             <button
               type="button"
               ref={buttonRef}
               className="-mr-2 flex h-10 w-10 items-center justify-center rounded-md bg-white p-2 text-gray-400"
-              onClick={() => setShowFilterMobile(false)}
-            >
+              onClick={() => setShowFilterMobile(false)}>
               <svg
                 className="h-6 w-6"
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth="1.5"
                 stroke="currentColor"
-                aria-hidden="true"
-              >
+                aria-hidden="true">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  d="M6 18L18 6M6 6l12 12"
-                />
+                  d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
           </div>
 
-          {/* Filters */}
           <form className="mt-4 border-t border-gray-200">
             {PET_FILTERS.map((filter) => (
               <>
@@ -120,8 +112,7 @@ export function PetFilterBarMobile({
                   disabled={disable || getBreedQuery.isLoading}
                   handleSetSpecies={handleSetSpecies}
                   filterForm={filterForm}
-                  isMobile={true}
-                />
+                  isMobile={true} />
                 {filter.id === 1 && breedFilter !== undefined && (
                   <PetFilterCard
                     key={PET_FILTERS.length + 1}
@@ -129,8 +120,7 @@ export function PetFilterBarMobile({
                     disabled={disable || getBreedQuery.isLoading}
                     handleSetSpecies={handleSetSpecies}
                     filterForm={filterForm}
-                    isMobile={true}
-                  />
+                    isMobile={true} />
                 )}
               </>
             ))}

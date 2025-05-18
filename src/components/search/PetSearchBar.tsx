@@ -8,7 +8,7 @@ import { UseFormReturn } from 'react-hook-form';
 import { IoSearchOutline as SearchIcon } from 'react-icons/io5';
 
 interface IPetSearchBar {
-  filterForm: UseFormReturn<IPetFilterRequest, any, undefined>;
+  filterForm: UseFormReturn<IPetFilterRequest, any, IPetFilterRequest>;
   disable: boolean;
 }
 
@@ -67,13 +67,11 @@ export function PetSearchBar(props: IPetSearchBar) {
           value={text}
           id={'text-search'}
           onChange={(e) => setText(e.target.value)}
-          onClick={() => setShowDropdown(true)}
-        />
+          onClick={() => setShowDropdown(true)} />
         {showDropdown && showedKeywords.length !== 0 && (
           <div
             ref={listRef}
-            className="w-full absolute text-center max-h-80 overflow-y-auto mt-2 rounded-md shadow-lg z-50 bg-white"
-          >
+            className="w-full absolute text-center max-h-80 overflow-y-auto mt-2 rounded-md shadow-lg z-50 bg-white">
             <div className="py-1" role="menu">
               {showedKeywords.map((keyword, index) => (
                 <div
@@ -83,8 +81,7 @@ export function PetSearchBar(props: IPetSearchBar) {
                   onClick={() => {
                     !disable && setValue('text', keyword);
                     setShowDropdown(false);
-                  }}
-                >
+                  }}>
                   {keyword}
                 </div>
               ))}

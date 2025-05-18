@@ -88,7 +88,13 @@ export function PetCard(props: IPetCard) {
                   {name}{' '}
                   {isOrgOwned && (
                     <Tooltip content="Cộng tác viên">
-                      <Button className="p-0 shadow-none bg-white">
+                      <Button
+                        className="p-0 shadow-none bg-white"
+                        placeholder={undefined}
+                        onResize={undefined}
+                        onResizeCapture={undefined}
+                        onPointerEnterCapture={undefined}
+                        onPointerLeaveCapture={undefined}>
                         <FaShieldDog color="green" size={20} />
                       </Button>
                     </Tooltip>
