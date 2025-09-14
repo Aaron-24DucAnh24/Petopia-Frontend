@@ -186,7 +186,7 @@ export const UserUpdateForm = (props: IUserUpdateForm) => {
                   </label>
                   <Input
                     id='inputOrganizationName'
-                    containerClassName='col-span-2 flex flex-row'
+                    containerClassName='col-span-2 flex flex-col'
                     onChange={(value) => setValue('organizationName', value, { shouldDirty: true })}
                     value={watch('organizationName')}
                     error={errors['organizationName']} />
@@ -227,7 +227,7 @@ export const UserUpdateForm = (props: IUserUpdateForm) => {
                   </label>
                   <Input
                     id='inputWebsite'
-                    containerClassName='col-span-2 flex flex-row'
+                    containerClassName='col-span-2 flex flex-col'
                     onChange={(value) => setValue('website', value, { shouldDirty: true })}
                     value={watch('website')}
                     error={errors['website']} />
@@ -242,7 +242,7 @@ export const UserUpdateForm = (props: IUserUpdateForm) => {
                   </label>
                   <Input
                     id='inputFirstName'
-                    containerClassName='col-span-2 flex flex-row'
+                    containerClassName='col-span-2 flex flex-col'
                     onChange={(value) => setValue('firstName', value, { shouldDirty: true })}
                     value={watch('firstName')}
                     error={errors['firstName']} />
@@ -255,7 +255,7 @@ export const UserUpdateForm = (props: IUserUpdateForm) => {
                   </label>
                   <Input
                     id='inputLastName'
-                    containerClassName='col-span-2 flex flex-row'
+                    containerClassName='col-span-2 flex flex-col'
                     onChange={(value) => setValue('lastName', value, { shouldDirty: true })}
                     value={watch('lastName')}
                     error={errors['lastName']} />
@@ -285,7 +285,7 @@ export const UserUpdateForm = (props: IUserUpdateForm) => {
           <Input
             id='inputPhone'
             type='tel'
-            containerClassName='col-span-2 flex flex-row'
+            containerClassName='col-span-2 flex flex-col'
             onChange={(value) => setValue('phone', value, { shouldDirty: true })}
             value={watch('phone')}
             error={errors['phone']} />
@@ -348,7 +348,7 @@ export const UserUpdateForm = (props: IUserUpdateForm) => {
           </label>
           <Input
             id='inputStreet'
-            containerClassName='col-span-2 flex flex-row'
+            containerClassName='col-span-2 flex flex-col'
             onChange={(value) => setValue('street', value, { shouldDirty: true })}
             value={watch('street')}
             error={errors['street']} />
