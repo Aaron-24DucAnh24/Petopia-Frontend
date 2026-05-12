@@ -3,9 +3,9 @@ import { useState } from 'react';
 import { PetFilterBarMobile } from './PetFilterBarMobile';
 import { PetSearchBar } from './PetSearchBar';
 import { PetCard } from './PetCard';
-import Pagination from '../common/general/Pagination';
-import { QueryProvider } from '../common/provider/QueryProvider';
-import { SortBlock } from '../common/general/SortBlock';
+import Pagination from '../common/Pagination';
+import { QueryProvider } from '../common/QueryProvider';
+import { SortBlock } from '../common/SortBlock';
 import { PetFilterBar } from './PetFilterBar';
 import { useForm } from 'react-hook-form';
 import { IApiResponse, IPaginationModel } from '@/src/interfaces/common';
@@ -15,7 +15,7 @@ import { IPetFilterRequest, IPetResponse } from '@/src/interfaces/pet';
 import { PAGE_SIZE, QUERY_KEYS } from '@/src/utils/constants';
 import CardSkeleton from '../common/CardSkeleton';
 import { FaFilter } from 'react-icons/fa';
-import { NoResultBackground } from '../common/general/NoResultBackground';
+import { NoResultBackground } from '../common/NoResultBackground';
 
 export const SearchPetSection = QueryProvider(() => {
   // STATES

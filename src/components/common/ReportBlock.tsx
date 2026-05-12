@@ -1,12 +1,12 @@
 import Popup from 'reactjs-popup';
-import ReportForm from '../user/ReportForm';
+import ReportForm from './ReportForm';
 import { GoReport } from 'react-icons/go';
 import { useState } from 'react';
 import { useQuery } from '@/src/utils/hooks';
 import { IApiResponse } from '@/src/interfaces/common';
 import { QUERY_KEYS, REPORT_ENTITY } from '@/src/utils/constants';
 import { getPreReport } from '@/src/services/user.api';
-import { Alert } from './general/Alert';
+import { Alert } from './Alert';
 
 interface IReportBlock {
   id: string,

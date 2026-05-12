@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert } from '../common/general/Alert';
+import { Alert } from '../common/Alert';
 import { LOCATION_LEVEL, ORG_TYPE, PET_ORG_TYPE_OPTION, QUERY_KEYS } from '@/src/utils/constants';
 import { useForm } from 'react-hook-form';
 import { IOrgUpgradeRequest } from '@/src/interfaces/org';
@@ -10,7 +10,6 @@ import { IApiResponse } from '@/src/interfaces/common';
 import { upgradeToOrg } from '@/src/services/user.api';
 import QueryButton from '../common/button/QueryButton';
 import { getErrorMessage } from '@/src/helpers/getErrorMessage';
-import { AddressInput } from './AddressInput';
 import { ILocationRequest, ILocationResponse } from '@/src/interfaces/pet';
 import { getProvince } from '@/src/services/pet.api';
 import { ValidatorManager } from '@/src/utils/ValidatorManager';
@@ -18,6 +17,7 @@ import { ValueText } from '@/src/utils/ValueText';
 import { SelectInput } from '../common/input/SelectInput';
 import { Input } from '../common/input/Input';
 import { HTMLArea } from '../common/input/HTMLArea';
+import { AddressInput } from '../common/input/AddressInput';
 
 interface IUserUpgradeForm {
   onClose: () => void,

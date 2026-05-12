@@ -2,9 +2,9 @@
 import Link from 'next/link';
 import { ChangeEvent, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Alert } from '../common/general/Alert';
+import { Alert } from '../common/Alert';
 import { GoogleRecaptcha } from './GoogleRecaptcha';
-import { QueryProvider } from '../common/provider/QueryProvider';
+import { QueryProvider } from '../common/QueryProvider';
 import { IRegisterForm, IRegisterRequest } from '@/src/interfaces/authentication';
 import { useMutation } from '@/src/utils/hooks';
 import { register } from '@/src/services/authentication.api';

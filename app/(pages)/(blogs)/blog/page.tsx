@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Tin tức - Petopia',
-  description: 'Nền tảng nhận nuôi thú cưng trực tuyến',
+  description: 'Mạng xã hội dành cho thú cưng',
 };
 
 export default function page() {

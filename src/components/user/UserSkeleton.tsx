@@ -1,6 +1,6 @@
-import CardSkeleton from './CardSkeleton';
+import CardSkeleton from '../common/CardSkeleton';
 
-export default function UserSkeleton() {
+export function UserSkeleton() {
   return (
     <div>
       <div className="container animate-pulse max-w-3xl p-5 mx-auto shadow-2xl rounded-2xl mt-36">
@@ -36,7 +36,6 @@ export default function UserSkeleton() {
           ))}
         </div>
       </div>
-      {/* <ListCards title="Thú cưng của bạn" data={userInfo?.pets!} /></div> */}
     </div>
   );
 }

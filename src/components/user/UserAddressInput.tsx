@@ -11,7 +11,7 @@ interface IAddressInput {
   isLoading: boolean;
 }
 
-export const AddressInput = (props: IAddressInput) => {
+export const UserAddressInput = (props: IAddressInput) => {
   const {
     options,
     onChange,

@@ -1,5 +1,4 @@
-export interface IPostPetPost {
-  petId: string;
+export interface ICreatePost {
   content: string;
   images: string[];
 }

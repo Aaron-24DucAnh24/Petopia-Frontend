@@ -1,38 +1,24 @@
 'use client';
 import { useState } from 'react';
-import { QueryProvider } from '../common/provider/QueryProvider';
-import ListCards from './ListCards';
+import { QueryProvider } from '../common/QueryProvider';
 import { getOtherUserInfo } from '@/src/services/user.api';
 import { IUserInfoReponse } from '@/src/interfaces/user';
-import { IApiResponse, IPaginationModel } from '@/src/interfaces/common';
+import { IApiResponse } from '@/src/interfaces/common';
 import { useQuery } from '@/src/utils/hooks';
 import {
   QUERY_KEYS,
   REPORT_ENTITY,
   STATIC_URLS,
 } from '@/src/utils/constants';
-import { useForm } from 'react-hook-form';
-import { IPetResponse } from '@/src/interfaces/pet';
-import { getPetsByUser } from '@/src/services/pet.api';
-import Pagination from '../common/general/Pagination';
-import UserSkeleton from '../common/UserSkeleton';
-import { NameRoleBlock } from './NameRoleBlock';
 import Image from 'next/image';
 import { ReportBlock } from '../common/ReportBlock';
 import { UserInfomationBlock } from './UserInformationBlock';
+import { UserSkeleton } from './UserSkeleton';
+import { UserRoleName } from './UserRoleName';
 
-export const OtherUserInformation = QueryProvider(({ userId }: { userId: string }) => {
+export const OtherUserPage = QueryProvider(({ userId }: { userId: string }) => {
   // STATES
   const [userInfo, setUserInfo] = useState<IUserInfoReponse>();
-  const [pets, setPets] = useState<IPetResponse[]>([]);
-
-  // FORMS
-  const paginationForm = useForm<IPaginationModel>({
-    defaultValues: {
-      pageIndex: 1,
-      pageNumber: 1,
-    },
-  });
 
   // QUERIES
   const getUserQuery = useQuery<IApiResponse<IUserInfoReponse>>(
@@ -42,28 +28,12 @@ export const OtherUserInformation = QueryProvider(({ userId }: { userId: string 
       onSuccess: (res) => {
         setUserInfo(res.data.data);
       },
-      refetchOnWindowFocus: false,
-      retry: false,
-    }
-  );
-
-  const getPetsQuery = useQuery<IApiResponse<IPetResponse[]>>(
-    [QUERY_KEYS.GET_PETS, getUserQuery.isLoading, paginationForm.watch('pageIndex')],
-    () =>
-      getPetsByUser({
-        pageIndex: paginationForm.getValues('pageIndex'),
-        pageSize: 6,
-        orderBy: '',
-        filter: userId,
-      }),
-    {
-      onSuccess: (res) => {
-        setPets(res.data.data);
-        paginationForm.setValue('pageNumber', res.data.pageNumber!);
+      onError: () => {
+        window.location.replace('/not-found');
       },
       refetchOnWindowFocus: false,
-      enabled: !getUserQuery.isLoading,
-    }
+      retry: false,
+    },
   );
 
   return (
@@ -82,7 +52,7 @@ export const OtherUserInformation = QueryProvider(({ userId }: { userId: string 
                 className="rounded-full"
                 quality={50} />
             </div>
-            <NameRoleBlock
+            <UserRoleName
               userName={userInfo.attributes.organizationName
                 || (userInfo.attributes.firstName + ' ' + userInfo.attributes.lastName)}
               userRole={userInfo.role}
@@ -97,15 +67,6 @@ export const OtherUserInformation = QueryProvider(({ userId }: { userId: string 
           </div>
         </div>
       )}
-
-      {!!pets.length && <ListCards title="Danh sách thú cưng" data={pets} />}
-
-      <div className="flex items-center justify-center my-5">
-        <Pagination
-          paginationForm={paginationForm}
-          disable={getPetsQuery.isFetching}
-          show={pets.length !== 0 && paginationForm.getValues('pageNumber') != 1} />
-      </div>
     </>
   );
 }

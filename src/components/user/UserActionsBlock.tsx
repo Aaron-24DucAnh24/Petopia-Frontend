@@ -3,13 +3,13 @@ import { useClickOutside } from '@/src/utils/hooks';
 import { Dispatch, SetStateAction, useRef, useState } from 'react';
 import { SlOptions } from 'react-icons/sl';
 
-interface IActionsBlock {
+interface IUserActionsBlock {
   setShowEdit: Dispatch<SetStateAction<boolean>>;
   setShowUpgrade: Dispatch<SetStateAction<boolean>>;
   allowUpgrade: boolean;
 }
 
-export const ActionsBlock = (props: IActionsBlock) => {
+export const UserActionsBlock = (props: IUserActionsBlock) => {
   const { setShowEdit, setShowUpgrade, allowUpgrade } = props;
 
   // STATES

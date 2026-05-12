@@ -2,7 +2,7 @@ import { Inter } from 'next/font/google';
 import '../globals.css';
 import '../datepicker.css';
 import { Navbar } from '@/src/components/common/navigator';
-import { Footer } from '@/src/components/common/general/Footer';
+import { Footer } from '@/src/components/common/Footer';
 
 const inter = Inter({ subsets: ['latin'] });
 

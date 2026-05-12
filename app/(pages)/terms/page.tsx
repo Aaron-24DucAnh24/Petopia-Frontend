@@ -3,7 +3,7 @@ import React from 'react';
 
 export const metadata: Metadata = {
   title: 'Điều khoản - Petopia',
-  description: 'Nền tảng nhận nuôi thú cưng trực tuyến',
+  description: 'Mạng xã hội dành cho thú cưng',
 };
 
 const TermsOfUse: React.FC = () => {

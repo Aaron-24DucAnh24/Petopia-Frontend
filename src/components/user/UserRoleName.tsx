@@ -4,14 +4,14 @@ import Link from 'next/link';
 import { RiVerifiedBadgeFill } from 'react-icons/ri';
 import { IoChevronForwardCircleSharp } from 'react-icons/io5';
 
-interface INameRoleBlock {
+interface IUserRoleName {
   userRole: USER_ROLE;
   userName: string;
   orgType: ORG_TYPE;
   website: string;
 }
 
-export const NameRoleBlock = (props: INameRoleBlock) => {
+export const UserRoleName = (props: IUserRoleName) => {
   const { userRole, userName, orgType, website } = props;
 
   return (

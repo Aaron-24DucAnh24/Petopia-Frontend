@@ -6,8 +6,8 @@ import { useMutation } from '@/src/utils/hooks';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { getErrorMessage } from '@/src/helpers/getErrorMessage';
-import { QueryProvider } from '@/src/components/common/provider/QueryProvider';
-import { Alert } from '@/src/components/common/general/Alert';
+import { QueryProvider } from '@/src/components/common/QueryProvider';
+import { Alert } from '@/src/components/common/Alert';
 import QueryButton from '@/src/components/common/button/QueryButton';
 import { StringUtil } from '@/src/utils/StringUtil';
 

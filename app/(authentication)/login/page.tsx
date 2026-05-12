@@ -1,11 +1,11 @@
 import React from 'react';
 import { LoginForm } from '@/src/components/authentication/LoginForm';
 import { Metadata } from 'next';
-import { Background } from '@/src/components/common/general/Background';
+import { Background } from '@/src/components/common/Background';
 
 export const metadata: Metadata = {
   title: 'Đăng nhập - Petopia',
-  description: 'Nền tảng nhận nuôi thú cưng trực tuyến',
+  description: 'Mạng xã hội dành cho thú cưng',
 };
 
 export default function page() {

@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { CiEdit } from 'react-icons/ci';
 import Popup from 'reactjs-popup';
 import { MdDelete } from 'react-icons/md';
-import { Alert } from '../common/general/Alert';
+import { Alert } from '../common/Alert';
 import { useMutation } from '@/src/utils/hooks';
 import { deleteBlog } from '@/src/services/blog.api';
 // import BlogEditor from '../text-editor/BlogEditor';

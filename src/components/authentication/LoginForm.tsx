@@ -3,9 +3,9 @@ import Link from 'next/link';
 import { ChangeEvent, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { GoogleLoginButton } from './GoogleLoginButton';
-import { Alert } from '../common/general/Alert';
+import { Alert } from '../common/Alert';
 import { deleteCookie, getCookie, setCookie } from 'cookies-next';
-import { QueryProvider } from '../common/provider/QueryProvider';
+import { QueryProvider } from '../common/QueryProvider';
 import {
   IGoogleLoginRequest,
   ILoginRequest,

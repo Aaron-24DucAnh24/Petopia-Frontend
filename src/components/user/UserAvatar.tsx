@@ -4,15 +4,15 @@ import { updateAvatar } from '@/src/services/user.api';
 import { STATIC_URLS } from '@/src/utils/constants';
 import { useMutation } from '@/src/utils/hooks';
 import { ChangeEvent, useRef, useState } from 'react';
-import { Alert } from '../common/general/Alert';
+import { Alert } from '../common/Alert';
 import { useStores } from '@/src/stores';
 
-interface IAvatarBlock {
+interface IUserAvatar {
   image: string;
   setImage: (image: string) => void;
 }
 
-export const AvatarBlock = (props: IAvatarBlock) => {
+export const UserAvatar = (props: IUserAvatar) => {
   const { image, setImage } = props;
   const inputRef = useRef<HTMLInputElement>(null);
   const { userStore } = useStores();

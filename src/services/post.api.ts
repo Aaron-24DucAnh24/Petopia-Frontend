@@ -1,10 +1,10 @@
-import { ICommentPost, IPostPetPost } from '../interfaces/post';
+import { ICommentPost, ICreatePost } from '../interfaces/post';
 import { http } from './http';
 
 export const getPetPosts = async (petId: string) =>
   await http.get(`/Post/Pet/${petId}`);
 
-export const createPost = async (data: IPostPetPost) =>
+export const createPost = async (data: ICreatePost) =>
   await http.post('/Post', data);
 
 export const likePost = async (postId: string) =>

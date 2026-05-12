@@ -3,26 +3,28 @@ import { useState } from 'react';
 import { useQuery } from '../../utils/hooks';
 import { IApiResponse } from '../../interfaces/common';
 import { QUERY_KEYS, STATIC_URLS } from '../../utils/constants';
-import { QueryProvider } from '../common/provider/QueryProvider';
+import { QueryProvider } from '../common/QueryProvider';
 import { getPreUpgrade, getUserInfo } from '@/src/services/user.api';
-import UserSkeleton from '../common/UserSkeleton';
-import TabbedTable from './TabbedTable';
-import { AvatarBlock } from './AvatarBlock';
-import { NameRoleBlock } from './NameRoleBlock';
+import { UserSkeleton } from './UserSkeleton';
+import { UserAvatar } from './UserAvatar';
+import { UserRoleName } from './UserRoleName';
 import { IUserInfoReponse } from '@/src/interfaces/user';
-import { ActionsBlock } from './ActionsBlock';
+import { UserActionsBlock } from './UserActionsBlock';
 import { UserInfomationBlock } from './UserInformationBlock';
 import { UserUpdateForm } from './UserUpdateForm';
 import Popup from 'reactjs-popup';
 import { UserUpgradeForm } from './UserUpgradeForm';
+import Button from '../common/button/Button';
+import { UserPostCreateForm } from './UserPostCreateForm';
 
-export const UserSection = QueryProvider(() => {
+export const UserPage = QueryProvider(() => {
   // States
   const [showEdit, setShowEdit] = useState(false);
   const [showUpgrade, setShowUpgrade] = useState(false);
   const [userInfo, setUserInfo] = useState<IUserInfoReponse>();
   const [image, setImage] = useState<string>(STATIC_URLS.NO_AVATAR);
   const [allowUpgrade, setAllowUpgrade] = useState<boolean>(false);
+  const [showCreatePost, setShowCreatePost] = useState(false);
 
   // Get user information
   const getUserQuery = useQuery<IApiResponse<IUserInfoReponse>>(
@@ -56,10 +58,10 @@ export const UserSection = QueryProvider(() => {
       {!getUserQuery.isLoading && userInfo && (
         <div className="container max-w-3xl p-5 mx-auto shadow-2xl rounded-2xl mt-36">
           <div className="flex relative">
-            <AvatarBlock
+            <UserAvatar
               image={image}
               setImage={setImage} />
-            <NameRoleBlock
+            <UserRoleName
               userName={userInfo.attributes.organizationName
                 || (userInfo.attributes.firstName + ' ' + userInfo.attributes.lastName)}
               userRole={userInfo.role}
@@ -67,7 +69,7 @@ export const UserSection = QueryProvider(() => {
               website={userInfo.attributes.website} />
           </div>
           <div className='-mt-20 space-y-2 relative'>
-            <ActionsBlock
+            <UserActionsBlock
               setShowEdit={setShowEdit}
               setShowUpgrade={setShowUpgrade}
               allowUpgrade={allowUpgrade} />
@@ -94,7 +96,17 @@ export const UserSection = QueryProvider(() => {
           </div>
         </div>
       )}
-      <TabbedTable userInfo={userInfo} />
+
+      <div className="container max-w-3xl p-5 mx-auto shadow-2xl rounded-2xl mt-8">
+        <Button name={'Tạo mới'} action={() => setShowCreatePost(true)} />
+        <Popup
+          modal
+          open={showCreatePost}
+          onClose={() => setShowCreatePost(false)}
+          overlayStyle={{ background: 'rgba(0, 0, 0, 0.5)' }}>
+          <UserPostCreateForm onSuccess={() => setShowCreatePost(false)} />
+        </Popup>
+      </div>
     </div>
   );
 });

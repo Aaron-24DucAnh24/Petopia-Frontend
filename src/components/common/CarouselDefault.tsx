@@ -7,7 +7,7 @@ import { AxiosResponse } from 'axios';
 import { UseQueryResult } from 'react-query';
 import { deletePost } from '@/src/services/post.api';
 import { useMutation } from '@/src/utils/hooks';
-import { Alert } from './general/Alert';
+import { Alert } from './Alert';
 
 export function CarouselDefault({
   posts,

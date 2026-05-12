@@ -1,5 +1,5 @@
 'use client';
-import { QueryProvider } from '@/src/components/common/provider/QueryProvider';
+import { QueryProvider } from '@/src/components/common/QueryProvider';
 import SeeMore from '@/src/components/common/SeeMore';
 import { PetAdoptButton } from '@/src/components/adopt/PetAdoptButton';
 import {
@@ -30,7 +30,7 @@ import { useStores } from '@/src/stores';
 import { IGetPostResponse } from '@/src/interfaces/post';
 import { getPetPosts } from '@/src/services/post.api';
 import { ReportBlock } from '@/src/components/common/ReportBlock';
-import { NoResultBackground } from '@/src/components/common/general/NoResultBackground';
+import { NoResultBackground } from '@/src/components/common/NoResultBackground';
 
 const page = observer(QueryProvider(({ params }: { params: { id: string } }) => {
   //States

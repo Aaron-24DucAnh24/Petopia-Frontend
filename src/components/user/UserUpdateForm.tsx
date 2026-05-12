@@ -3,7 +3,7 @@ import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
 import { useMutation, useQuery } from '../../utils/hooks';
 import { IApiResponse } from '../../interfaces/common';
 import { updateUser } from '../../services/user.api';
-import { Alert } from '../common/general/Alert';
+import { Alert } from '../common/Alert';
 import QueryButton from '../common/button/QueryButton';
 import { IUserInfoReponse, IUserUpdate } from '@/src/interfaces/user';
 import { getErrorMessage } from '@/src/helpers/getErrorMessage';
@@ -11,7 +11,7 @@ import Button from '../common/button/Button';
 import { ILocationRequest, ILocationResponse } from '@/src/interfaces/pet';
 import { LOCATION_LEVEL, ORG_TYPE, PET_ORG_TYPE_OPTION, QUERY_KEYS, USER_ROLE } from '@/src/utils/constants';
 import { getProvince } from '@/src/services/pet.api';
-import { AddressInput } from './AddressInput';
+import { UserAddressInput } from './UserAddressInput';
 import { useStores } from '@/src/stores';
 import { DatePicker } from '../common/input/DatePicker';
 import { ValidatorManager } from '@/src/utils/ValidatorManager';
@@ -297,7 +297,7 @@ export const UserUpdateForm = (props: IUserUpdateForm) => {
             Tỉnh/thành phố:
           </label>
           <div className="col-span-2">
-            <AddressInput
+            <UserAddressInput
               testId="province-input-dropdown"
               options={new ValueText(provinces.map(province => ({ text: province.name, value: province.code })))}
               onChange={handleLocationChange}
@@ -314,7 +314,7 @@ export const UserUpdateForm = (props: IUserUpdateForm) => {
             Quận/huyện:
           </label>
           <div className="col-span-2">
-            <AddressInput
+            <UserAddressInput
               testId="district-input-dropdown"
               options={new ValueText(districts.map(district => ({ text: district.name, value: district.code })))}
               onChange={handleLocationChange}
@@ -331,7 +331,7 @@ export const UserUpdateForm = (props: IUserUpdateForm) => {
             Xã/phường:
           </label>
           <div className="col-span-2">
-            <AddressInput
+            <UserAddressInput
               testId="ward-input-dropdown"
               options={new ValueText(wards.map(ward => ({ text: ward.name, value: ward.code })))}
               onChange={handleLocationChange}

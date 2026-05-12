@@ -5,7 +5,7 @@ import { IPostPetPost } from '@/src/interfaces/post';
 import { useMutation } from '@/src/utils/hooks';
 import { createPost } from '@/src/services/post.api';
 import { useState } from 'react';
-import { Alert } from '../common/general/Alert';
+import { Alert } from '../common/Alert';
 import QueryButton from '../common/button/QueryButton';
 
 export default function CreatePetPostForm({

@@ -1,15 +1,15 @@
-import { OtherUserInformation } from '@/src/components/user/OtherUserInformation';
+import { OtherUserPage } from '@/src/components/user/OtherUserPage';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Hồ sơ người dùng - Petopia',
-  description: 'Nền tảng nhận nuôi thú cưng trực tuyến',
+  description: 'Mạng xã hội dành cho thú cưng',
 };
 
 export default function page({ params }: { params: { userId: string } }) {
   return (
     <div>
-      <OtherUserInformation userId={params.userId} />
+      <OtherUserPage userId={params.userId} />
     </div>
   );
 }
