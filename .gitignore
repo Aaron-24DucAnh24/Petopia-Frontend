@@ -17,3 +17,4 @@ yarn-error.log*
 next-env.d.ts
 /temp
 /ckeditor5
+.claude/settings.local.json

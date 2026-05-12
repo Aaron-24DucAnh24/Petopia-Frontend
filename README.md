@@ -1,33 +1,48 @@
-# PETOPIA - Pet Adoption Platform FrontOffice
+# Petopia — Pet Adoption Platform
 
-## This is the introduction to run webapp locally on your machine
+A social platform for pet adoption, connecting pet owners with adopters and providing a community space for pet lovers.
 
-### Requirements
+## Prerequisites
 
-You gotta run the API application successfully on your local machine first.
-Check the link: <<https://github.com/Aaron-24DucAnh24/Petopia-Backend.git>>
+The backend API must be running locally before starting the frontend.
+Backend repo: https://github.com/Aaron-24DucAnh24/Petopia-Backend.git
 
-### Run
+Copy `.env.example` to `.env` and set `NEXT_PUBLIC_API_ENDPOINT` to your local API URL.
+
+## Getting Started
 
 ```bash
-npm i
+npm install
 npm run dev
 ```
 
-### Sample account to log into as Admin
+The app runs at http://localhost:3000.
+
+## Available Scripts
+
+| Command | Description |
+|---|---|
+| `npm run dev` | Start development server |
+| `npm run build` | Build for production |
+| `npm run start` | Start production server |
+| `npm run lint` | Run ESLint with auto-fix |
+
+## Sample Admin Account
+
 ```
-Email: anh.bui24ducanh24@hcmut.edu.vn
+Email:    anh.bui24ducanh24@hcmut.edu.vn
 Password: 123456789
 ```
 
-> Now program is running at <<<http://locahost:3000>>> on your local machine.
+## Tech Stack
 
-### Main libraries
-
-- NextJs
-- MobX
-- Ckeditor5
-- Braintree web drop-in
-- Axios
-- Tailwind CSS
-- Cypress
+- **Next.js 13** (App Router)
+- **TypeScript**
+- **Tailwind CSS**
+- **MobX** — global auth state
+- **React Query v3** — server state & caching
+- **React Hook Form** — form management
+- **Axios** — HTTP client
+- **CKEditor 5** — rich text editing
+- **Braintree Web Drop-in** — payment UI
+- **Cypress** — end-to-end testing

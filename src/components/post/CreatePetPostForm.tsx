@@ -1,15 +1,15 @@
 import { useForm } from 'react-hook-form';
 import { IApiResponse, IUploadImage } from '@/src/interfaces/common';
 import Dropzone from '../common/Dropzone';
-import { IPostPetPost } from '@/src/interfaces/post';
+import { ICreatePost } from '@/src/interfaces/post';
 import { useMutation } from '@/src/utils/hooks';
 import { createPost } from '@/src/services/post.api';
+import { uploadMany } from '@/src/services/storage.api';
 import { useState } from 'react';
 import { Alert } from '../common/Alert';
 import QueryButton from '../common/button/QueryButton';
 
 export default function CreatePetPostForm({
-  petId,
   query,
   action,
 }: {
@@ -31,9 +31,8 @@ export default function CreatePetPostForm({
     },
   });
 
-  const createPostForm = useForm<IPostPetPost>({
+  const createPostForm = useForm<ICreatePost>({
     defaultValues: {
-      petId: petId,
       content: '',
       images: [],
     },
@@ -43,29 +42,19 @@ export default function CreatePetPostForm({
     const files = uploadImageForm.getValues('files');
 
     if (files && files.length > 0) {
-      // Convert FileList to array
-      const filesArray = Array.from(files);
+      const formData = new FormData();
+      Array.from(files).forEach((file) => formData.append('images', file));
 
-      // Use Promise.all to await all image uploads
-      await Promise.all(
-        filesArray.map(async (file) => {
-          const formData = new FormData();
-          formData.append('image', file);
-          // const url: string = await postImage(formData);
-          // url &&
-          //   createPostForm.setValue('images', [
-          //     ...createPostForm.getValues('images'),
-          //     url,
-          //   ]);
-        })
-      );
+      const response = await uploadMany(formData);
+      const urls = response.data as string[];
+      createPostForm.setValue('images', urls);
     }
     setIsLoading(false);
   };
 
   const createPostPetMutation = useMutation<
     IApiResponse<boolean>,
-    IPostPetPost
+    ICreatePost
   >(createPost, {
     onError: () => {
       setAlertFail(true);

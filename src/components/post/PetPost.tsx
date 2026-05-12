@@ -114,15 +114,17 @@ export default function PetPost({
   return (
     <div>
       <div className="w-full flex items-center justify-center my-5">
-        <div className="w-96 md:w-[600px] relative bg-white border border-gray-200 rounded-lg shadow">
+        <div className="w-96 md:w-[600px] relative bg-white border border-gray-100 rounded-2xl shadow-md overflow-hidden">
           {/* Image carousel */}
-          <div className="relative w-full h-80">
-            <Image
-              className="rounded-t-lg object-contain"
-              src={currentImage}
-              alt="post image"
-              fill
-            />
+          <div className="relative w-full h-80 mx-0 p-3">
+            <div className="relative w-full h-full rounded-xl overflow-hidden border border-gray-100">
+              <Image
+                className="object-contain"
+                src={currentImage}
+                alt="post image"
+                fill
+              />
+            </div>
           </div>
           <div className="mt-5 flex items-center justify-center">
             <ImageCarousel
@@ -155,10 +157,13 @@ export default function PetPost({
               </div>
             </a>
             {/* Post content */}
-            <p className="mb-3 font-normal text-gray-700">{post.content}</p>
+            <div
+              className="mb-3 font-normal text-gray-700 prose prose-sm max-w-none"
+              dangerouslySetInnerHTML={{ __html: post.content }}
+            />
           </div>
           {/* Like, comment, delete button */}
-          <div className="flex flex-row items-center gap-6 -mt-10 ">
+          <div className="flex flex-row items-center gap-6 px-5 pb-4 pt-2 border-t border-gray-100">
             <div className="flex flex-row items-center">
               <button
                 onClick={handleLikeButton}
@@ -176,9 +181,9 @@ export default function PetPost({
             </button>
             <button
               onClick={handleDeleteButton}
-              className="flex flex-row items-center gap-2"
+              className="flex flex-row items-center gap-2 ml-auto"
             >
-              <MdDelete className="text-gray-400" size={20} />
+              <MdDelete className="text-gray-400 hover:text-red-400 transition-colors" size={20} />
             </button>
           </div>
           {/* Comment section */}

@@ -16,8 +16,14 @@ import Popup from 'reactjs-popup';
 import { UserUpgradeForm } from './UserUpgradeForm';
 import Button from '../common/button/Button';
 import { UserPostCreateForm } from './UserPostCreateForm';
+import { CarouselDefault } from '../common/CarouselDefault';
+import { IGetPostResponse } from '@/src/interfaces/post';
+import { getUserPosts } from '@/src/services/post.api';
+import { useStores } from '@/src/stores';
 
 export const UserPage = QueryProvider(() => {
+  const { userStore } = useStores();
+
   // States
   const [showEdit, setShowEdit] = useState(false);
   const [showUpgrade, setShowUpgrade] = useState(false);
@@ -25,6 +31,7 @@ export const UserPage = QueryProvider(() => {
   const [image, setImage] = useState<string>(STATIC_URLS.NO_AVATAR);
   const [allowUpgrade, setAllowUpgrade] = useState<boolean>(false);
   const [showCreatePost, setShowCreatePost] = useState(false);
+  const [posts, setPosts] = useState<IGetPostResponse[]>([]);
 
   // Get user information
   const getUserQuery = useQuery<IApiResponse<IUserInfoReponse>>(
@@ -35,6 +42,16 @@ export const UserPage = QueryProvider(() => {
         setUserInfo(res.data.data);
         setImage(res.data.data.image);
       },
+      refetchOnWindowFocus: false,
+    }
+  );
+
+  const getUserPostsQuery = useQuery(
+    [QUERY_KEYS.GET_USER_POSTS],
+    () => getUserPosts(userStore.userContext!.id),
+    {
+      enabled: !!userStore.userContext?.id,
+      onSuccess: (res: any) => setPosts(res.data.data ?? []),
       refetchOnWindowFocus: false,
     }
   );
@@ -98,13 +115,21 @@ export const UserPage = QueryProvider(() => {
       )}
 
       <div className="container max-w-3xl p-5 mx-auto shadow-2xl rounded-2xl mt-8">
-        <Button name={'Tạo mới'} action={() => setShowCreatePost(true)} />
+        {posts.length > 0 && (
+          <CarouselDefault posts={posts} query={getUserPostsQuery as any} />
+        )}
+        <div className="mt-4">
+          <Button name={'Tạo mới'} action={() => setShowCreatePost(true)} />
+        </div>
         <Popup
           modal
           open={showCreatePost}
           onClose={() => setShowCreatePost(false)}
           overlayStyle={{ background: 'rgba(0, 0, 0, 0.5)' }}>
-          <UserPostCreateForm onSuccess={() => setShowCreatePost(false)} />
+          <UserPostCreateForm onSuccess={() => {
+            setShowCreatePost(false);
+            getUserPostsQuery.refetch();
+          }} />
         </Popup>
       </div>
     </div>

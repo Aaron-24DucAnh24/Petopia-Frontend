@@ -44,7 +44,7 @@ export function CarouselDefault({
       {posts && (
         <Carousel
           className="rounded-xl bg-gray-50 mt-5"
-          navigation={({ setActiveIndex, activeIndex, length }) => (
+          navigation={({ setActiveIndex, activeIndex, length }) => posts.length <= 1 ? <></> : (
             <div className="absolute bottom-1 left-2/4 z-10 flex -translate-x-2/4 gap-2">
               {new Array(length).fill('').map((_, i) => (
                 <span
@@ -54,7 +54,7 @@ export function CarouselDefault({
               ))}
             </div>
           )}
-          prevArrow={({ handlePrev }) => (
+          prevArrow={({ handlePrev }) => posts.length <= 1 ? <></> : (
             <IconButton
               variant="text"
               color="black"
@@ -83,7 +83,7 @@ export function CarouselDefault({
               </svg>
             </IconButton>
           )}
-          nextArrow={({ handleNext }) => (
+          nextArrow={({ handleNext }) => posts.length <= 1 ? <></> : (
             <IconButton
               variant="text"
               color="black"

@@ -4,6 +4,9 @@ import { http } from './http';
 export const getPetPosts = async (petId: string) =>
   await http.get(`/Post/Pet/${petId}`);
 
+export const getUserPosts = async (userId: string) =>
+  await http.post('/Post/Get', { pageIndex: 0, pageSize: 20, filter: { userId } });
+
 export const createPost = async (data: ICreatePost) =>
   await http.post('/Post', data);
 

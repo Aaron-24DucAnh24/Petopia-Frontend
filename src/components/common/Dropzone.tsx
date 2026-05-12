@@ -9,7 +9,7 @@ export default function Dropzone({
   setValue,
   watch,
 }: {
-  id: string | undefined;
+  id?: string | undefined;
   imagesNumber: number;
   setValue: UseFormSetValue<IUploadImage>;
   watch: UseFormWatch<IUploadImage>;
