@@ -136,7 +136,7 @@ export default function PetPost({
           <div className="p-5">
             {/* User post avatar and name */}
             <a
-              href={`/user/${post.creatorId}`}
+              href={`/user/${post.userId}`}
               className="flex flex-row items-center mb-2 gap-2"
             >
               <div className="relative w-10 h-10 rounded-full">
@@ -229,7 +229,7 @@ export default function PetPost({
                     <CommentCard
                       key={comment.id}
                       comment={comment}
-                      creatorId={post.creatorId}
+                      creatorId={post.userId}
                       getCommentsMutation={() =>
                         getCommentMutation.mutate(post.id)
                       }

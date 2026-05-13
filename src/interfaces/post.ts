@@ -5,7 +5,7 @@ export interface ICreatePost {
 
 export interface IGetPostResponse {
   id: string;
-  creatorId: string;
+  userId: string;
   content: string;
   userImage: string;
   userName: string;

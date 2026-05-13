@@ -133,7 +133,7 @@ export function PostDetailModal({
 
           {/* Header: user info + close */}
           <div className="px-4 py-3 bg-gray-50 border-b border-gray-200 flex items-center justify-between flex-shrink-0">
-            <a href={`/user/${post.creatorId}`} className="flex items-center gap-2.5">
+            <a href={`/user/${post.userId}`} className="flex items-center gap-2.5">
               <div className="relative w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
                 <Image
                   src={post.userImage}
@@ -176,7 +176,7 @@ export function PostDetailModal({
               <FaRegComment size={16} />
               <span className="text-sm">{commentCount}</span>
             </div>
-            {userStore.userContext?.id === post.creatorId && (
+            {userStore.userContext?.id === post.userId && (
               <button onClick={onDelete} className="ml-auto">
                 <MdDelete
                   className="text-gray-400 hover:text-red-400 transition-colors"
@@ -204,7 +204,7 @@ export function PostDetailModal({
                 <CommentCard
                   key={comment.id}
                   comment={comment}
-                  creatorId={post.creatorId}
+                  creatorId={post.userId}
                   getCommentsMutation={() => getCommentMutation.mutate(post.id)}
                   setCommentCount={setCommentCount as Dispatch<SetStateAction<number>>}
                   onUpdate={(updated) =>

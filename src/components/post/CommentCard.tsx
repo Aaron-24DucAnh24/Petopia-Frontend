@@ -77,7 +77,7 @@ export default function CommentCard({
 
   return (
     <div
-      className="flex flex-row items-start gap-2"
+      className="flex flex-row items-center gap-2"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => {
         setIsHovered(false);
@@ -85,14 +85,14 @@ export default function CommentCard({
       }}
     >
       {/* Avatar */}
-      <div className="relative w-9 h-9 rounded-full flex-shrink-0 mt-0.5">
+      <a href={`/user/${comment.userId}`} className="relative w-9 h-9 rounded-full flex-shrink-0 mt-0.5">
         <Image
           src={comment.userImage}
           alt="user avatar"
           fill
           className="rounded-full object-cover"
         />
-      </div>
+      </a>
 
       {/* Bubble */}
       <div className="flex-1 relative bg-gray-100 rounded-2xl px-3 py-2">
@@ -131,7 +131,7 @@ export default function CommentCard({
 
         {/* Name + time row */}
         <div className="flex items-baseline gap-1.5 flex-wrap min-w-0">
-          <span className="font-semibold text-sm leading-tight">{comment.userName}</span>
+          <a href={`/user/${comment.userId}`} className="font-semibold text-sm leading-tight hover:underline">{comment.userName}</a>
           <span className="text-gray-400 text-xs">{getTimeAgo(comment.isCreatedAt)}</span>
         </div>
 

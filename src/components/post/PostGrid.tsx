@@ -10,18 +10,21 @@ import { Alert } from '../common/Alert';
 import { PostCard } from './PostCard';
 import { PostDetailModal } from './PostDetailModal';
 import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
+import { AddButton } from '../common/button/AddButton';
 
 const PAGE_SIZE = 6;
 
 export function PostGrid({
   posts,
   query,
+  onAdd,
 }: {
   posts: IGetPostResponse[];
   query: UseQueryResult<
     AxiosResponse<IApiResponse<IGetPostResponse[]>, any>,
     AxiosResponse<IApiErrorResponse, any>
   >;
+  onAdd?: () => void;
 }) {
   const [selectedPost, setSelectedPost] = useState<IGetPostResponse | null>(null);
   const [alertShow, setAlertShow] = useState(false);
@@ -61,6 +64,12 @@ export function PostGrid({
 
   return (
     <>
+      <div className="flex items-center gap-3 mb-4">
+        <h2 className="text-base font-semibold text-gray-700 uppercase tracking-widest">Bài đăng</h2>
+        <div className="flex-1 h-px bg-gray-200" />
+        {onAdd && <AddButton onClick={onAdd} title="Tạo bài đăng" />}
+      </div>
+
       {/* Stable-height wrapper prevents layout shift during slide */}
       <div style={{ minHeight: minGridHeight }}>
         <div

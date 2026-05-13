@@ -14,7 +14,6 @@ import { UserInfomationBlock } from './UserInformationBlock';
 import { UserUpdateForm } from './UserUpdateForm';
 import Popup from 'reactjs-popup';
 import { UserUpgradeForm } from './UserUpgradeForm';
-import Button from '../common/button/Button';
 import { UserPostCreateForm } from './UserPostCreateForm';
 import { PostGrid } from '../post/PostGrid';
 import { IGetPostResponse } from '@/src/interfaces/post';
@@ -86,10 +85,12 @@ export const UserPage = QueryProvider(() => {
               website={userInfo.attributes.website} />
           </div>
           <div className='-mt-20 space-y-2 relative'>
-            <UserActionsBlock
-              setShowEdit={setShowEdit}
-              setShowUpgrade={setShowUpgrade}
-              allowUpgrade={allowUpgrade} />
+            <div className="flex justify-end">
+              <UserActionsBlock
+                setShowEdit={setShowEdit}
+                setShowUpgrade={setShowUpgrade}
+                allowUpgrade={allowUpgrade} />
+            </div>
 
             <UserInfomationBlock
               userInfo={userInfo}
@@ -115,12 +116,7 @@ export const UserPage = QueryProvider(() => {
       )}
 
       <div className="container max-w-3xl p-5 mx-auto shadow-2xl rounded-2xl mt-8">
-        {posts.length > 0 && (
-          <PostGrid posts={posts} query={getUserPostsQuery as any} />
-        )}
-        <div className="mt-4">
-          <Button name={'Tạo mới'} action={() => setShowCreatePost(true)} />
-        </div>
+        <PostGrid posts={posts} query={getUserPostsQuery as any} onAdd={() => setShowCreatePost(true)} />
         <Popup
           modal
           open={showCreatePost}

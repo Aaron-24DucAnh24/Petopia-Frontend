@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { useClickOutside } from '@/src/utils/hooks';
 import { Dispatch, SetStateAction, useRef, useState } from 'react';
 import { SlOptions } from 'react-icons/sl';
+import { FiEdit2, FiLock, FiAward } from 'react-icons/fi';
 
 interface IUserActionsBlock {
   setShowEdit: Dispatch<SetStateAction<boolean>>;
@@ -12,10 +13,8 @@ interface IUserActionsBlock {
 export const UserActionsBlock = (props: IUserActionsBlock) => {
   const { setShowEdit, setShowUpgrade, allowUpgrade } = props;
 
-  // STATES
   const [showOptions, setShowOptions] = useState<boolean>(false);
 
-  // EFFECTS
   const buttonRef = useRef<HTMLButtonElement>(null);
   const divRef = useRef<HTMLDivElement>(null);
   useClickOutside(() => {
@@ -23,47 +22,56 @@ export const UserActionsBlock = (props: IUserActionsBlock) => {
   }, [buttonRef, divRef]);
 
   return (
-    <div className='relative'>
-      <div className='flex justify-end'>
-        <button
-          ref={buttonRef}
-          className='flex justify-center items-center text-sm bg-gray-100 ring-1 ring-gray-300 hover:ring-2 rounded-full overflow-hidden w-8 h-8 relative'
-          onClick={() => setShowOptions(prev => !prev)}>
-          <SlOptions color='#000' />
-        </button>
-      </div>
+    <div className="relative">
+      <button
+        ref={buttonRef}
+        className="flex items-center justify-center w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors border border-gray-200"
+        onClick={() => setShowOptions((prev) => !prev)}
+      >
+        <SlOptions size={14} className="text-gray-600" />
+      </button>
 
       {showOptions && (
         <div
           ref={divRef}
-          className='absolute shadow-lg bg-white right-9 top-0 w-60 rounded-lg border flex flex-col items-start overflow-hidden'>
+          className="absolute right-0 top-11 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 py-1.5 z-50"
+        >
           <button
             test-id="show-edit-button"
             onClick={() => {
               setShowEdit((prev) => !prev);
               setShowOptions(false);
             }}
-            className="flex items-center w-full justify-center px-2 pt-1 font-thin text-gray-700 border-b hover:bg-yellow-300 hover:font-normal">
-            {'Thay đổi thông tin'}
+            className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+          >
+            <FiEdit2 size={15} className="text-gray-400 flex-shrink-0" />
+            Thay đổi thông tin
           </button>
 
           <Link
-            href={'user/change-password'}
-            className="flex items-center w-full justify-center px-2 pt-1 font-thin text-gray-700 border-b hover:bg-yellow-300 hover:font-normal">
-            {'Đổi mật khẩu'}
+            href="user/change-password"
+            className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+          >
+            <FiLock size={15} className="text-gray-400 flex-shrink-0" />
+            Đổi mật khẩu
           </Link>
 
           {allowUpgrade && (
-            <button
-              test-id="show-upgrade-button"
-              className="flex items-center w-full justify-center px-2 pt-1 font-thin text-gray-700 border-b hover:bg-yellow-300 hover:font-normal"
-              onClick={() => {
-                setShowUpgrade((prev) => !prev);
-                setShowEdit(false);
-                setShowOptions(false);
-              }}>
-              {'Đăng ký thông tin tổ chức'}
-            </button>
+            <>
+              <div className="mx-4 my-1 border-t border-gray-100" />
+              <button
+                test-id="show-upgrade-button"
+                onClick={() => {
+                  setShowUpgrade((prev) => !prev);
+                  setShowEdit(false);
+                  setShowOptions(false);
+                }}
+                className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-orange-500 hover:bg-orange-50 transition-colors"
+              >
+                <FiAward size={15} className="flex-shrink-0" />
+                Đăng ký tổ chức
+              </button>
+            </>
           )}
         </div>
       )}
