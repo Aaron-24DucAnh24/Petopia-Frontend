@@ -63,6 +63,14 @@ const config: Config = {
             color: 'red',
           },
         },
+        'slide-in-right': {
+          '0%': { transform: 'translateX(24px)', opacity: '0' },
+          '100%': { transform: 'translateX(0)', opacity: '1' },
+        },
+        'slide-in-left': {
+          '0%': { transform: 'translateX(-24px)', opacity: '0' },
+          '100%': { transform: 'translateX(0)', opacity: '1' },
+        },
       },
       animation: {
         fade_in: 'fade_in 0.2s linear',
@@ -70,6 +78,8 @@ const config: Config = {
         spin: 'spin 3s linear infinite',
         pulse: 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'pulse-plus': 'pulse-plus 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'slide-in-right': 'slide-in-right 0.22s ease-out',
+        'slide-in-left': 'slide-in-left 0.22s ease-out',
       },
     },
   },

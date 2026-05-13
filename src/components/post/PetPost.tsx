@@ -234,6 +234,11 @@ export default function PetPost({
                         getCommentMutation.mutate(post.id)
                       }
                       setCommentCount={setCommentNumber}
+                      onUpdate={(updated) =>
+                        setComments((prev) =>
+                          prev.map((c) => (c.id === updated.id ? updated : c))
+                        )
+                      }
                     />
                   ))
                 )}

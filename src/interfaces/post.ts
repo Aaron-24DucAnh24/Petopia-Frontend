@@ -29,3 +29,8 @@ export interface ICommentPost {
   postId: string;
   content: string;
 }
+
+export interface IUpdateComment {
+  id: string;
+  content: string;
+}

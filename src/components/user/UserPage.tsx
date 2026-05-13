@@ -16,7 +16,7 @@ import Popup from 'reactjs-popup';
 import { UserUpgradeForm } from './UserUpgradeForm';
 import Button from '../common/button/Button';
 import { UserPostCreateForm } from './UserPostCreateForm';
-import { CarouselDefault } from '../common/CarouselDefault';
+import { PostGrid } from '../post/PostGrid';
 import { IGetPostResponse } from '@/src/interfaces/post';
 import { getUserPosts } from '@/src/services/post.api';
 import { useStores } from '@/src/stores';
@@ -116,7 +116,7 @@ export const UserPage = QueryProvider(() => {
 
       <div className="container max-w-3xl p-5 mx-auto shadow-2xl rounded-2xl mt-8">
         {posts.length > 0 && (
-          <CarouselDefault posts={posts} query={getUserPostsQuery as any} />
+          <PostGrid posts={posts} query={getUserPostsQuery as any} />
         )}
         <div className="mt-4">
           <Button name={'Tạo mới'} action={() => setShowCreatePost(true)} />

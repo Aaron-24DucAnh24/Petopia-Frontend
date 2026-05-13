@@ -1,4 +1,4 @@
-import { ICommentPost, ICreatePost } from '../interfaces/post';
+import { ICommentPost, ICreatePost, IUpdateComment } from '../interfaces/post';
 import { http } from './http';
 
 export const getPetPosts = async (petId: string) =>
@@ -24,3 +24,6 @@ export const deletePost = async (postId: string) =>
 
 export const deleteComment = async (commentId: string) =>
   await http.delete(`/Comment/${commentId}`);
+
+export const updateComment = async (data: IUpdateComment) =>
+  await http.put('/Comment', data);
