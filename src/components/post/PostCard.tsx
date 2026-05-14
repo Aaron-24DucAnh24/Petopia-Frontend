@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { FaHeart, FaComment } from 'react-icons/fa';
+import { MdDelete } from 'react-icons/md';
 import { IGetPostResponse } from '@/src/interfaces/post';
 
 function ImageGrid({ images }: { images: string[] }) {
@@ -74,13 +75,15 @@ function ImageGrid({ images }: { images: string[] }) {
 export function PostCard({
   post,
   onClick,
+  onDelete,
 }: {
   post: IGetPostResponse;
   onClick: () => void;
+  onDelete?: () => void;
 }) {
   return (
     <div
-      className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden cursor-pointer hover:shadow-md transition-shadow flex flex-col"
+      className="group bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden cursor-pointer hover:shadow-md transition-shadow flex flex-col relative"
       onClick={onClick}
     >
       <ImageGrid images={post.images} />
@@ -94,6 +97,18 @@ export function PostCard({
           <span>{post.commentCount}</span>
         </div>
       </div>
+      {onDelete && (
+        <button
+          className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-500"
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelete();
+          }}
+          title="Xoá bài đăng"
+        >
+          <MdDelete size={14} className="text-white" />
+        </button>
+      )}
     </div>
   );
 }

@@ -34,7 +34,7 @@ export default function Pagination(props: IPagination) {
         result.push(
           <li key={i}>
             <a
-              className="flex items-center justify-center rounded-lg px-3 h-8 text-black font-bold bg-yellow-300 hover:bg-yellow-400 hover:text-black select-none cursor-pointer"
+              className="flex items-center justify-center w-9 h-9 rounded-full text-gray-800 font-bold bg-amber-300 hover:bg-amber-400 transition-colors select-none cursor-pointer"
               onClick={() => handleClickValue(i)}
             >
               {i}
@@ -45,7 +45,7 @@ export default function Pagination(props: IPagination) {
         result.push(
           <li key={i}>
             <a
-              className="flex items-center justify-center rounded-lg px-3 h-8 leading-tight text-black font-bold bg-white hover:bg-gray-100 hover:text-gray-700 select-none cursor-pointer"
+              className="flex items-center justify-center w-9 h-9 rounded-full text-gray-500 font-medium hover:bg-gray-100 hover:text-gray-700 transition-colors select-none cursor-pointer"
               onClick={() => handleClickValue(i)}
             >
               {i}
@@ -60,28 +60,16 @@ export default function Pagination(props: IPagination) {
   useEffect(() => { }, [watch('pageIndex')]);
 
   return show ? (
-    <div>
+    <div className="flex justify-center mt-4">
       <nav>
-        <ul className="inline-flex space-x-1 text-sm">
+        <ul className="inline-flex items-center space-x-1 text-sm">
           <li>
             <a
-              className="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white  rounded-lg hover:bg-gray-100 hover:text-gray-700 cursor-pointer"
+              className="flex items-center justify-center w-9 h-9 rounded-full text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition-colors cursor-pointer select-none"
               onClick={() => handleClickNavigate('down')}
             >
-              <svg
-                className="w-6 h-6 text-gray-800 "
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 14 10"
-              >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M13 5H1m0 0 4 4M1 5l4-4"
-                />
+              <svg className="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 5H1m0 0 4 4M1 5l4-4" />
               </svg>
             </a>
           </li>
@@ -90,23 +78,11 @@ export default function Pagination(props: IPagination) {
 
           <li>
             <a
-              className="flex items-center justify-center px-3 h-8 leading-tight text-black font-bold bg-white rounded-lg hover:bg-gray-100 hover:text-gray-700 cursor-pointer"
+              className="flex items-center justify-center w-9 h-9 rounded-full text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition-colors cursor-pointer select-none"
               onClick={() => handleClickNavigate('up')}
             >
-              <svg
-                className="w-6 h-6 text-gray-800 "
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 14 10"
-              >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M1 5h12m0 0L9 1m4 4L9 9"
-                />
+              <svg className="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
               </svg>
             </a>
           </li>

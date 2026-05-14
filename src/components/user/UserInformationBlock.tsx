@@ -1,4 +1,4 @@
-import { IUserInfoReponse } from '@/src/interfaces/user';
+import { IUserInfoResponse } from '@/src/interfaces/user';
 import { format } from 'date-fns';
 import { USER_ROLE } from '@/src/utils/constants';
 import { ValueTextManager } from '@/src/utils/ValueTextManager';
@@ -8,7 +8,7 @@ import Testimonials from '../common/Testimonials';
 import { FiUser, FiCalendar, FiMail, FiPhone, FiMapPin, FiLink, FiBriefcase, FiTag } from 'react-icons/fi';
 
 interface IUserInformationBlock {
-  userInfo: IUserInfoReponse,
+  userInfo: IUserInfoResponse,
   visible: boolean,
 }
 

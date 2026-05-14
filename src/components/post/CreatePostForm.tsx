@@ -9,7 +9,7 @@ import { useState } from 'react';
 import { Alert } from '../common/Alert';
 import QueryButton from '../common/button/QueryButton';
 
-export default function CreatePetPostForm({
+export default function CreatePostForm({
   query,
   action,
 }: {

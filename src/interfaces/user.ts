@@ -13,7 +13,7 @@ export interface IOrganizationAttributes {
   organizationName: string;
 }
 
-export interface IUserInfoReponse {
+export interface IUserInfoResponse {
   attributes: IIndividualAttributes & IOrganizationAttributes;
   address: string;
   provinceCode: string;

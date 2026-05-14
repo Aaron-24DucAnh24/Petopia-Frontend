@@ -5,7 +5,7 @@ import { IApiResponse } from '../../interfaces/common';
 import { updateUser } from '../../services/user.api';
 import { Alert } from '../common/Alert';
 import QueryButton from '../common/button/QueryButton';
-import { IUserInfoReponse, IUserUpdate } from '@/src/interfaces/user';
+import { IUserInfoResponse, IUserUpdate } from '@/src/interfaces/user';
 import { getErrorMessage } from '@/src/helpers/getErrorMessage';
 import Button from '../common/button/Button';
 import { ILocationRequest, ILocationResponse } from '@/src/interfaces/pet';
@@ -21,7 +21,7 @@ import { Input } from '../common/input/Input';
 import { HTMLArea } from '../common/input/HTMLArea';
 
 interface IUserUpdateForm {
-  userInfo: IUserInfoReponse;
+  userInfo: IUserInfoResponse;
   show: boolean;
   onSuccess: () => void;
   setShowEdit: Dispatch<SetStateAction<boolean>>,
@@ -72,7 +72,7 @@ export const UserUpdateForm = (props: IUserUpdateForm) => {
     defaultValues: { Level: LOCATION_LEVEL.PROVINCE },
   });
 
-  const updateUserMutation = useMutation<IApiResponse<IUserInfoReponse>, IUserUpdate>(
+  const updateUserMutation = useMutation<IApiResponse<IUserInfoResponse>, IUserUpdate>(
     updateUser,
     {
       onError: (err) => {

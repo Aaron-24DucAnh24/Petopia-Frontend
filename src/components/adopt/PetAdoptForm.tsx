@@ -8,7 +8,7 @@ import {
 import { useMutation, useQuery } from '@/src/utils/hooks';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { IUserInfoReponse } from '@/src/interfaces/user';
+import { IUserInfoResponse } from '@/src/interfaces/user';
 import { usePathname } from 'next/navigation';
 import { Alert } from '../common/Alert';
 import { preCheckAdoption, sendAdoptRequest } from '@/src/services/adopt.api';
@@ -19,7 +19,7 @@ import { useStores } from '@/src/stores';
 
 export const PetAdoptForm = observer(({ handleClose }: { handleClose: () => void; }) => {
   // States
-  const [userInfo, setUserInfo] = useState<IUserInfoReponse>();
+  const [userInfo, setUserInfo] = useState<IUserInfoResponse>();
   const [alertMessage, setAlertMessage] = useState<string>('');
   const [alertShow, setAlertShow] = useState<boolean>(false);
   const [alertFail, setAlertFail] = useState<boolean>(false);
@@ -62,7 +62,7 @@ export const PetAdoptForm = observer(({ handleClose }: { handleClose: () => void
       retry: false,
     }
   );
-  useQuery<IApiResponse<IUserInfoReponse>>(
+  useQuery<IApiResponse<IUserInfoResponse>>(
     [QUERY_KEYS.GET_USER_INFO_FOR_ADOPTION],
     getUserInfo,
     {
@@ -79,7 +79,7 @@ export const PetAdoptForm = observer(({ handleClose }: { handleClose: () => void
     }
   );
   const sendAdoptRequestMutation = useMutation<
-    IApiResponse<IUserInfoReponse>,
+    IApiResponse<IUserInfoResponse>,
     IAdoptPetRequest
   >(sendAdoptRequest, {
     onError: () => {

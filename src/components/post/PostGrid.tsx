@@ -1,45 +1,78 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import { IGetPostResponse } from '@/src/interfaces/post';
-import { AxiosResponse } from 'axios';
-import { UseQueryResult } from 'react-query';
-import { IApiErrorResponse, IApiResponse } from '@/src/interfaces/common';
-import { deletePost } from '@/src/services/post.api';
-import { useMutation } from '@/src/utils/hooks';
+import { IApiResponse, IPaginationModel } from '@/src/interfaces/common';
+import { deletePost, getUserPosts } from '@/src/services/post.api';
+import { useQuery, useMutation } from '@/src/utils/hooks';
+import { QUERY_KEYS } from '@/src/utils/constants';
 import { Alert } from '../common/Alert';
 import { PostCard } from './PostCard';
 import { PostDetailModal } from './PostDetailModal';
-import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
 import { AddButton } from '../common/button/AddButton';
+import { QueryProvider } from '../common/QueryProvider';
+import Pagination from '../common/Pagination';
+import { UserPostCreateForm } from '../user/UserPostCreateForm';
+import Popup from 'reactjs-popup';
+import { useStores } from '@/src/stores';
 
 const PAGE_SIZE = 6;
 
-export function PostGrid({
-  posts,
-  query,
-  onAdd,
-}: {
-  posts: IGetPostResponse[];
-  query: UseQueryResult<
-    AxiosResponse<IApiResponse<IGetPostResponse[]>, any>,
-    AxiosResponse<IApiErrorResponse, any>
-  >;
-  onAdd?: () => void;
-}) {
+interface IPostGridProps {
+  userId: string;
+  canCreate?: boolean;
+}
+
+export const PostGrid = QueryProvider(({ userId, canCreate }: IPostGridProps) => {
+  const { userStore } = useStores();
+  const [posts, setPosts] = useState<IGetPostResponse[]>([]);
   const [selectedPost, setSelectedPost] = useState<IGetPostResponse | null>(null);
   const [alertShow, setAlertShow] = useState(false);
   const [pendingDeleteId, setPendingDeleteId] = useState('');
-  const [page, setPage] = useState(0);
-  const [slideDir, setSlideDir] = useState<'right' | 'left' | null>(null);
+  const [showCreatePost, setShowCreatePost] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const totalPages = Math.ceil(posts.length / PAGE_SIZE);
-  const safePage = Math.min(page, Math.max(0, totalPages - 1));
-  const visiblePosts = posts.slice(safePage * PAGE_SIZE, (safePage + 1) * PAGE_SIZE);
+  const paginationForm = useForm<IPaginationModel>({
+    defaultValues: { pageIndex: 1, pageNumber: 1 },
+  });
+
+  // Use the callback form of watch — the only reliable way in RHF v7 to
+  // subscribe a component to setValue calls made by a child (Pagination).
+  useEffect(() => {
+    const { unsubscribe } = paginationForm.watch((values) => {
+      if (values.pageIndex !== undefined) {
+        setCurrentPage(values.pageIndex);
+      }
+    });
+    return unsubscribe;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const getPostsQuery = useQuery<IApiResponse<IGetPostResponse[]>>(
+    [QUERY_KEYS.GET_USER_POSTS, currentPage],
+    () => getUserPosts({ pageIndex: currentPage, pageSize: PAGE_SIZE, filter: { userId } }),
+    {
+      enabled: !!userId,
+      onSuccess: (res) => {
+        setPosts(res.data.data ?? []);
+        if (res.data.pageNumber !== undefined) {
+          paginationForm.setValue('pageNumber', res.data.pageNumber);
+        }
+      },
+      refetchOnWindowFocus: false,
+    }
+  );
 
   const deletePostMutation = useMutation<IApiResponse<boolean>, string>(deletePost, {
     onSuccess: () => {
       setSelectedPost(null);
-      query.refetch();
+      const page = paginationForm.getValues('pageIndex');
+      if (posts.length === 1 && page > 1) {
+        paginationForm.setValue('pageIndex', page - 1);
+        setCurrentPage(page - 1);
+      } else {
+        getPostsQuery.refetch();
+      }
     },
   });
 
@@ -48,14 +81,14 @@ export function PostGrid({
     setAlertShow(true);
   };
 
-  const goNext = () => {
-    setSlideDir('left');
-    setPage((p) => Math.min(p + 1, totalPages - 1));
-  };
-
-  const goPrev = () => {
-    setSlideDir('right');
-    setPage((p) => Math.max(p - 1, 0));
+  const handleCreateSuccess = () => {
+    setShowCreatePost(false);
+    if (currentPage === 1) {
+      getPostsQuery.refetch();
+    } else {
+      paginationForm.setValue('pageIndex', 1);
+      setCurrentPage(1);
+    }
   };
 
   // h-44 image (176px) + stats bar ~36px + border = ~214px per row, gap-2 (8px) between rows
@@ -67,54 +100,34 @@ export function PostGrid({
       <div className="flex items-center gap-3 mb-4">
         <h2 className="text-base font-semibold text-gray-700 uppercase tracking-widest">Bài đăng</h2>
         <div className="flex-1 h-px bg-gray-200" />
-        {onAdd && <AddButton onClick={onAdd} title="Tạo bài đăng" />}
+        {canCreate && <AddButton onClick={() => setShowCreatePost(true)} title="Tạo bài đăng" />}
       </div>
 
-      {/* Stable-height wrapper prevents layout shift during slide */}
       <div style={{ minHeight: minGridHeight }}>
-        <div
-          key={safePage}
-          className={
-            slideDir === 'left'
-              ? 'animate-slide-in-right'
-              : slideDir === 'right'
-                ? 'animate-slide-in-left'
-                : ''
-          }
-        >
+        <div>
           <div className="grid grid-cols-3 gap-2">
-            {visiblePosts.map((post) => (
+            {posts.map((post) => (
               <PostCard
                 key={post.id}
                 post={post}
                 onClick={() => setSelectedPost(post)}
+                onDelete={
+                  userStore.userContext?.id === post.userId
+                    ? () => handleDeleteRequest(post.id)
+                    : undefined
+                }
               />
             ))}
           </div>
         </div>
       </div>
 
-      {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-3 mt-3">
-          <button
-            onClick={goPrev}
-            disabled={safePage === 0}
-            className="w-8 h-8 rounded-full flex items-center justify-center border border-gray-200 disabled:opacity-30 hover:bg-gray-50 transition-colors"
-          >
-            <IoChevronBack size={14} />
-          </button>
-          <span className="text-sm text-gray-500">
-            {safePage + 1} / {totalPages}
-          </span>
-          <button
-            onClick={goNext}
-            disabled={safePage === totalPages - 1}
-            className="w-8 h-8 rounded-full flex items-center justify-center border border-gray-200 disabled:opacity-30 hover:bg-gray-50 transition-colors"
-          >
-            <IoChevronForward size={14} />
-          </button>
-        </div>
-      )}
+      <Pagination
+        paginationForm={paginationForm}
+        disable={getPostsQuery.isFetching}
+        show={paginationForm.getValues('pageNumber') > 1}
+      />
+
 
       {selectedPost && (
         <PostDetailModal
@@ -131,6 +144,15 @@ export function PostGrid({
         failed={false}
         action={() => deletePostMutation.mutate(pendingDeleteId)}
       />
+
+      <Popup
+        modal
+        open={showCreatePost}
+        onClose={() => setShowCreatePost(false)}
+        overlayStyle={{ background: 'rgba(0, 0, 0, 0.5)' }}
+      >
+        <UserPostCreateForm onSuccess={handleCreateSuccess} />
+      </Popup>
     </>
   );
-}
+});

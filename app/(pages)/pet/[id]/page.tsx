@@ -23,7 +23,7 @@ import Link from 'next/link';
 import { FaHouseUser } from 'react-icons/fa';
 import { Button, Tooltip } from '@material-tailwind/react';
 import { FaShieldDog } from 'react-icons/fa6';
-import CreatePetPostButton from '@/src/components/post/CreatePetPostButton';
+import CreatePostButton from '@/src/components/post/CreatePostButton';
 import { CarouselDefault } from '@/src/components/common/CarouselDefault';
 import { observer } from 'mobx-react-lite';
 import { useStores } from '@/src/stores';
@@ -245,7 +245,7 @@ const page = observer(QueryProvider(({ params }: { params: { id: string } }) => 
           {
             (petPost.length || (userStore.userContext?.id === petDetail.ownerId))
             && <div className="container max-w-5xl mx-auto p-5 shadow-2xl rounded-2xl my-5">
-              <CreatePetPostButton
+              <CreatePostButton
                 petId={params.id}
                 query={getPostQuery}
                 show={userStore.userContext?.id === petDetail.ownerId} />

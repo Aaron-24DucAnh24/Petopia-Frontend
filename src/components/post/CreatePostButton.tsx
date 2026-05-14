@@ -1,9 +1,9 @@
 import Popup from 'reactjs-popup';
 import { FaPlus } from 'react-icons/fa';
-import CreatePetPostForm from './CreatePetPostForm';
+import CreatePostForm from './CreatePostForm';
 import { useState } from 'react';
 
-export default function CreatePetPostButton({
+export default function CreatePostButton({
   petId,
   query,
   show,
@@ -21,7 +21,7 @@ export default function CreatePetPostButton({
         overlayStyle={{ background: 'rgba(0, 0, 0, 0.5)' }}
         open={open}
       >
-        <CreatePetPostForm
+        <CreatePostForm
           petId={petId}
           query={query}
           action={() => setOpen(false)}

@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { QueryProvider } from '../common/QueryProvider';
 import { getOtherUserInfo } from '@/src/services/user.api';
-import { IUserInfoReponse } from '@/src/interfaces/user';
+import { IUserInfoResponse } from '@/src/interfaces/user';
 import { IApiResponse } from '@/src/interfaces/common';
 import { useQuery } from '@/src/utils/hooks';
 import {
@@ -18,10 +18,10 @@ import { UserRoleName } from './UserRoleName';
 
 export const OtherUserPage = QueryProvider(({ userId }: { userId: string }) => {
   // STATES
-  const [userInfo, setUserInfo] = useState<IUserInfoReponse>();
+  const [userInfo, setUserInfo] = useState<IUserInfoResponse>();
 
   // QUERIES
-  const getUserQuery = useQuery<IApiResponse<IUserInfoReponse>>(
+  const getUserQuery = useQuery<IApiResponse<IUserInfoResponse>>(
     [QUERY_KEYS.GET_OTHER_USER],
     () => getOtherUserInfo({ userId: userId }),
     {

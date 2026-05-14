@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```bash
 npm run dev      # Start dev server at http://localhost:3000
 npm run build    # Production build
-npm run lint     # ESLint with auto-fix
+npm run lint     # ESLint with auto-fix, always run this command after creating/editing files
 ```
 
 Cypress e2e tests live in `cypress/e2e/`. There is no unit test setup — only Cypress.

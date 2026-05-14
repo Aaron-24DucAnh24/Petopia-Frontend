@@ -5,7 +5,7 @@ const config: Config = {
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
-    './**/@material-tailwind/**/*.{html,js,ts,jsx,tsx,mdx}',
+    './node_modules/@material-tailwind/**/*.{html,js,ts,jsx,tsx,mdx}',
   ],
   theme: {
     extend: {
@@ -63,14 +63,6 @@ const config: Config = {
             color: 'red',
           },
         },
-        'slide-in-right': {
-          '0%': { transform: 'translateX(24px)', opacity: '0' },
-          '100%': { transform: 'translateX(0)', opacity: '1' },
-        },
-        'slide-in-left': {
-          '0%': { transform: 'translateX(-24px)', opacity: '0' },
-          '100%': { transform: 'translateX(0)', opacity: '1' },
-        },
       },
       animation: {
         fade_in: 'fade_in 0.2s linear',
@@ -78,8 +70,6 @@ const config: Config = {
         spin: 'spin 3s linear infinite',
         pulse: 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'pulse-plus': 'pulse-plus 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        'slide-in-right': 'slide-in-right 0.22s ease-out',
-        'slide-in-left': 'slide-in-left 0.22s ease-out',
       },
     },
   },
