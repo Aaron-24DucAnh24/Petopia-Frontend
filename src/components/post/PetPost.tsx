@@ -6,7 +6,7 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { FaComment } from 'react-icons/fa';
+import { FaHeart, FaRegHeart, FaComment } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
 import CommentCard from './CommentCard';
 import { IoSend } from 'react-icons/io5';
@@ -62,7 +62,7 @@ export default function PetPost({
       // Reset animation after 0.8s (same duration as CSS animation)
       setTimeout(() => {
         setIsAnimating(false);
-      }, 800);
+      }, 400);
     }
     likeMutation.mutate(post.id);
   };
@@ -167,10 +167,14 @@ export default function PetPost({
             <div className="flex flex-row items-center">
               <button
                 onClick={handleLikeButton}
-                className={`heart ${isAnimating ? 'is_animating' : ''} ${isLiked ? 'liked' : ''
-                  }`}
-              ></button>
-              <div className="font-medium -ml-4 text-gray-400">{post.like}</div>
+                className={`flex items-center justify-center ${isAnimating ? 'heart-pop' : ''}`}
+              >
+                {isLiked
+                  ? <FaHeart size={20} className="text-red-500" />
+                  : <FaRegHeart size={20} className="text-gray-400" />
+                }
+              </button>
+              <div className="font-medium ml-1 text-gray-400">{post.like}</div>
             </div>
             <button
               onClick={handleCommentButton}

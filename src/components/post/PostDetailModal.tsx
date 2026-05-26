@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import { Dispatch, FormEvent, SetStateAction, useEffect, useState } from 'react';
-import { FaRegComment } from 'react-icons/fa';
+import { FaHeart, FaRegHeart, FaRegComment } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
 import { IoSend, IoClose, IoChevronBack, IoChevronForward } from 'react-icons/io5';
 import { ICommentPost, ICommentResponse, IGetPostResponse } from '@/src/interfaces/post';
@@ -20,7 +20,7 @@ export function PostDetailModal({
 }: {
   post: IGetPostResponse;
   onClose: () => void;
-  onDelete: () => void;
+  onDelete?: () => void;
 }) {
   const { userStore } = useStores();
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -59,7 +59,7 @@ export function PostDetailModal({
     setIsLiked((prev) => !prev);
     if (!isLiked) {
       setIsAnimating(true);
-      setTimeout(() => setIsAnimating(false), 800);
+      setTimeout(() => setIsAnimating(false), 400);
     }
     likeMutation.mutate(post.id);
   };
@@ -169,14 +169,19 @@ export function PostDetailModal({
           <div className="px-2 py-1.5 border-b border-gray-200 flex items-center gap-4 flex-shrink-0 bg-gray-50">
             <button
               onClick={handleLike}
-              className={`heart ${isAnimating ? 'is_animating' : ''} ${isLiked ? 'liked' : ''}`}
-            />
-            <span className="font-medium -ml-4 text-gray-500 text-sm">{likeCount}</span>
+              className={`flex items-center gap-1.5 justify-center ${isAnimating ? 'heart-pop' : ''}`}
+            >
+              {isLiked
+                ? <FaHeart size={20} className="text-red-500" />
+                : <FaRegHeart size={20} className="text-gray-400" />
+              }
+              <span className="font-medium text-gray-500 text-sm">{likeCount}</span>
+            </button>
             <div className="flex items-center gap-1.5 text-gray-500">
               <FaRegComment size={16} />
               <span className="text-sm">{commentCount}</span>
             </div>
-            {userStore.userContext?.id === post.userId && (
+            {onDelete && userStore.userContext?.id === post.userId && (
               <button onClick={onDelete} className="ml-auto">
                 <MdDelete
                   className="text-gray-400 hover:text-red-400 transition-colors"

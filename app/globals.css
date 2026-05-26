@@ -26,32 +26,14 @@ input[type='search']::-webkit-search-results-decoration {
   height: calc(100vh - 80px);
 }
 
-.heart {
-  cursor: pointer;
-  height: 54px;
-  width: 54px;
-  background-image: url('https://abs.twimg.com/a/1446542199/img/t1/web_heart_animation.png');
-  background-position: left;
-  background-repeat: no-repeat;
-  background-size: 2900%;
+.heart-pop {
+  animation: heart-pop 0.4s ease-in-out;
 }
 
-.heart.liked {
-  background-position: right;
-}
-
-.is_animating {
-  animation: heart-burst 0.8s steps(28) 1;
-}
-
-@keyframes heart-burst {
-  from {
-    background-position: left;
-  }
-
-  to {
-    background-position: right;
-  }
+@keyframes heart-pop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.5); }
+  100% { transform: scale(1); }
 }
 
 .ck-focused {

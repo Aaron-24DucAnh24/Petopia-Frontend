@@ -8,6 +8,9 @@ export const getPetPosts = async (petId: string) =>
 export const getUserPosts = async (data: IPaginationRequest<{ userId: string }>) =>
   await http.post('/Post/Get', data);
 
+export const getAllPosts = async (data: IPaginationRequest<undefined>) =>
+  await http.post('/Post/Get', data);
+
 export const createPost = async (data: ICreatePost) =>
   await http.post('/Post', data);
 
