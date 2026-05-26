@@ -6,7 +6,7 @@ export const GivePetHeaderBar = ({ activeStep }: { activeStep: number }) => {
   const activeStepperBorder = 'border-blue-600';
 
   return (
-    <ol className="flex items-center justify-center w-full p-3 mb-5 space-x-2 text-sm font-medium text-center text-gray-500 bg-white border border-gray-200 rounded-lg shadow-sm  sm:p-4 sm:space-x-4 rtl:space-x-reverse">
+    <ol className="flex items-center justify-center w-full p-3 mb-5 space-x-2 text-sm font-medium text-center text-gray-500 bg-yellow-100 border border-yellow-200 rounded-lg sm:p-4 sm:space-x-4 rtl:space-x-reverse">
       <li
         className={
           'flex items-center ' + (activeStep === GIVE_PET_STEP.UPLOAD_IMAGE ? activeStepper : '')

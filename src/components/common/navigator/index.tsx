@@ -28,7 +28,7 @@ export const Navbar = QueryProvider(observer(() => {
   }
 
   return (
-    <nav className=" border-gray-200 w-full fixed top-0 bg-white z-50">
+    <nav className="border-b border-gray-100 shadow-sm w-full fixed top-0 bg-white z-50">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <Link href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
           <span className="self-center text-2xl whitespace-nowrap ">
