@@ -91,10 +91,6 @@ export const PostGrid = QueryProvider(({ userId, canCreate }: IPostGridProps) =>
     }
   };
 
-  // h-44 image (176px) + stats bar ~36px + border = ~214px per row, gap-2 (8px) between rows
-  const rows = Math.ceil(PAGE_SIZE / 3);
-  const minGridHeight = rows * 214 + (rows - 1) * 8;
-
   return (
     <>
       <div className="flex items-center gap-3 mb-4">
@@ -103,7 +99,7 @@ export const PostGrid = QueryProvider(({ userId, canCreate }: IPostGridProps) =>
         {canCreate && <AddButton onClick={() => setShowCreatePost(true)} title="Tạo bài đăng" />}
       </div>
 
-      <div style={{ minHeight: minGridHeight }}>
+      <div>
         <div>
           <div className="grid grid-cols-3 gap-2">
             {posts.map((post) => (
