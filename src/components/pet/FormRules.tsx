@@ -13,9 +13,9 @@ export default function FormRules({
   setIsAgreed: (v: boolean) => void;
 }) {
   return (
-    <div className="w-full rounded-2xl bg-yellow-100 p-5">
-      <h2 className="font-bold mb-2">Điều khoản</h2>
-      <div className="w-full p-5 mb-5 bg-gray-50 rounded-lg">
+    <div className="w-full rounded-2xl bg-yellow-100 p-5 flex flex-col flex-1 min-h-0">
+      <h2 className="font-bold mb-2 shrink-0">Điều khoản</h2>
+      <div className="w-full p-5 mb-5 bg-gray-50 rounded-lg overflow-y-auto flex-1 min-h-0">
         <div className="mb-4">
           <h3 className="font-bold">Định Nghĩa:</h3>
           <p>

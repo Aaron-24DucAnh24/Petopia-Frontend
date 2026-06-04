@@ -1,7 +1,7 @@
-import Popup from 'reactjs-popup';
 import { FaPlus } from 'react-icons/fa';
 import CreatePostForm from './CreatePostForm';
 import { useState } from 'react';
+import { ConfirmCloseModal } from '../common/ConfirmCloseModal';
 
 export default function CreatePostButton({
   petId,
@@ -16,17 +16,13 @@ export default function CreatePostButton({
   return !show
     ? <></>
     : (<div>
-      <Popup
-        modal
-        overlayStyle={{ background: 'rgba(0, 0, 0, 0.5)' }}
-        open={open}
-      >
+      <ConfirmCloseModal open={open} onClose={() => setOpen(false)}>
         <CreatePostForm
           petId={petId}
           query={query}
           action={() => setOpen(false)}
         />
-      </Popup>
+      </ConfirmCloseModal>
       <button
         className="p-3 flex items-center w-fit font-medium bg-yellow-300 rounded-full hover:bg-yellow-400"
         onClick={() => setOpen(true)}

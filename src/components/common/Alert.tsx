@@ -40,7 +40,7 @@ export function Alert(props: IAlert) {
   return (
     show && (
       <div
-        className={`transition ${className} z-50 !fixed top-0 bottom-0 right-0 left-0 !m-0`}
+        className={`transition ${className} !z-[9999] !fixed top-0 bottom-0 right-0 left-0 !m-0`}
         onAnimationEnd={handleOnAnimationEnd}>
         <div className="h-full w-full absolute inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
 

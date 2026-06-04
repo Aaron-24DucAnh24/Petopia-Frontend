@@ -10,9 +10,9 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Dispatch, SetStateAction, useRef, useState } from 'react';
 import { FaNewspaper, FaPaw, FaFeather, FaPlus, FaUser } from 'react-icons/fa6';
-import Popup from 'reactjs-popup';
 import { UserPostCreateForm } from '@/src/components/user/UserPostCreateForm';
 import PetProfileForm from '@/src/components/pet/PetProfileForm';
+import { ConfirmCloseModal } from '@/src/components/common/ConfirmCloseModal';
 
 interface INavOptionsBlock {
   isOpenMenu: boolean;
@@ -154,27 +154,23 @@ export const NavOptionsBlock = observer((props: INavOptionsBlock) => {
 
       {/* Create Post Modal */}
       {userStore.userContext && (
-        <Popup
+        <ConfirmCloseModal
           open={isPostModalOpen}
-          onClose={() => setIsPostModalOpen(false)}
-          modal
-          overlayStyle={{ background: 'rgba(0, 0, 0, 0.5)' }}>
+          onClose={() => setIsPostModalOpen(false)}>
           <UserPostCreateForm onSuccess={() => setIsPostModalOpen(false)} />
-        </Popup>
+        </ConfirmCloseModal>
       )}
 
       {/* Create Pet Modal */}
       {userStore.userContext && (
-        <Popup
+        <ConfirmCloseModal
           open={isPetModalOpen}
           onClose={() => setIsPetModalOpen(false)}
-          modal
-          overlayStyle={{ background: 'rgba(0, 0, 0, 0.5)' }}
           contentStyle={{ width: '90vw', maxWidth: '900px', padding: 0, borderRadius: '12px' }}>
-          <div className="bg-white rounded-xl max-h-[90vh] overflow-y-auto">
+          <div className="bg-white rounded-xl max-h-[90vh] overflow-hidden flex flex-col">
             <PetProfileForm />
           </div>
-        </Popup>
+        </ConfirmCloseModal>
       )}
     </>
   );

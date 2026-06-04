@@ -8,8 +8,8 @@ import { useState } from 'react';
 import { useMutation } from '@/src/utils/hooks';
 import { deletePet } from '@/src/services/pet.api';
 import { CiEdit } from 'react-icons/ci';
-import Popup from 'reactjs-popup';
 import PetProfileForm from '../pet/PetProfileForm';
+import { ConfirmCloseModal } from '../common/ConfirmCloseModal';
 import { FaShieldDog } from 'react-icons/fa6';
 import { Tooltip, Button } from '@material-tailwind/react';
 import { UseQueryResult } from 'react-query';
@@ -42,6 +42,7 @@ export function PetCard(props: IPetCard) {
   } = props;
   const [showAlert, setShowAlert] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
+  const [isPetFormOpen, setIsPetFormOpen] = useState(false);
 
   const handleClose = () => {
     window.location.reload();
@@ -122,23 +123,21 @@ export function PetCard(props: IPetCard) {
       </Link>
       {isEditable && (
         <div className="absolute top-2 right-2 flex gap-1">
-          <Popup
-            modal
-            overlayStyle={{ background: 'rgba(0, 0, 0, 0.5)' }}
-            contentStyle={{ width: '90vw', maxWidth: '900px', padding: 0, borderRadius: '12px' }}
-            trigger={
-              <button
-                className="p-2 bg-gray-200 rounded-full hover:bg-gray-300"
-                onClick={handleEdit}
-              >
-                <CiEdit size={20} />
-              </button>
-            }
+          <button
+            className="p-2 bg-gray-200 rounded-full hover:bg-gray-300"
+            onClick={() => { handleEdit(); setIsPetFormOpen(true); }}
           >
-            <div className="bg-white rounded-xl max-h-[85vh] overflow-y-auto">
+            <CiEdit size={20} />
+          </button>
+          <ConfirmCloseModal
+            open={isPetFormOpen}
+            onClose={() => setIsPetFormOpen(false)}
+            contentStyle={{ width: '90vw', maxWidth: '900px', padding: 0, borderRadius: '12px' }}
+          >
+            <div className="bg-white rounded-xl max-h-[85vh] overflow-hidden flex flex-col">
               <PetProfileForm id={id} handleClose={handleClose} />
             </div>
-          </Popup>
+          </ConfirmCloseModal>
 
           <button
             className="p-2 bg-gray-200 rounded-full hover:bg-gray-300"

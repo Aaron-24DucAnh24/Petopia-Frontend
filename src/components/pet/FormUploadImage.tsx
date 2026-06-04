@@ -45,58 +45,60 @@ export default function FormUploadImage({
   };
 
   return (
-    <div className="w-full rounded-2xl bg-yellow-100 p-5">
-      <h2 className="font-bold mb-2">Hình thú cưng của bạn</h2>
+    <div className="w-full rounded-2xl bg-yellow-100 p-5 flex flex-col flex-1 min-h-0">
+      <h2 className="font-bold mb-2 shrink-0">Hình thú cưng của bạn</h2>
 
-      {/* Dropzone */}
-      <div className="flex items-center justify-center w-full p-5 mb-5 bg-gray-50 rounded-lg">
-        <label
-          htmlFor="pet-dropzone-file"
-          className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100"
-        >
-          <div className="flex flex-col items-center justify-center pt-5 pb-6">
-            <UploadIcon color='grey' size={32}/>
-            <p className="my-2 text-sm text-gray-500">
-              <span className="font-semibold">Click to upload</span> or drag and
-              drop
-            </p>
-            <p className="text-xs text-gray-500 ">PNG, JPG, JPEG</p>
-          </div>
-          <input
-            test-id="image-dropzone"
-            id="pet-dropzone-file"
-            disabled={watch('showImages').length >= 3}
-            type="file"
-            accept="image/png, image/jpeg, image/jpg"
-            className="hidden"
-            onChange={handleAddImage}
-          />
-        </label>
-      </div>
-      {/* Image preview */}
-      <div className="flex gap-3 mb-5">
-        {watch('showImages').length > 0 &&
-          watch('showImages').map((file, index) => (
-            <div
-              test-id="show-images-dropzone"
-              key={index}
-              className="relative w-1/3 h-24"
-            >
-              <Image
-                src={file}
-                alt="preview"
-                fill
-                className="object-cover rounded-lg"
-              ></Image>
-              <div
-                className="absolute top-0 bg-red-300 right-0 p-1 rounded-full flex justify-center items-center cursor-pointer"
-                onClick={() => deleteFile(index)}
-                test-id="delete-image-dropzone"
-              >
-                <IoClose color="black" />
-              </div>
+      <div className="overflow-y-auto flex-1 min-h-0">
+        {/* Dropzone */}
+        <div className="flex items-center justify-center w-full p-5 mb-5 bg-gray-50 rounded-lg">
+          <label
+            htmlFor="pet-dropzone-file"
+            className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100"
+          >
+            <div className="flex flex-col items-center justify-center pt-5 pb-6">
+              <UploadIcon color='grey' size={32}/>
+              <p className="my-2 text-sm text-gray-500">
+                <span className="font-semibold">Click to upload</span> or drag and
+                drop
+              </p>
+              <p className="text-xs text-gray-500 ">PNG, JPG, JPEG</p>
             </div>
-          ))}
+            <input
+              test-id="image-dropzone"
+              id="pet-dropzone-file"
+              disabled={watch('showImages').length >= 3}
+              type="file"
+              accept="image/png, image/jpeg, image/jpg"
+              className="hidden"
+              onChange={handleAddImage}
+            />
+          </label>
+        </div>
+        {/* Image preview */}
+        <div className="flex gap-3 mb-5">
+          {watch('showImages').length > 0 &&
+            watch('showImages').map((file, index) => (
+              <div
+                test-id="show-images-dropzone"
+                key={index}
+                className="relative w-1/3 h-24"
+              >
+                <Image
+                  src={file}
+                  alt="preview"
+                  fill
+                  className="object-cover rounded-lg"
+                ></Image>
+                <div
+                  className="absolute top-0 bg-red-300 right-0 p-1 rounded-full flex justify-center items-center cursor-pointer"
+                  onClick={() => deleteFile(index)}
+                  test-id="delete-image-dropzone"
+                >
+                  <IoClose color="black" />
+                </div>
+              </div>
+            ))}
+        </div>
       </div>
 
       {/* Controller */}

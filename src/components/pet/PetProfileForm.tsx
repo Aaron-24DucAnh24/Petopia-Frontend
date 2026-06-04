@@ -205,7 +205,7 @@ const PetProfileForm = QueryProvider(
     const uploadImagesMutation = useMutation<void, undefined>(uploadImage);
 
     return (
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
         {/* breadscrum stepper */}
         <GivePetHeaderBar activeStep={activeStep} />
 

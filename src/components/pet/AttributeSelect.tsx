@@ -3,10 +3,6 @@ import {
   ICreatePetProfileRequest,
   IPetFilterItem,
 } from '@/src/interfaces/pet';
-import { UseQueryResult } from 'react-query';
-import { AxiosResponse } from 'axios';
-import { IApiErrorResponse } from '@/src/interfaces/common';
-import { BsStars } from 'react-icons/bs';
 interface AttributeSelectProps {
   label: string;
   options: IPetFilterItem[];
@@ -37,7 +33,7 @@ export default function AttributeSelect({
       <label className="text-sm font-medium">{label}</label>
       <select
         test-id={testId}
-        onChange={(e) => setValue(value, e.target.value)}
+        onChange={(e) => setValue(value, Number(e.target.value) as never)}
         className={`text-black  border ${value === 'species'
           ? 'border-yellow-600 animate-pulse bg-yellow-200'
           : 'border-gray-300 hover:bg-slate-100'

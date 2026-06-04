@@ -43,11 +43,11 @@ export default function FormPetDetail({
     }
   );
   return (
-    <div className="w-full rounded-2xl bg-yellow-100 p-5">
-      <h2 className="font-bold mb-2">Thông tin về thú cưng của bạn</h2>
+    <div className="w-full rounded-2xl bg-yellow-100 p-5 flex flex-col flex-1 min-h-0">
+      <h2 className="font-bold mb-2 shrink-0">Thông tin về thú cưng của bạn</h2>
 
       {/* form */}
-      <div className="w-full p-5 mb-5 bg-gray-50 rounded-lg">
+      <div className="w-full p-5 mb-5 bg-gray-50 rounded-lg overflow-y-auto flex-1 min-h-0">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {/* Tên thú cưng */}
           <div className="flex flex-col space-y-2">
