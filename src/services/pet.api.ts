@@ -1,12 +1,11 @@
 import { http } from './http';
 import { IPaginationRequest } from '../interfaces/common';
 import {
-  ICreatePetProfileRequest,
   ILocationRequest,
+  IPetApiPayload,
   IPetFilterRequest,
 } from '../interfaces/pet';
 import { PET_SPECIES } from '../utils/constants';
-import axios from 'axios';
 
 export const getPets = async (data: IPaginationRequest<IPetFilterRequest>) =>
   await http.post('/Pet/Get', data);
@@ -14,7 +13,7 @@ export const getPets = async (data: IPaginationRequest<IPetFilterRequest>) =>
 export const getProvince = async (req: ILocationRequest) =>
   await http.get('/Location', req);
 
-export const postPet = async (data: ICreatePetProfileRequest) =>
+export const postPet = async (data: IPetApiPayload) =>
   await http.post('/Pet', data);
 
 export const getPetDetail = async (data: { id: string }) =>
@@ -23,7 +22,7 @@ export const getPetDetail = async (data: { id: string }) =>
 export const deletePet = async (data: { id: string }) =>
   await http.delete(`/Pet/${data.id}`);
 
-export const updatePet = async (data: ICreatePetProfileRequest) =>
+export const updatePet = async (data: IPetApiPayload) =>
   await http.put('/Pet', data);
 
 export const getPetsByUser = async (data: IPaginationRequest<string>) =>
@@ -36,8 +35,5 @@ export const getBreed = async (data: PET_SPECIES) =>
   await http.get('/Pet/Breed', { species: data });
 
 export const getKeywords = async () => await http.get('/Pet/Keywords');
-
-export const predict = async (data: FormData) =>
-  await http.post('/Pet/Predict', data);
 
 export const getVaccine = async () => await http.get('/Pet/Vaccines');

@@ -75,7 +75,6 @@ export interface ICreatePetProfileRequest {
   isAvailable: boolean;
   address: string;
   breed: string;
-  predictedBreed: string;
   presetBreed: string;
   files: File[];
   images: string[];
@@ -83,6 +82,23 @@ export interface ICreatePetProfileRequest {
   id?: string;
   listBreed: string[];
   vaccineIds: string[];
+}
+
+export interface IPetApiPayload {
+  name: string;
+  description: string;
+  sex: number;
+  age: number;
+  color: number;
+  species: number;
+  size: number;
+  isSterillized: number;
+  isVaccinated: number;
+  isAvailable: boolean;
+  breed: string;
+  images: string[];
+  vaccineIds: string[];
+  id?: string;
 }
 
 export interface ILocationResponse {

@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { IGetPostResponse } from '@/src/interfaces/post';
 import { IApiResponse } from '@/src/interfaces/common';
-import { getAllPosts } from '@/src/services/post.api';
+import { getUserPosts } from '@/src/services/post.api';
 import { useQuery } from '@/src/utils/hooks';
 import { QUERY_KEYS } from '@/src/utils/constants';
 import { FeedPostCard } from './FeedPostCard';
@@ -20,7 +20,7 @@ export const PostListPage = QueryProvider(() => {
 
   const query = useQuery<IApiResponse<IGetPostResponse[]>>(
     [QUERY_KEYS.GET_ALL_POSTS, currentPage],
-    () => getAllPosts({ pageIndex: currentPage, pageSize: PAGE_SIZE }),
+    () => getUserPosts({ pageIndex: currentPage, pageSize: PAGE_SIZE, filter: { userId: undefined } }),
     {
       onSuccess: (res) => {
         const newPosts = res.data.data ?? [];

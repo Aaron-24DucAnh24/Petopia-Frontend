@@ -5,10 +5,7 @@ import { http } from './http';
 export const getPetPosts = async (petId: string) =>
   await http.get(`/Post/Pet/${petId}`);
 
-export const getUserPosts = async (data: IPaginationRequest<{ userId: string }>) =>
-  await http.post('/Post/Get', data);
-
-export const getAllPosts = async (data: IPaginationRequest<undefined>) =>
+export const getUserPosts = async (data: IPaginationRequest<{ userId?: string }>) =>
   await http.post('/Post/Get', data);
 
 export const createPost = async (data: ICreatePost) =>

@@ -5,7 +5,6 @@ import { IApiResponse } from '@/src/interfaces/common';
 import { getBreed } from '@/src/services/pet.api';
 import { UseFormSetValue, UseFormWatch } from 'react-hook-form';
 import { ICreatePetProfileRequest } from '@/src/interfaces/pet';
-import { FilterDropDown } from '../common/FilterDropdown';
 
 export default function BreedInput({
   setValue,
@@ -14,14 +13,12 @@ export default function BreedInput({
   setValue: UseFormSetValue<ICreatePetProfileRequest>;
   watch: UseFormWatch<ICreatePetProfileRequest>;
 }) {
-  // QUERY
-  const getBreedQuery = useQuery<IApiResponse<string[]>>(
+  useQuery<IApiResponse<string[]>>(
     [QUERY_KEYS.GET_BREED_DETAIL, watch('species')],
     () => getBreed(watch('species')),
     {
       onSuccess: (res) => {
         setValue('listBreed', res.data.data);
-        watch('predictedBreed') && setValue('breed', watch('predictedBreed'));
         watch('presetBreed') && setValue('breed', watch('presetBreed'));
       },
       enabled:
@@ -35,14 +32,16 @@ export default function BreedInput({
   }, [watch('species')]);
 
   return (
-    <>
-      {watch('species') != PET_SPECIES.OTHER && (
-        <FilterDropDown
-          options={watch('listBreed')?.map((e) => ({ label: e, value: e }))}
-          value={watch('breed')}
-          setValue={(value: string) => setValue('breed', value)}
-        />
-      )}
-    </>
+    <select
+      onChange={(e) => setValue('breed', e.target.value)}
+      disabled={watch('species') !== PET_SPECIES.DOG}
+      className="border border-gray-300 hover:bg-slate-100 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
+      value={watch('breed')}
+    >
+      <option value="">Chọn giống</option>
+      {watch('listBreed')?.map((breed) => (
+        <option key={breed} value={breed}>{breed}</option>
+      ))}
+    </select>
   );
 }

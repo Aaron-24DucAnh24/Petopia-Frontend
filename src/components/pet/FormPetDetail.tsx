@@ -13,7 +13,7 @@ import {
 } from '@/src/interfaces/pet';
 import BreedInput from './BreedInput';
 import { useQuery } from '@/src/utils/hooks';
-import { getVaccine, predict } from '@/src/services/pet.api';
+import { getVaccine } from '@/src/services/pet.api';
 import Dropdown from '../common/VaccineDropdown';
 import { IApiResponse } from '@/src/interfaces/common';
 
@@ -24,17 +24,13 @@ export default function FormPetDetail({
   handleBack,
   setValue,
   watch,
-  enableAI,
 }: {
   handleNext: () => void;
   handleBack: () => void;
   setValue: UseFormSetValue<ICreatePetProfileRequest>;
   watch: UseFormWatch<ICreatePetProfileRequest>;
-  enableAI: boolean;
 }) {
   const [vaccines, setVaccines] = useState<IVaccine[]>();
-  const formData = new FormData();
-  formData.append('', watch('files')[0]);
 
   useQuery<IApiResponse<IVaccine[]>>(
     [QUERY_KEYS.GET_VACCINE],
@@ -77,10 +73,10 @@ export default function FormPetDetail({
             value="species"
             options={{ ...PET_SPECIES_FILTER, kind: 'species' }.items}
           />
-          <BreedInput
-            watch={watch}
-            setValue={setValue}
-          />
+          <div className="flex flex-col space-y-2">
+            <label className="text-sm font-medium">Giống</label>
+            <BreedInput watch={watch} setValue={setValue} />
+          </div>
           {PET_SELECT.map((filter) => (
             <AttributeSelect
               testId={`dropdown-option-${filter.kind}`}

@@ -51,7 +51,7 @@ export default function FormUploadImage({
       {/* Dropzone */}
       <div className="flex items-center justify-center w-full p-5 mb-5 bg-gray-50 rounded-lg">
         <label
-          htmlFor="dropzone-file"
+          htmlFor="pet-dropzone-file"
           className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100"
         >
           <div className="flex flex-col items-center justify-center pt-5 pb-6">
@@ -64,7 +64,7 @@ export default function FormUploadImage({
           </div>
           <input
             test-id="image-dropzone"
-            id="dropzone-file"
+            id="pet-dropzone-file"
             disabled={watch('showImages').length >= 3}
             type="file"
             accept="image/png, image/jpeg, image/jpg"

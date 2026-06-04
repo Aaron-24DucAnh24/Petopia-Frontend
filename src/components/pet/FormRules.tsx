@@ -4,9 +4,13 @@ import ControlForm from './ControlForm';
 export default function FormRules({
   handleBack,
   isLoading,
+  isAgreed,
+  setIsAgreed,
 }: {
   handleBack: () => void;
   isLoading: boolean;
+  isAgreed: boolean;
+  setIsAgreed: (v: boolean) => void;
 }) {
   return (
     <div className="w-full rounded-2xl bg-yellow-100 p-5">
@@ -49,7 +53,14 @@ export default function FormRules({
           </p>
         </div>
         <div className="mb-4">
-          <input test-id="check-box-give-form" type="checkbox" id="agreeCheckbox" required />
+          <input
+            test-id="check-box-give-form"
+            type="checkbox"
+            id="agreeCheckbox"
+            checked={isAgreed}
+            onChange={(e) => setIsAgreed(e.target.checked)}
+            required
+          />
           <label htmlFor="agreeCheckbox" className="ml-2">
             Tôi đồng ý với các điều khoản nhận nuôi.
           </label>

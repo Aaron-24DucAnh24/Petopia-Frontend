@@ -11,10 +11,12 @@ import { Alert } from '../common/Alert';
 import {
   ICreatePetProfileRequest,
   ICreatePetResponse,
+  IPetApiPayload,
   IPetDetailResponse,
   IUpdatePeResponse,
 } from '@/src/interfaces/pet';
 import { getPetDetail, postPet, updatePet } from '@/src/services/pet.api';
+import { uploadMany } from '@/src/services/storage.api';
 import { GIVE_PET_STEP, QUERY_KEYS } from '@/src/utils/constants';
 import { GivePetHeaderBar } from './GivePetHeaderBar';
 import { StringUtil } from '@/src/utils/StringUtil';
@@ -25,6 +27,8 @@ const PetProfileForm = QueryProvider(
     const [error, setError] = useState<string>('');
     const [showAlert, setShowAlert] = useState<boolean>(false);
     const [activeStep, setActiveStep] = useState(GIVE_PET_STEP.UPLOAD_IMAGE);
+    const [isAgreed, setIsAgreed] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     // FORMS
     const { getValues, setValue, watch } = useForm<ICreatePetProfileRequest>({
@@ -41,7 +45,6 @@ const PetProfileForm = QueryProvider(
         isAvailable: true,
         address: 'chưa điền',
         breed: '',
-        predictedBreed: '',
         presetBreed: '',
         files: [],
         images: [],
@@ -68,26 +71,38 @@ const PetProfileForm = QueryProvider(
         setError(errorMessage);
         setShowAlert(true);
       } else {
+        setIsSubmitting(true);
         !getValues('breed') && setValue('breed', 'Không rõ');
         await uploadImagesMutation.mutateAsync(undefined);
-        if (id) await updatePetMutation.mutateAsync(getValues());
-        else await createPetMutation.mutateAsync(getValues());
+        const payload: IPetApiPayload = {
+          name: getValues('name'),
+          description: getValues('description'),
+          sex: getValues('sex'),
+          age: getValues('age'),
+          color: getValues('color'),
+          species: getValues('species'),
+          size: getValues('size'),
+          isSterillized: getValues('isSterillized'),
+          isVaccinated: getValues('isVaccinated'),
+          isAvailable: getValues('isAvailable'),
+          breed: getValues('breed'),
+          images: getValues('images'),
+          vaccineIds: getValues('vaccineIds'),
+          ...(id ? { id } : {}),
+        };
+        if (id) await updatePetMutation.mutateAsync(payload);
+        else await createPetMutation.mutateAsync(payload);
       }
     };
 
     const uploadImage = async () => {
       const files = getValues('files');
-
       if (files && files.length > 0) {
-        const filesArray = Array.from(files);
-        await Promise.all(
-          filesArray.map(async (file) => {
-            // const formData = new FormData();
-            // formData.append('image', file);
-            // const url: string = await postImage(formData);
-            // url && setValue('images', [...getValues('images'), url]);
-          })
-        );
+        const formData = new FormData();
+        Array.from(files).forEach((file) => formData.append('images', file));
+        const res = await uploadMany(formData);
+        const urls = res.data.data as string[];
+        setValue('images', [...getValues('images'), ...urls]);
       }
     };
 
@@ -163,7 +178,7 @@ const PetProfileForm = QueryProvider(
 
     const updatePetMutation = useMutation<
       IApiResponse<IUpdatePeResponse>,
-      ICreatePetProfileRequest
+      IPetApiPayload
     >(updatePet, {
       onError: () => {
         setError('Cập nhật hồ sơ thú cưng thất bại');
@@ -176,21 +191,21 @@ const PetProfileForm = QueryProvider(
 
     const createPetMutation = useMutation<
       IApiResponse<ICreatePetResponse>,
-      ICreatePetProfileRequest
+      IPetApiPayload
     >(postPet, {
       onError: () => {
         setError('Tạo hồ sơ thú cưng thất bại');
         setShowAlert(true);
       },
       onSuccess: (res) => {
-        // window.location.replace(`/pet/${res.data.data.id}`);
+        window.location.replace(`/pet/${res.data.data.id}`);
       },
     });
 
     const uploadImagesMutation = useMutation<void, undefined>(uploadImage);
 
     return (
-      <form onSubmit={handleSubmit} className="max-h-screen overflow-y-auto">
+      <form onSubmit={handleSubmit}>
         {/* breadscrum stepper */}
         <GivePetHeaderBar activeStep={activeStep} />
 
@@ -210,7 +225,6 @@ const PetProfileForm = QueryProvider(
             handleBack={handleBack}
             setValue={setValue}
             watch={watch}
-            enableAI={id === ''}
           />
         )}
 
@@ -219,10 +233,13 @@ const PetProfileForm = QueryProvider(
           <FormRules
             handleBack={handleBack}
             isLoading={
+              isSubmitting ||
               createPetMutation.isLoading ||
               updatePetMutation.isLoading ||
               uploadImagesMutation.isLoading
             }
+            isAgreed={isAgreed}
+            setIsAgreed={setIsAgreed}
           />
         )}
 

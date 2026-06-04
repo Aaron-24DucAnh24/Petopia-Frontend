@@ -169,8 +169,9 @@ export const NavOptionsBlock = observer((props: INavOptionsBlock) => {
           open={isPetModalOpen}
           onClose={() => setIsPetModalOpen(false)}
           modal
-          overlayStyle={{ background: 'rgba(0, 0, 0, 0.5)' }}>
-          <div className="bg-white rounded-xl w-full max-w-3xl">
+          overlayStyle={{ background: 'rgba(0, 0, 0, 0.5)' }}
+          contentStyle={{ width: '90vw', maxWidth: '900px', padding: 0, borderRadius: '12px' }}>
+          <div className="bg-white rounded-xl max-h-[90vh] overflow-y-auto">
             <PetProfileForm />
           </div>
         </Popup>

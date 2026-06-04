@@ -34,6 +34,7 @@ export default function AttributeSelect({
 }: AttributeSelectProps) {
   return (
     <div className="flex flex-col space-y-2">
+      <label className="text-sm font-medium">{label}</label>
       <select
         test-id={testId}
         onChange={(e) => setValue(value, e.target.value)}

@@ -125,6 +125,7 @@ export function PetCard(props: IPetCard) {
           <Popup
             modal
             overlayStyle={{ background: 'rgba(0, 0, 0, 0.5)' }}
+            contentStyle={{ width: '90vw', maxWidth: '900px', padding: 0, borderRadius: '12px' }}
             trigger={
               <button
                 className="p-2 bg-gray-200 rounded-full hover:bg-gray-300"
@@ -134,7 +135,9 @@ export function PetCard(props: IPetCard) {
               </button>
             }
           >
-            <PetProfileForm id={id} handleClose={handleClose} />
+            <div className="bg-white rounded-xl max-h-[85vh] overflow-y-auto">
+              <PetProfileForm id={id} handleClose={handleClose} />
+            </div>
           </Popup>
 
           <button
