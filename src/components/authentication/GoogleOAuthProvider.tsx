@@ -1,3 +1,4 @@
+'use client';
 import { GoogleOAuthProvider as Provider } from '@react-oauth/google';
 import { useState } from 'react';
 import { IGoogleLogin } from './GoogleLoginButton';

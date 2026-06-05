@@ -1,3 +1,4 @@
+'use client';
 import { ICreatePetProfileRequest, IVaccine } from '@/src/interfaces/pet';
 import { useRef, useState } from 'react';
 import { useClickOutside } from '@/src/utils/hooks';

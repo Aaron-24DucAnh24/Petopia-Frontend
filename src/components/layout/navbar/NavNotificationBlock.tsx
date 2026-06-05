@@ -1,3 +1,4 @@
+'use client';
 import { MdNotifications } from 'react-icons/md';
 import { useEffect, useRef, useState } from 'react';
 import { QUERY_KEYS } from '@/src/utils/constants';

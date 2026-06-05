@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import BlogCard from './BlogCard';
-import Pagination from '../common/Pagination';
+import Pagination from '../ui/Pagination';
 import { getBlogs } from '@/src/services/blog.api';
 import { useForm } from 'react-hook-form';
 import { IApiResponse, IPaginationModel } from '@/src/interfaces/common';
@@ -13,10 +13,10 @@ import {
 } from '@/src/utils/constants';
 import { IBlogCardResponse, IBlogResponse } from '@/src/interfaces/blog';
 import { useQuery } from '@/src/utils/hooks';
-import { QueryProvider } from '../common/QueryProvider';
-import CardSkeleton from '../common/CardSkeleton';
+import { QueryProvider } from '../providers/QueryProvider';
+import CardSkeleton from '../ui/CardSkeleton';
 import AdvertisementCarousel from './AdvertisementCarousel';
-import { SortBlock } from '../common/SortBlock';
+import { SortBlock } from '../ui/SortBlock';
 
 const BlogSection = QueryProvider(() => {
   const [selectedCategory, setSelectedCategory] = useState<

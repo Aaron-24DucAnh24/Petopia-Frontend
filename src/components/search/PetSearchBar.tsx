@@ -1,3 +1,4 @@
+'use client';
 import { IApiResponse } from '@/src/interfaces/common';
 import { IPetFilterRequest } from '@/src/interfaces/pet';
 import { getKeywords } from '@/src/services/pet.api';

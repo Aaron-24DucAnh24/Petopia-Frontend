@@ -5,7 +5,7 @@ import Popup from 'reactjs-popup';
 import { PetAdoptForm } from './PetAdoptForm';
 import { observer } from 'mobx-react-lite';
 import { useStores } from '@/src/stores';
-import { Alert } from '../common/Alert';
+import { Alert } from '../ui/Alert';
 import { setCookie } from 'cookies-next';
 import { COOKIES_NAME } from '@/src/utils/constants';
 import { usePathname } from 'next/navigation';

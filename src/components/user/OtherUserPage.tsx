@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { QueryProvider } from '../common/QueryProvider';
+import { QueryProvider } from '../providers/QueryProvider';
 import { getOtherUserInfo } from '@/src/services/user.api';
 import { IUserInfoResponse } from '@/src/interfaces/user';
 import { IApiResponse } from '@/src/interfaces/common';
@@ -11,7 +11,7 @@ import {
   STATIC_URLS,
 } from '@/src/utils/constants';
 import Image from 'next/image';
-import { ReportBlock } from '../common/ReportBlock';
+import { ReportBlock } from '../ui/ReportBlock';
 import { UserInfomationBlock } from './UserInformationBlock';
 import { UserSkeleton } from './UserSkeleton';
 import { UserRoleName } from './UserRoleName';

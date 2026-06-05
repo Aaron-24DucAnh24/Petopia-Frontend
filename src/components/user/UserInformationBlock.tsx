@@ -4,7 +4,7 @@ import { USER_ROLE } from '@/src/utils/constants';
 import { ValueTextManager } from '@/src/utils/ValueTextManager';
 import Link from 'next/link';
 import { StringUtil } from '@/src/utils/StringUtil';
-import Testimonials from '../common/Testimonials';
+import Testimonials from '../ui/Testimonials';
 import { FiUser, FiCalendar, FiMail, FiPhone, FiMapPin, FiLink, FiBriefcase, FiTag } from 'react-icons/fi';
 
 interface IUserInformationBlock {

@@ -1,3 +1,4 @@
+'use client';
 import { IApiResponse } from '@/src/interfaces/common';
 import { IPetFilter, IPetFilterRequest } from '@/src/interfaces/pet';
 import { getAvailableBreeds } from '@/src/services/pet.api';

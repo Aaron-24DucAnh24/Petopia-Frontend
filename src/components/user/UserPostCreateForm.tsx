@@ -1,14 +1,15 @@
+'use client';
 import React, { useState } from 'react';
-import { Alert } from '../common/Alert';
+import { Alert } from '../ui/Alert';
 import { useForm } from 'react-hook-form';
 import { observer } from 'mobx-react-lite';
 import { useMutation } from '@/src/utils/hooks';
 import { IApiResponse, IUploadImage } from '@/src/interfaces/common';
-import QueryButton from '../common/button/QueryButton';
+import QueryButton from '../ui/button/QueryButton';
 import { createPost } from '@/src/services/post.api';
-import Dropzone from '../common/Dropzone';
+import Dropzone from '../ui/Dropzone';
 import { ICreatePost } from '@/src/interfaces/post';
-import { HTMLArea } from '../common/input/HTMLArea';
+import { HTMLArea } from '../ui/input/HTMLArea';
 import { uploadMany } from '@/src/services/storage.api';
 
 interface IUserPostCreateForm {

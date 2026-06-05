@@ -1,3 +1,4 @@
+'use client';
 import { useClickOutside } from '@/src/utils/hooks';
 import { Dispatch, SetStateAction, useRef, useState } from 'react';
 

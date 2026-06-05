@@ -1,6 +1,6 @@
 'use client';
-import { QueryProvider } from '@/src/components/common/QueryProvider';
-import SeeMore from '@/src/components/common/SeeMore';
+import { QueryProvider } from '@/src/components/providers/QueryProvider';
+import SeeMore from '@/src/components/ui/SeeMore';
 import { PetAdoptButton } from '@/src/components/adopt/PetAdoptButton';
 import {
   getPetAgeText,
@@ -17,20 +17,20 @@ import { PET_SPECIES, QUERY_KEYS, REPORT_ENTITY } from '@/src/utils/constants';
 import { useQuery } from '@/src/utils/hooks';
 import { useState } from 'react';
 import Image from 'next/image';
-import ImageCarousel from '@/src/components/common/Carousel';
-import PetDetailSkeleton from '@/src/components/common/PetDetailSkeleton';
+import ImageCarousel from '@/src/components/ui/Carousel';
+import PetDetailSkeleton from '@/src/components/ui/PetDetailSkeleton';
 import Link from 'next/link';
 import { FaHouseUser } from 'react-icons/fa';
 import { Button, Tooltip } from '@material-tailwind/react';
 import { FaShieldDog } from 'react-icons/fa6';
 import CreatePostButton from '@/src/components/post/CreatePostButton';
-import { CarouselDefault } from '@/src/components/common/CarouselDefault';
+import { CarouselDefault } from '@/src/components/ui/CarouselDefault';
 import { observer } from 'mobx-react-lite';
 import { useStores } from '@/src/stores';
 import { IGetPostResponse } from '@/src/interfaces/post';
 import { getPetPosts } from '@/src/services/post.api';
-import { ReportBlock } from '@/src/components/common/ReportBlock';
-import { NoResultBackground } from '@/src/components/common/NoResultBackground';
+import { ReportBlock } from '@/src/components/ui/ReportBlock';
+import { NoResultBackground } from '@/src/components/ui/NoResultBackground';
 
 const page = observer(QueryProvider(({ params }: { params: { id: string } }) => {
   //States

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useQuery } from '../../utils/hooks';
 import { IApiResponse } from '../../interfaces/common';
 import { QUERY_KEYS, STATIC_URLS } from '../../utils/constants';
-import { QueryProvider } from '../common/QueryProvider';
+import { QueryProvider } from '../providers/QueryProvider';
 import { getPreUpgrade, getUserInfo } from '@/src/services/user.api';
 import { UserSkeleton } from './UserSkeleton';
 import { UserAvatar } from './UserAvatar';

@@ -7,7 +7,7 @@ import { useQuery } from '@/src/utils/hooks';
 import { QUERY_KEYS } from '@/src/utils/constants';
 import { FeedPostCard } from './FeedPostCard';
 import { PostDetailModal } from './PostDetailModal';
-import { QueryProvider } from '../common/QueryProvider';
+import { QueryProvider } from '../providers/QueryProvider';
 
 const PAGE_SIZE = 20;
 

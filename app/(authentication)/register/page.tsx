@@ -1,7 +1,7 @@
 import React from 'react';
 import RegisterForm from '@/src/components/authentication/RegisterForm';
 import { Metadata } from 'next';
-import { Background } from '@/src/components/common/Background';
+import { Background } from '@/src/components/ui/Background';
 
 export const metadata: Metadata = {
   title: 'Đăng ký - Petopia',

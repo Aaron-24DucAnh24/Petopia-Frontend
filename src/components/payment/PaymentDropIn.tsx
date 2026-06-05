@@ -1,9 +1,10 @@
+'use client';
 import { useQuery } from '@/src/utils/hooks';
 import { getPaymentToken } from '@/src/services/payment.api';
 import { useEffect, useState } from 'react';
 import { IApiResponse } from '@/src/interfaces/common';
 import { QUERY_KEYS } from '@/src/utils/constants';
-import { Alert } from '../common/Alert';
+import { Alert } from '../ui/Alert';
 import * as braintree from 'braintree-web-drop-in';
 
 export default function PaymentDropIn({

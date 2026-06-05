@@ -1,24 +1,25 @@
+'use client';
 import { useForm } from 'react-hook-form';
 import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
 import { useMutation, useQuery } from '../../utils/hooks';
 import { IApiResponse } from '../../interfaces/common';
 import { updateUser } from '../../services/user.api';
-import { Alert } from '../common/Alert';
-import QueryButton from '../common/button/QueryButton';
+import { Alert } from '../ui/Alert';
+import QueryButton from '../ui/button/QueryButton';
 import { IUserInfoResponse, IUserUpdate } from '@/src/interfaces/user';
 import { getErrorMessage } from '@/src/helpers/getErrorMessage';
-import Button from '../common/button/Button';
+import Button from '../ui/button/Button';
 import { ILocationRequest, ILocationResponse } from '@/src/interfaces/pet';
 import { LOCATION_LEVEL, ORG_TYPE, PET_ORG_TYPE_OPTION, QUERY_KEYS, USER_ROLE } from '@/src/utils/constants';
 import { getProvince } from '@/src/services/pet.api';
 import { UserAddressInput } from './UserAddressInput';
 import { useStores } from '@/src/stores';
-import { DatePicker } from '../common/input/DatePicker';
+import { DatePicker } from '../ui/input/DatePicker';
 import { ValidatorManager } from '@/src/utils/ValidatorManager';
 import { ValueText } from '@/src/utils/ValueText';
-import { SelectInput } from '../common/input/SelectInput';
-import { Input } from '../common/input/Input';
-import { HTMLArea } from '../common/input/HTMLArea';
+import { SelectInput } from '../ui/input/SelectInput';
+import { Input } from '../ui/input/Input';
+import { HTMLArea } from '../ui/input/HTMLArea';
 
 interface IUserUpdateForm {
   userInfo: IUserInfoResponse;

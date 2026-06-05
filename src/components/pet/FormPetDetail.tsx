@@ -1,3 +1,4 @@
+'use client';
 import AttributeSelect from './AttributeSelect';
 import { UseFormSetValue, UseFormWatch } from 'react-hook-form';
 import ControlForm from './ControlForm';
@@ -14,7 +15,7 @@ import {
 import BreedInput from './BreedInput';
 import { useQuery } from '@/src/utils/hooks';
 import { getVaccine } from '@/src/services/pet.api';
-import Dropdown from '../common/VaccineDropdown';
+import Dropdown from '../ui/VaccineDropdown';
 import { IApiResponse } from '@/src/interfaces/common';
 
 import { useState } from 'react';

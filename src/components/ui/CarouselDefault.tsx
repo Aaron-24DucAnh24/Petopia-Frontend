@@ -1,3 +1,4 @@
+'use client';
 import { Carousel, IconButton } from '@material-tailwind/react';
 import PetPost from '../post/PetPost';
 import { useState } from 'react';

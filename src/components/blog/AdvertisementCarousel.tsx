@@ -1,3 +1,4 @@
+'use client';
 import { IBlogAd } from '@/src/interfaces/blog';
 import { IApiResponse } from '@/src/interfaces/common';
 import { getBlogAd } from '@/src/services/blog.api';

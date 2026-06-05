@@ -2,9 +2,9 @@
 import Link from 'next/link';
 import { ChangeEvent, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Alert } from '../common/Alert';
+import { Alert } from '../ui/Alert';
 import { GoogleRecaptcha } from './GoogleRecaptcha';
-import { QueryProvider } from '../common/QueryProvider';
+import { QueryProvider } from '../providers/QueryProvider';
 import { IRegisterForm, IRegisterRequest } from '@/src/interfaces/authentication';
 import { useMutation } from '@/src/utils/hooks';
 import { register } from '@/src/services/authentication.api';
@@ -12,10 +12,10 @@ import { IApiResponse } from '@/src/interfaces/common';
 import { getErrorMessage } from '@/src/helpers/getErrorMessage';
 import { publish } from '@/src/services/event';
 import { EVENT_NAMES } from '@/src/utils/constants';
-import { DatePicker } from '../common/input/DatePicker';
+import { DatePicker } from '../ui/input/DatePicker';
 import { ValidatorManager } from '@/src/utils/ValidatorManager';
-import QueryButton from '../common/button/QueryButton';
-import { Input } from '../common/input/Input';
+import QueryButton from '../ui/button/QueryButton';
+import { Input } from '../ui/input/Input';
 
 export default QueryProvider(() => {
   // STATES

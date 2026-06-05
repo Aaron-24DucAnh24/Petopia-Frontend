@@ -1,3 +1,4 @@
+'use client';
 import Popup from 'reactjs-popup';
 import PetAdoptionInfo from './PetAdoptionInfo';
 import { IAdoptCardResponse } from '@/src/interfaces/adopt';

@@ -1,3 +1,4 @@
+'use client';
 import { IApiResponse } from '@/src/interfaces/common';
 import { getUserInfo } from '@/src/services/user.api';
 import {
@@ -10,7 +11,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { IUserInfoResponse } from '@/src/interfaces/user';
 import { usePathname } from 'next/navigation';
-import { Alert } from '../common/Alert';
+import { Alert } from '../ui/Alert';
 import { preCheckAdoption, sendAdoptRequest } from '@/src/services/adopt.api';
 import { IAdoptPetRequest } from '@/src/interfaces/adopt';
 import { getErrorMessage } from '@/src/helpers/getErrorMessage';

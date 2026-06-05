@@ -1,7 +1,8 @@
+'use client';
 import { FaPlus } from 'react-icons/fa';
 import CreatePostForm from './CreatePostForm';
 import { useState } from 'react';
-import { ConfirmCloseModal } from '../common/ConfirmCloseModal';
+import { ConfirmCloseModal } from '../ui/ConfirmCloseModal';
 
 export default function CreatePostButton({
   petId,

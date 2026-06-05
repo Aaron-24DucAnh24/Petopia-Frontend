@@ -1,4 +1,4 @@
-'use-client';
+'use client';
 import { QueryClientProvider, QueryClient } from 'react-query';
 
 export function QueryProvider<T extends {}>(Children: (props: T) => JSX.Element) {

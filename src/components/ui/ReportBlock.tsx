@@ -1,3 +1,4 @@
+'use client';
 import Popup from 'reactjs-popup';
 import ReportForm from './ReportForm';
 import { GoReport } from 'react-icons/go';

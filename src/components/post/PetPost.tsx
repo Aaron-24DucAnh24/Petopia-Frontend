@@ -1,3 +1,4 @@
+'use client';
 import Image from 'next/image';
 import {
   Dispatch,
@@ -23,8 +24,8 @@ import {
   likePost,
   sendCommentPost,
 } from '@/src/services/post.api';
-import ImageCarousel from '@/src/components/common/Carousel';
-import CommentSkeleton from '../common/CommentSkeleton';
+import ImageCarousel from '@/src/components/ui/Carousel';
+import CommentSkeleton from '../ui/CommentSkeleton';
 import { useStores } from '@/src/stores';
 
 export default function PetPost({

@@ -1,3 +1,4 @@
+'use client';
 import { ValueText } from '@/src/utils/ValueText';
 import { useEffect, useState } from 'react';
 import { IoMdCloseCircle } from 'react-icons/io';

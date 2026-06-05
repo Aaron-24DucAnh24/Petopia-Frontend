@@ -7,10 +7,10 @@ import { IBlogResponse } from '@/src/interfaces/blog';
 import { getBlogDetail } from '@/src/services/blog.api';
 import { useQuery } from '@/src/utils/hooks';
 import { observer } from 'mobx-react-lite';
-import { QueryProvider } from '@/src/components/common/QueryProvider';
+import { QueryProvider } from '@/src/components/providers/QueryProvider';
 import BlogDetailSkeleton from '@/src/components/blog/BlogDetailSkeleton';
 import AdvertisementCarousel from '@/src/components/blog/AdvertisementCarousel';
-import { NoResultBackground } from '@/src/components/common/NoResultBackground';
+import { NoResultBackground } from '@/src/components/ui/NoResultBackground';
 
 const page = observer(QueryProvider(({ params }: { params: { id: string } }) => {
   // States

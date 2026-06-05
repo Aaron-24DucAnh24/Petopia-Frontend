@@ -1,10 +1,11 @@
+'use client';
 import Image from 'next/image';
 import { IApiResponse } from '@/src/interfaces/common';
 import { updateAvatar } from '@/src/services/user.api';
 import { STATIC_URLS } from '@/src/utils/constants';
 import { useMutation } from '@/src/utils/hooks';
 import { ChangeEvent, useRef, useState } from 'react';
-import { Alert } from '../common/Alert';
+import { Alert } from '../ui/Alert';
 import { useStores } from '@/src/stores';
 
 interface IUserAvatar {

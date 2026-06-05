@@ -1,3 +1,4 @@
+'use client';
 import React, { useState } from 'react';
 import QueryButton from './button/QueryButton';
 import { REPORT_ENTITY, REPORT_TYPE } from '@/src/utils/constants';

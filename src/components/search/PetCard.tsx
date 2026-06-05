@@ -1,15 +1,16 @@
+'use client';
 import { getPetAgeText, getPetSexText } from '@/src/helpers/getPetTextDetails';
 import { IPetResponse } from '@/src/interfaces/pet';
 import Image from 'next/image';
 import Link from 'next/link';
 import { MdDelete } from 'react-icons/md';
-import { Alert } from '../common/Alert';
+import { Alert } from '../ui/Alert';
 import { useState } from 'react';
 import { useMutation } from '@/src/utils/hooks';
 import { deletePet } from '@/src/services/pet.api';
 import { CiEdit } from 'react-icons/ci';
 import PetProfileForm from '../pet/PetProfileForm';
-import { ConfirmCloseModal } from '../common/ConfirmCloseModal';
+import { ConfirmCloseModal } from '../ui/ConfirmCloseModal';
 import { FaShieldDog } from 'react-icons/fa6';
 import { Tooltip, Button } from '@material-tailwind/react';
 import { UseQueryResult } from 'react-query';

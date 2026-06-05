@@ -1,4 +1,4 @@
-import CardSkeleton from '../common/CardSkeleton';
+import CardSkeleton from '../ui/CardSkeleton';
 
 export function UserSkeleton() {
   return (

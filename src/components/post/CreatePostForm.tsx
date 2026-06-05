@@ -1,13 +1,14 @@
+'use client';
 import { useForm } from 'react-hook-form';
 import { IApiResponse, IUploadImage } from '@/src/interfaces/common';
-import Dropzone from '../common/Dropzone';
+import Dropzone from '../ui/Dropzone';
 import { ICreatePost } from '@/src/interfaces/post';
 import { useMutation } from '@/src/utils/hooks';
 import { createPost } from '@/src/services/post.api';
 import { uploadMany } from '@/src/services/storage.api';
 import { useState } from 'react';
-import { Alert } from '../common/Alert';
-import QueryButton from '../common/button/QueryButton';
+import { Alert } from '../ui/Alert';
+import QueryButton from '../ui/button/QueryButton';
 
 export default function CreatePostForm({
   query,
@@ -46,7 +47,7 @@ export default function CreatePostForm({
       Array.from(files).forEach((file) => formData.append('images', file));
 
       const response = await uploadMany(formData);
-      const urls = response.data as string[];
+      const urls = response.data.data as string[];
       createPostForm.setValue('images', urls);
     }
     setIsLoading(false);

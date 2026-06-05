@@ -1,3 +1,4 @@
+'use client';
 import { IPetFilter, IPetFilterRequest } from '@/src/interfaces/pet';
 import { PET_SPECIES } from '@/src/utils/constants';
 import { useState } from 'react';

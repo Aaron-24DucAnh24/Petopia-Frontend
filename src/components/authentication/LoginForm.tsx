@@ -3,9 +3,9 @@ import Link from 'next/link';
 import { ChangeEvent, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { GoogleLoginButton } from './GoogleLoginButton';
-import { Alert } from '../common/Alert';
+import { Alert } from '../ui/Alert';
 import { deleteCookie, getCookie, setCookie } from 'cookies-next';
-import { QueryProvider } from '../common/QueryProvider';
+import { QueryProvider } from '../providers/QueryProvider';
 import {
   IGoogleLoginRequest,
   ILoginRequest,
@@ -16,9 +16,9 @@ import { useMutation } from '@/src/utils/hooks';
 import { IApiResponse } from '@/src/interfaces/common';
 import { googleLogin, login } from '@/src/services/authentication.api';
 import { getErrorMessage } from '@/src/helpers/getErrorMessage';
-import QueryButton from '../common/button/QueryButton';
+import QueryButton from '../ui/button/QueryButton';
 import { useStores } from '@/src/stores';
-import { Input } from '../common/input/Input';
+import { Input } from '../ui/input/Input';
 
 export const LoginForm = QueryProvider(() => {
   // STATES

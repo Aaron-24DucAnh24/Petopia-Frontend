@@ -10,7 +10,7 @@ import { useMutation } from '@/src/utils/hooks';
 import { IApiResponse } from '@/src/interfaces/common';
 import { getCommentsPost, likePost, sendCommentPost } from '@/src/services/post.api';
 import CommentCard from './CommentCard';
-import CommentSkeleton from '../common/CommentSkeleton';
+import CommentSkeleton from '../ui/CommentSkeleton';
 import { useStores } from '@/src/stores';
 
 export function PostDetailModal({

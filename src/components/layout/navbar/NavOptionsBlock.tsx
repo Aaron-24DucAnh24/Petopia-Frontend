@@ -12,7 +12,7 @@ import { Dispatch, SetStateAction, useRef, useState } from 'react';
 import { FaNewspaper, FaPaw, FaFeather, FaPlus, FaUser } from 'react-icons/fa6';
 import { UserPostCreateForm } from '@/src/components/user/UserPostCreateForm';
 import PetProfileForm from '@/src/components/pet/PetProfileForm';
-import { ConfirmCloseModal } from '@/src/components/common/ConfirmCloseModal';
+import { ConfirmCloseModal } from '@/src/components/ui/ConfirmCloseModal';
 
 interface INavOptionsBlock {
   isOpenMenu: boolean;

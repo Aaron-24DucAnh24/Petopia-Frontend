@@ -1,3 +1,4 @@
+'use client';
 import { IPetFilter, IPetFilterRequest } from '@/src/interfaces/pet';
 import { useRef, useState, useEffect } from 'react';
 import { UseFormReturn } from 'react-hook-form';

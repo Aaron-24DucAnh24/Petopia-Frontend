@@ -1,5 +1,6 @@
+'use client';
 import React, { useState } from 'react';
-import { Alert } from '../common/Alert';
+import { Alert } from '../ui/Alert';
 import { LOCATION_LEVEL, ORG_TYPE, PET_ORG_TYPE_OPTION, QUERY_KEYS } from '@/src/utils/constants';
 import { useForm } from 'react-hook-form';
 import { IOrgUpgradeRequest } from '@/src/interfaces/org';
@@ -8,16 +9,16 @@ import { useStores } from '@/src/stores';
 import { useMutation, useQuery } from '@/src/utils/hooks';
 import { IApiResponse } from '@/src/interfaces/common';
 import { upgradeToOrg } from '@/src/services/user.api';
-import QueryButton from '../common/button/QueryButton';
+import QueryButton from '../ui/button/QueryButton';
 import { getErrorMessage } from '@/src/helpers/getErrorMessage';
 import { ILocationRequest, ILocationResponse } from '@/src/interfaces/pet';
 import { getProvince } from '@/src/services/pet.api';
 import { ValidatorManager } from '@/src/utils/ValidatorManager';
 import { ValueText } from '@/src/utils/ValueText';
-import { SelectInput } from '../common/input/SelectInput';
-import { Input } from '../common/input/Input';
-import { HTMLArea } from '../common/input/HTMLArea';
-import { AddressInput } from '../common/input/AddressInput';
+import { SelectInput } from '../ui/input/SelectInput';
+import { Input } from '../ui/input/Input';
+import { HTMLArea } from '../ui/input/HTMLArea';
+import { AddressInput } from '../ui/input/AddressInput';
 
 interface IUserUpgradeForm {
   onClose: () => void,

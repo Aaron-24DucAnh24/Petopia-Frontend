@@ -1,3 +1,4 @@
+'use client';
 // Carousel.tsx
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import Image from 'next/image';

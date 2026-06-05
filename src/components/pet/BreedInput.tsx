@@ -1,3 +1,4 @@
+'use client';
 import React, { useEffect } from 'react';
 import { useQuery } from '@/src/utils/hooks';
 import { PET_SPECIES, QUERY_KEYS } from '@/src/utils/constants';
