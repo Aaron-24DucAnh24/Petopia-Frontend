@@ -1,4 +1,4 @@
-import { ORG_TYPE, USER_ROLE } from './constants';
+import { ORG_TYPE, PET_SPECIES, USER_ROLE } from './constants';
 import { ValueText } from './ValueText';
 
 export class ValueTextManager {
@@ -13,5 +13,11 @@ export class ValueTextManager {
     { value: ORG_TYPE.OTHER.toString(), text: 'Tổ chức' },
     { value: ORG_TYPE.VET.toString(), text: 'Thú y' },
     { value: ORG_TYPE.RESCUE.toString(), text: 'Cứu hộ' },
+  ]);
+
+  static PetSpecies = new ValueText([
+    { value: PET_SPECIES.DOG.toString(), text: 'Chó' },
+    { value: PET_SPECIES.CAT.toString(), text: 'Mèo' },
+    { value: PET_SPECIES.OTHER.toString(), text: 'Khác' },
   ]);
 }

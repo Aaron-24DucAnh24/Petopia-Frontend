@@ -306,7 +306,7 @@ export const PET_VACCINATED_FILTER: IPetFilter = {
 export const PET_STERILIZED_FILTER: IPetFilter = {
   id: 7,
   label: 'Triệt sản',
-  labelGetValues: 'isSterillized',
+  labelGetValues: 'isSterilized',
   items: [
     {
       id: 1,
@@ -341,7 +341,7 @@ export const PET_SELECT: IPetSelect[] = [
   { ...PET_COLOR_FILTER, kind: 'color' },
   { ...PET_SIZE_FILTER, kind: 'size' },
   { ...PET_AGE_FILTER, kind: 'age' },
-  { ...PET_STERILIZED_FILTER, kind: 'isSterillized' },
+  { ...PET_STERILIZED_FILTER, kind: 'isSterilized' },
   { ...PET_VACCINATED_FILTER, kind: 'isVaccinated' },
 ];
 

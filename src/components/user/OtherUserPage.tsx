@@ -12,7 +12,7 @@ import {
 } from '@/src/utils/constants';
 import Image from 'next/image';
 import { ReportBlock } from '../ui/ReportBlock';
-import { UserInfomationBlock } from './UserInformationBlock';
+import { UserInformationBlock } from './UserInformationBlock';
 import { UserSkeleton } from './UserSkeleton';
 import { UserRoleName } from './UserRoleName';
 
@@ -60,7 +60,7 @@ export const OtherUserPage = QueryProvider(({ userId }: { userId: string }) => {
               website={userInfo.attributes.website} />
           </div>
 
-          <UserInfomationBlock userInfo={userInfo} visible />
+          <UserInformationBlock userInfo={userInfo} visible />
 
           <div className="mt-3 flex justify-end">
             <ReportBlock id={userId} type={REPORT_ENTITY.User} />

@@ -16,6 +16,7 @@ import { Tooltip, Button } from '@material-tailwind/react';
 import { UseQueryResult } from 'react-query';
 import { AxiosResponse } from 'axios';
 import { IApiErrorResponse, IApiResponse } from '@/src/interfaces/common';
+import { QueryProvider } from '../providers/QueryProvider';
 
 interface IPetCard extends IPetResponse {
   isEditable?: boolean;
@@ -27,7 +28,7 @@ interface IPetCard extends IPetResponse {
   testId?: string;
 }
 
-export function PetCard(props: IPetCard) {
+function PetCardInner(props: IPetCard) {
   const {
     id,
     name,
@@ -159,3 +160,5 @@ export function PetCard(props: IPetCard) {
     </div>
   );
 }
+
+export const PetCard = QueryProvider(PetCardInner);

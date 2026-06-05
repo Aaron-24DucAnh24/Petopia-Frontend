@@ -13,7 +13,7 @@ import { AddButton } from '../ui/button/AddButton';
 import { QueryProvider } from '../providers/QueryProvider';
 import Pagination from '../ui/Pagination';
 import { UserPostCreateForm } from '../user/UserPostCreateForm';
-import Popup from 'reactjs-popup';
+import { ConfirmCloseModal } from '../ui/ConfirmCloseModal';
 import { useStores } from '@/src/stores';
 
 const PAGE_SIZE = 6;
@@ -141,14 +141,9 @@ export const PostGrid = QueryProvider(({ userId, canCreate }: IPostGridProps) =>
         action={() => deletePostMutation.mutate(pendingDeleteId)}
       />
 
-      <Popup
-        modal
-        open={showCreatePost}
-        onClose={() => setShowCreatePost(false)}
-        overlayStyle={{ background: 'rgba(0, 0, 0, 0.5)' }}
-      >
+      <ConfirmCloseModal open={showCreatePost} onClose={() => setShowCreatePost(false)}>
         <UserPostCreateForm onSuccess={handleCreateSuccess} />
-      </Popup>
+      </ConfirmCloseModal>
     </>
   );
 });

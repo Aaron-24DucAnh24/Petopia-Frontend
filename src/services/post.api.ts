@@ -2,9 +2,6 @@ import { ICommentPost, ICreatePost, IUpdateComment } from '../interfaces/post';
 import { IPaginationRequest } from '../interfaces/common';
 import { http } from './http';
 
-export const getPetPosts = async (petId: string) =>
-  await http.get(`/Post/Pet/${petId}`);
-
 export const getUserPosts = async (data: IPaginationRequest<{ userId?: string }>) =>
   await http.post('/Post/Get', data);
 

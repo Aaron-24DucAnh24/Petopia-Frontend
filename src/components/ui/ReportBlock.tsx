@@ -1,5 +1,5 @@
 'use client';
-import Popup from 'reactjs-popup';
+import { ConfirmCloseModal } from './ConfirmCloseModal';
 import ReportForm from './ReportForm';
 import { GoReport } from 'react-icons/go';
 import { useState } from 'react';
@@ -8,13 +8,14 @@ import { IApiResponse } from '@/src/interfaces/common';
 import { QUERY_KEYS, REPORT_ENTITY } from '@/src/utils/constants';
 import { getPreReport } from '@/src/services/user.api';
 import { Alert } from './Alert';
+import { QueryProvider } from '../providers/QueryProvider';
 
 interface IReportBlock {
   id: string,
   type: REPORT_ENTITY,
 }
 
-export const ReportBlock = (props: IReportBlock) => {
+const ReportBlockInner = (props: IReportBlock) => {
   const { id, type } = props;
 
   const [showReport, setShowReport] = useState(false);
@@ -44,16 +45,12 @@ export const ReportBlock = (props: IReportBlock) => {
 
   return (
     <>
-      <Popup
-        modal
-        overlayStyle={{ background: 'rgba(0, 0, 0, 0.5)' }}
-        open={showReport}
-        onClose={() => setShowReport(false)}>
+      <ConfirmCloseModal open={showReport} onClose={() => setShowReport(false)}>
         <ReportForm
           id={id}
           type={type}
           handleClose={() => setShowReport(false)} />
-      </Popup>
+      </ConfirmCloseModal>
 
       <button
         className="hover:bg-gray-100 p-2 rounded-full border border-red-600"
@@ -69,3 +66,5 @@ export const ReportBlock = (props: IReportBlock) => {
     </>
   );
 };
+
+export const ReportBlock = QueryProvider(ReportBlockInner);

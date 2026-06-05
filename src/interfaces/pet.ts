@@ -24,7 +24,7 @@ export interface IPetFilter {
   | 'size'
   | 'age'
   | 'isVaccinated'
-  | 'isSterillized';
+  | 'isSterilized';
   items: IPetFilterItem[];
 }
 
@@ -37,7 +37,7 @@ export interface IPetSelect extends IPetFilter {
   | 'color'
   | 'size'
   | 'isVaccinated'
-  | 'isSterillized';
+  | 'isSterilized';
 }
 
 export interface IPetFilterRequest {
@@ -48,7 +48,7 @@ export interface IPetFilterRequest {
   size?: PET_SIZE[];
   age?: PET_AGE[];
   isVaccinated?: PET_MEDICAL_STATUS[];
-  isSterillized?: PET_MEDICAL_STATUS[];
+  isSterilized?: PET_MEDICAL_STATUS[];
   text: string;
 }
 
@@ -70,7 +70,7 @@ export interface ICreatePetProfileRequest {
   color: number;
   species: number;
   size: number;
-  isSterillized: number;
+  isSterilized: number;
   isVaccinated: number;
   isAvailable: boolean;
   address: string;
@@ -92,7 +92,7 @@ export interface IPetApiPayload {
   color: number;
   species: number;
   size: number;
-  isSterillized: number;
+  isSterilized: number;
   isVaccinated: number;
   isAvailable: boolean;
   breed: string;
@@ -119,7 +119,7 @@ export interface IPetDetailResponse {
   color: PET_COLOR;
   species: PET_SPECIES;
   size: PET_SIZE;
-  isSterillized: PET_MEDICAL_STATUS;
+  isSterilized: PET_MEDICAL_STATUS;
   isVaccinated: PET_MEDICAL_STATUS;
   isAvailable: boolean;
   breed: string;
@@ -141,7 +141,7 @@ export interface ICreatePetResponse {
   color: PET_COLOR;
   species: PET_SPECIES;
   size: PET_SIZE;
-  isSterillized: PET_MEDICAL_STATUS;
+  isSterilized: PET_MEDICAL_STATUS;
   isVaccinated: PET_MEDICAL_STATUS;
   isAvailable: boolean;
   breed: string;

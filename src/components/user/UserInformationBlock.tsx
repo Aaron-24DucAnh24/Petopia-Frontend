@@ -34,7 +34,7 @@ function InfoRow({
   );
 }
 
-export const UserInfomationBlock = (props: IUserInformationBlock) => {
+export const UserInformationBlock = (props: IUserInformationBlock) => {
   const { userInfo, visible } = props;
 
   if (!visible) return <></>;

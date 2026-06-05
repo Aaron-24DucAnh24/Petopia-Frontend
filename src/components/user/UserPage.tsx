@@ -12,7 +12,7 @@ import { IUserInfoResponse } from '@/src/interfaces/user';
 import { UserActionsBlock } from './UserActionsBlock';
 import { UserInfomationBlock } from './UserInformationBlock';
 import { UserUpdateForm } from './UserUpdateForm';
-import Popup from 'reactjs-popup';
+import { ConfirmCloseModal } from '../ui/ConfirmCloseModal';
 import { UserUpgradeForm } from './UserUpgradeForm';
 import { PostGrid } from '../post/PostGrid';
 import { useStores } from '@/src/stores';
@@ -84,15 +84,11 @@ export const UserPage = QueryProvider(() => {
               onSuccess={() => getUserQuery.refetch()}
               setShowEdit={setShowEdit} />
 
-            <Popup
-              modal
-              open={showUpgrade}
-              onClose={() => setShowUpgrade(false)}
-              overlayStyle={{ background: 'rgba(0, 0, 0, 0.5)' }}>
+            <ConfirmCloseModal open={showUpgrade} onClose={() => setShowUpgrade(false)}>
               <UserUpgradeForm
                 onClose={() => setShowUpgrade(false)}
                 onSuccess={() => setAllowUpgrade(false)} />
-            </Popup>
+            </ConfirmCloseModal>
           </div>
         </div>
       )}

@@ -72,8 +72,8 @@ export const PetFilterCard = (props: IPetFilterCard) => {
         break;
 
       case 7:
-        let isSterillized = getValues('isSterillized');
-        setValue('isSterillized', setFilter(isSterillized, itemValue));
+        let isSterilized = getValues('isSterilized');
+        setValue('isSterilized', setFilter(isSterilized, itemValue));
         break;
 
       default:
