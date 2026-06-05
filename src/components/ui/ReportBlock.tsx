@@ -1,7 +1,7 @@
 'use client';
 import { ConfirmCloseModal } from './ConfirmCloseModal';
 import ReportForm from './ReportForm';
-import { GoReport } from 'react-icons/go';
+import { MdOutlineFlag } from 'react-icons/md';
 import { useState } from 'react';
 import { useQuery } from '@/src/utils/hooks';
 import { IApiResponse } from '@/src/interfaces/common';
@@ -45,7 +45,11 @@ const ReportBlockInner = (props: IReportBlock) => {
 
   return (
     <>
-      <ConfirmCloseModal open={showReport} onClose={() => setShowReport(false)}>
+      <ConfirmCloseModal
+        open={showReport}
+        onClose={() => setShowReport(false)}
+        contentStyle={{ width: '90vw', maxWidth: '440px', borderRadius: '16px' }}
+      >
         <ReportForm
           id={id}
           type={type}
@@ -53,9 +57,11 @@ const ReportBlockInner = (props: IReportBlock) => {
       </ConfirmCloseModal>
 
       <button
-        className="hover:bg-gray-100 p-2 rounded-full border border-red-600"
-        onClick={() => getPreReportQuery.refetch()}>
-        <GoReport size={30} color='#dc2626' />
+        className="flex items-center gap-1.5 text-sm font-medium text-red-500 border border-red-200 hover:bg-red-50 px-3 py-1.5 rounded-full transition-colors"
+        onClick={() => getPreReportQuery.refetch()}
+      >
+        <MdOutlineFlag size={16} />
+        Báo cáo
       </button>
 
       <Alert

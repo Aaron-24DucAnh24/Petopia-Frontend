@@ -40,7 +40,7 @@ const PetProfileForm = QueryProvider(
         color: -1,
         species: -1,
         size: -1,
-        isSterilized: -1,
+        isSterillized: -1,
         isVaccinated: -1,
         isAvailable: true,
         address: 'chưa điền',
@@ -82,7 +82,7 @@ const PetProfileForm = QueryProvider(
           color: getValues('color'),
           species: getValues('species'),
           size: getValues('size'),
-          isSterilized: getValues('isSterilized'),
+          isSterillized: getValues('isSterillized'),
           isVaccinated: getValues('isVaccinated'),
           isAvailable: getValues('isAvailable'),
           breed: getValues('breed'),
@@ -136,7 +136,7 @@ const PetProfileForm = QueryProvider(
       errorMessage += isNotChecked(getValues('size'))
         ? 'Kích thước không được để trống;\n'
         : '';
-      errorMessage += isNotChecked(getValues('isSterilized'))
+      errorMessage += isNotChecked(getValues('isSterillized'))
         ? 'Triệt sản phải được chọn;\n'
         : '';
       errorMessage += isNotChecked(getValues('isVaccinated'))
@@ -159,7 +159,7 @@ const PetProfileForm = QueryProvider(
           setValue('color', res.data.data.color);
           setValue('species', res.data.data.species);
           setValue('size', res.data.data.size);
-          setValue('isSterilized', res.data.data.isSterilized);
+          setValue('isSterillized', res.data.data.isSterillized);
           setValue('isVaccinated', res.data.data.isVaccinated);
           setValue('isAvailable', res.data.data.isAvailable);
           setValue('address', res.data.data.address);

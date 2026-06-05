@@ -1,45 +1,77 @@
 import CardSkeleton from './CardSkeleton';
 
-const DETAIL_ROWS = 12;
-
 export default function PetDetailSkeleton() {
   return (
-    <div>
-      <div className="container max-w-5xl animate-pulse mx-auto p-5 shadow-2xl rounded-2xl">
-        <div className="grid md:grid-cols-2 grid-cols-1">
-          {/* Left: main image + thumbnail strip */}
-          <div>
-            <div className="w-full relative pt-[100%] bg-gray-200 rounded-lg" />
-            <div className="p-5 flex gap-2">
+    <div className="py-6 space-y-5 animate-pulse">
+      <div className="container max-w-5xl mx-auto px-4">
+        <div className="grid md:grid-cols-2 grid-cols-1 gap-8">
+          {/* Left: image + thumbnail strip */}
+          <div className="flex flex-col gap-3">
+            <div className="w-full relative pt-[100%] bg-gray-200 rounded-2xl" />
+            <div className="flex gap-2">
               {Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="w-16 h-16 bg-gray-200 rounded-md flex-shrink-0" />
+                <div key={i} className="flex-1 aspect-square bg-gray-200 rounded-xl" />
               ))}
             </div>
           </div>
 
-          {/* Right: name, link button, detail rows, report button */}
-          <div className="md:pl-10 md:mt-0 mt-5">
-            <div className="h-8 bg-gray-200 rounded-full w-48 mb-4 mt-5 md:mt-0" />
-            <div className="h-10 w-44 bg-gray-200 rounded-full mb-5" />
+          {/* Right: info */}
+          <div className="flex flex-col gap-4">
+            {/* Availability badge + name */}
+            <div>
+              <div className="h-5 w-24 bg-gray-200 rounded-full mb-2" />
+              <div className="h-8 w-48 bg-gray-200 rounded-lg" />
+            </div>
 
-            <div className="flex flex-col divide-y">
-              {Array.from({ length: DETAIL_ROWS }).map((_, i) => (
-                <div key={i} className="flex flex-row py-2 gap-2">
-                  <div className="w-1/3 h-4 bg-gray-200 rounded-full" />
-                  <div className="w-2/3 h-4 bg-gray-200 rounded-full" />
-                </div>
+            {/* Attribute chips */}
+            <div className="flex flex-wrap gap-2">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="h-7 w-16 bg-gray-200 rounded-full" />
               ))}
             </div>
 
-            <div className="flex justify-end mt-3">
-              <div className="w-10 h-10 bg-gray-200 rounded-full" />
+            {/* Breed + Color mini-cards */}
+            <div className="grid grid-cols-2 gap-3">
+              <div className="bg-gray-100 rounded-xl p-3 h-14" />
+              <div className="bg-gray-100 rounded-xl p-3 h-14" />
             </div>
+
+            {/* Location + date */}
+            <div className="flex flex-col gap-2">
+              <div className="h-4 w-3/4 bg-gray-200 rounded-full" />
+              <div className="h-4 w-1/2 bg-gray-200 rounded-full" />
+            </div>
+
+            {/* Health status cards */}
+            <div className="grid grid-cols-2 gap-3">
+              <div className="bg-gray-100 rounded-xl p-3 h-16" />
+              <div className="bg-gray-100 rounded-xl p-3 h-16" />
+            </div>
+
+            {/* Owner link button */}
+            <div className="h-12 bg-gray-200 rounded-full" />
+
+            {/* Report button */}
+            <div className="flex justify-end">
+              <div className="h-8 w-24 bg-gray-200 rounded-full" />
+            </div>
+          </div>
+        </div>
+
+        {/* Description section */}
+        <div className="mt-8 p-5 bg-gray-100 rounded-2xl">
+          <div className="h-5 w-40 bg-gray-200 rounded-full mb-3" />
+          <div className="space-y-2">
+            <div className="h-4 w-full bg-gray-200 rounded-full" />
+            <div className="h-4 w-5/6 bg-gray-200 rounded-full" />
+            <div className="h-4 w-4/6 bg-gray-200 rounded-full" />
           </div>
         </div>
       </div>
 
-      <div className="container mx-auto p-5 shadow-2xl rounded-2xl my-5">
-        <div className="h-4 bg-gray-200 rounded-full w-48 mb-4" />
+      {/* See more */}
+      <div className="container max-w-5xl mx-auto px-4 py-5 shadow-2xl rounded-2xl">
+        <div className="h-6 w-40 bg-gray-200 rounded-full mb-5" />
         <div className="grid md:grid-cols-4 grid-cols-1 gap-3">
           {Array.from({ length: 4 }).map((_, i) => (
             <CardSkeleton key={i} />

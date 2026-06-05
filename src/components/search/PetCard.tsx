@@ -1,6 +1,7 @@
 'use client';
 import { getPetAgeText, getPetSexText } from '@/src/helpers/getPetTextDetails';
 import { IPetResponse } from '@/src/interfaces/pet';
+import { PET_SEX } from '@/src/utils/constants';
 import Image from 'next/image';
 import Link from 'next/link';
 import { MdDelete } from 'react-icons/md';
@@ -12,7 +13,6 @@ import { CiEdit } from 'react-icons/ci';
 import PetProfileForm from '../pet/PetProfileForm';
 import { ConfirmCloseModal } from '../ui/ConfirmCloseModal';
 import { FaShieldDog } from 'react-icons/fa6';
-import { Tooltip, Button } from '@material-tailwind/react';
 import { UseQueryResult } from 'react-query';
 import { AxiosResponse } from 'axios';
 import { IApiErrorResponse, IApiResponse } from '@/src/interfaces/common';
@@ -42,94 +42,68 @@ function PetCardInner(props: IPetCard) {
     getPetQuery,
     testId,
   } = props;
+
   const [showAlert, setShowAlert] = useState(false);
-  const [showEdit, setShowEdit] = useState(false);
   const [isPetFormOpen, setIsPetFormOpen] = useState(false);
 
-  const handleClose = () => {
-    window.location.reload();
-  };
-
-  const handleDelete = () => {
-    setShowAlert(true);
-  };
-
-  const handleEdit = () => {
-    setShowEdit(!showEdit);
-  };
-
   const deletePetMutation = useMutation(deletePet, {
-    onSuccess: () => {
-      getPetQuery?.refetch();
-    },
+    onSuccess: () => getPetQuery?.refetch(),
   });
 
-  const deletePetFunc = () => {
-    deletePetMutation.mutate({ id: id });
-  };
+  const sexBadgeClass =
+    sex === PET_SEX.MALE
+      ? 'bg-blue-50 text-blue-600'
+      : sex === PET_SEX.FEMALE
+        ? 'bg-pink-50 text-pink-600'
+        : 'bg-gray-50 text-gray-500';
 
   return (
-    <div className="relative">
-      <Link href={`/pet/${id}`}>
+    <div className="relative group h-full">
+      <Link href={`/pet/${id}`} className="block h-full">
         <div
           test-id={testId}
-          className="max-w-xs h-full p-2 bg-white border border-gray-200 rounded-2xl shadow-lg"
+          className="h-full rounded-2xl overflow-hidden bg-white border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
         >
-          <div className="flex flex-col">
-            <div className="w-full relative pt-[100%]">
-              <Image
-                src={image}
-                alt="profile"
-                fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                className="w-full h-full top-0 left-0 object-cover rounded-2xl"
-              ></Image>
-            </div>
-            <div className="p-2 md:p-5">
-              <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">
-                <div className="flex flex-row gap-2 items-center">
-                  {name}{' '}
-                  {isOrgOwned && (
-                    <Tooltip content="Cộng tác viên">
-                      <Button
-                        className="p-0 shadow-none bg-white"
-                        placeholder={undefined}
-                        onResize={undefined}
-                        onResizeCapture={undefined}
-                        onPointerEnterCapture={undefined}
-                        onPointerLeaveCapture={undefined}>
-                        <FaShieldDog color="green" size={20} />
-                      </Button>
-                    </Tooltip>
-                  )}
+          <div className="relative w-full pt-[100%]">
+            <Image
+              src={image}
+              alt="profile"
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              className="object-cover top-0 left-0 group-hover:scale-[1.02] transition-transform duration-300"
+            />
+            {isOrgOwned && (
+              <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm rounded-full p-1.5 shadow-sm">
+                <FaShieldDog size={14} className="text-green-600" title="Cộng tác viên" />
+              </div>
+            )}
+          </div>
+          <div className="p-3">
+            <h5 className="font-bold text-gray-900 truncate text-base">{name}</h5>
+            {!simple && (
+              <>
+                <p className="text-sm text-gray-400 truncate mb-2">{breed}</p>
+                <div className="flex flex-wrap gap-1.5">
+                  <span className={`text-xs px-2.5 py-0.5 rounded-full ${sexBadgeClass}`}>
+                    {getPetSexText(sex)}
+                  </span>
+                  <span className="text-xs px-2.5 py-0.5 rounded-full bg-purple-50 text-purple-600">
+                    {getPetAgeText(age)} tuổi
+                  </span>
                 </div>
-              </h5>
-              {!simple && (
-                <div className="">
-                  <h4 className="font-bold text-md md:text-lg">{breed}</h4>
-                  <div className="flex flex-col text-md md:text-lg">
-                    <div className="text-gray-600">
-                      Giới tính:{' '}
-                      <span className="font-medium">{getPetSexText(sex)}</span>
-                    </div>
-                    <div className="text-gray-600">
-                      Tuổi:{' '}
-                      <span className="font-medium">{getPetAgeText(age)}</span>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
+              </>
+            )}
           </div>
         </div>
       </Link>
+
       {isEditable && (
-        <div className="absolute top-2 right-2 flex gap-1">
+        <div className="absolute top-2 left-2 flex gap-1 z-10">
           <button
-            className="p-2 bg-gray-200 rounded-full hover:bg-gray-300"
-            onClick={() => { handleEdit(); setIsPetFormOpen(true); }}
+            className="p-2 bg-white/90 backdrop-blur-sm rounded-full shadow hover:bg-white transition-colors"
+            onClick={() => setIsPetFormOpen(true)}
           >
-            <CiEdit size={20} />
+            <CiEdit size={18} />
           </button>
           <ConfirmCloseModal
             open={isPetFormOpen}
@@ -137,25 +111,25 @@ function PetCardInner(props: IPetCard) {
             contentStyle={{ width: '90vw', maxWidth: '900px', padding: 0, borderRadius: '12px' }}
           >
             <div className="bg-white rounded-xl max-h-[85vh] overflow-hidden flex flex-col">
-              <PetProfileForm id={id} handleClose={handleClose} />
+              <PetProfileForm id={id} handleClose={() => window.location.reload()} />
             </div>
           </ConfirmCloseModal>
-
           <button
-            className="p-2 bg-gray-200 rounded-full hover:bg-gray-300"
-            onClick={handleDelete}
+            className="p-2 bg-white/90 backdrop-blur-sm rounded-full shadow hover:bg-white transition-colors"
+            onClick={() => setShowAlert(true)}
           >
-            <MdDelete size={20} />
+            <MdDelete size={18} className="text-red-500" />
           </button>
         </div>
       )}
+
       <Alert
-        message={'Bạn có chắc muốn xoá không?'}
+        message="Bạn có chắc muốn xoá không?"
         failed={true}
         show={showAlert}
         title="Xác nhận xoá"
         setShow={setShowAlert}
-        action={deletePetFunc}
+        action={() => deletePetMutation.mutate({ id })}
       />
     </div>
   );

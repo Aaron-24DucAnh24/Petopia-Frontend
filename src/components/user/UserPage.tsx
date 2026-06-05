@@ -10,7 +10,7 @@ import { UserAvatar } from './UserAvatar';
 import { UserRoleName } from './UserRoleName';
 import { IUserInfoResponse } from '@/src/interfaces/user';
 import { UserActionsBlock } from './UserActionsBlock';
-import { UserInfomationBlock } from './UserInformationBlock';
+import { UserInformationBlock } from './UserInformationBlock';
 import { UserUpdateForm } from './UserUpdateForm';
 import { ConfirmCloseModal } from '../ui/ConfirmCloseModal';
 import { UserUpgradeForm } from './UserUpgradeForm';
@@ -74,7 +74,7 @@ export const UserPage = QueryProvider(() => {
                 allowUpgrade={allowUpgrade} />
             </div>
 
-            <UserInfomationBlock
+            <UserInformationBlock
               userInfo={userInfo}
               visible={!showEdit} />
 

@@ -1,5 +1,6 @@
 import { SearchPetSection } from '@/src/components/search/SearchPetSection';
 import { Metadata } from 'next';
+import { Suspense } from 'react';
 
 export const metadata: Metadata = {
   title: 'Tìm kiếm - Petopia',
@@ -9,7 +10,9 @@ export const metadata: Metadata = {
 export default function page() {
   return (
     <div className="container mx-auto">
-      <SearchPetSection />
+      <Suspense>
+        <SearchPetSection />
+      </Suspense>
     </div>
   );
 }

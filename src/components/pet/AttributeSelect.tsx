@@ -14,7 +14,7 @@ interface AttributeSelectProps {
   | 'color'
   | 'size'
   | 'isVaccinated'
-  | 'isSterilized';
+  | 'isSterillized';
   setValue: UseFormSetValue<ICreatePetProfileRequest>;
   watch: UseFormWatch<ICreatePetProfileRequest>;
   testId?: string;

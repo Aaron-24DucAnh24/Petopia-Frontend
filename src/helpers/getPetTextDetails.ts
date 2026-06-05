@@ -133,7 +133,7 @@ export const getPetMedicalStatusText = (status: number) => {
   return result;
 };
 
-export const getPetSterilizedText = (status: number) => {
+export const getPetSterillizedText = (status: number) => {
   let result: string;
   switch (status) {
     case PET_MEDICAL_STATUS.YES:
