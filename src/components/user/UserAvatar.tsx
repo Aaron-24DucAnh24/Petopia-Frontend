@@ -20,7 +20,7 @@ export const UserAvatar = (props: IUserAvatar) => {
 
   // STATES
   const [isEditAvatar, setIsEditAvatar] = useState<boolean>(false);
-  const [isUploadAvatar, setIsUpdloadAvatar] = useState<boolean>(false);
+  const [isUploadAvatar, setIsUploadAvatar] = useState<boolean>(false);
   const [processingImage, setProcessingImage] = useState<string>('');
   const [alertMessage, setAlertMessage] = useState<string>('');
   const [alertShow, setAlertShow] = useState<boolean>(false);
@@ -33,7 +33,7 @@ export const UserAvatar = (props: IUserAvatar) => {
       const url = URL.createObjectURL(file);
       setProcessingImage(url);
       setIsEditAvatar(false);
-      setIsUpdloadAvatar(true);
+      setIsUploadAvatar(true);
     }
   };
 
@@ -46,7 +46,7 @@ export const UserAvatar = (props: IUserAvatar) => {
       updateAvatarMutation.mutate(formData);
     }
 
-    setIsUpdloadAvatar(false);
+    setIsUploadAvatar(false);
     setProcessingImage('');
 
     // Clear input after processing

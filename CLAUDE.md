@@ -41,6 +41,8 @@ export const MyPage = QueryProvider(() => {
 });
 ```
 
+**Critical:** `QueryProvider` must be present on any component (or its ancestor) whose subtree calls `useQuery` or `useMutation`. When removing `QueryProvider` from a component, always audit every child component for react-query usage — including deeply nested ones — and ensure a `QueryProvider` is still present somewhere in the tree above them. Failure to do so causes a runtime "No QueryClient set" error.
+
 All query key strings are centralised in `QUERY_KEYS` in `src/utils/constants.ts`.
 
 ### HTTP client — `src/services/http.ts`
