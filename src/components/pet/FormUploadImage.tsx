@@ -106,6 +106,7 @@ export default function FormUploadImage({
         handleBack={() => {}}
         handleNext={handleNext}
         step={GIVE_PET_STEP.UPLOAD_IMAGE}
+        isNextDisabled={watch('showImages').length === 0}
       />
     </div>
   );

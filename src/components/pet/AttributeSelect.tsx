@@ -18,6 +18,7 @@ interface AttributeSelectProps {
   setValue: UseFormSetValue<ICreatePetProfileRequest>;
   watch: UseFormWatch<ICreatePetProfileRequest>;
   testId?: string;
+  error?: string;
 }
 
 export default function AttributeSelect({
@@ -27,6 +28,7 @@ export default function AttributeSelect({
   value,
   options,
   testId,
+  error,
 }: AttributeSelectProps) {
   return (
     <div className="flex flex-col space-y-2">
@@ -34,9 +36,11 @@ export default function AttributeSelect({
       <select
         test-id={testId}
         onChange={(e) => setValue(value, Number(e.target.value) as never)}
-        className={`text-black  border ${value === 'species'
+        className={`text-black border ${value === 'species'
           ? 'border-yellow-600 animate-pulse bg-yellow-200'
-          : 'border-gray-300 hover:bg-slate-100'
+          : error
+            ? 'border-red-400 bg-red-50'
+            : 'border-gray-300 hover:bg-slate-100'
           } focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center`}
         value={watch(value)}>
         <option value="-1">Chọn {label}</option>
@@ -46,6 +50,7 @@ export default function AttributeSelect({
           </option>
         ))}
       </select>
+      {error && <span className="text-sm text-red-500">{error}</span>}
     </div>
   );
 }

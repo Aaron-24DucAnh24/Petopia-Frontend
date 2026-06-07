@@ -83,7 +83,10 @@ export const UserPostCreateForm = observer((props: IUserPostCreateForm) => {
         <h2 className="font-bold mb-2">Tạo bài đăng</h2>
         <div className="w-full p-5 mb-5 bg-gray-50 rounded-lg overflow-auto space-y-8" style={{ maxHeight: '600px' }}>
           <div>
-            <div className="text-sm font-medium mb-2">Tải ảnh lên</div>
+            <div className="text-sm font-medium mb-2">
+              Tải ảnh lên
+              <span className="text-red-500 ml-1">*</span>
+            </div>
             <Dropzone
               id={'postCreateDropzone'}
               setValue={uploadImageForm.setValue}
@@ -104,7 +107,7 @@ export const UserPostCreateForm = observer((props: IUserPostCreateForm) => {
           <QueryButton
             name={'Tạo bài đăng'}
             isLoading={createPostMutation.isLoading || isLoading}
-            isDisabled={!createPostForm.watch('content')} />
+            isDisabled={!createPostForm.watch('content') || !uploadImageForm.watch('files').length} />
         </div>
       </form>
 

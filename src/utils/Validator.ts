@@ -9,6 +9,7 @@ export type RuleSet = {
     maxLength?: number;
     length?: number;
     confirm?: string;
+    notValue?: any;
   };
 };
 
@@ -29,6 +30,12 @@ export class Validator {
       // Requirement checking
       if (rule.required && StringUtil.IsEmpty(value)) {
         errors[field] = 'Vui lòng nhập trường này';
+        continue;
+      }
+
+      // Sentinel value checking (e.g. unselected enum fields defaulted to -1)
+      if (rule.notValue !== undefined && value === rule.notValue) {
+        errors[field] = 'Vui lòng chọn trường này';
         continue;
       }
 

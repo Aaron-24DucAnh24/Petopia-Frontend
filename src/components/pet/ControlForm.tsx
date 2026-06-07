@@ -7,11 +7,13 @@ export default function ControlForm({
   handleNext,
   step,
   isLoading = false,
+  isNextDisabled = false,
 }: {
   handleBack: () => void;
   handleNext: () => void;
   step: number;
   isLoading?: boolean;
+  isNextDisabled?: boolean;
 }) {
   return (
     <div className="w-full bg-white rounded-lg p-5 flex">
@@ -33,8 +35,8 @@ export default function ControlForm({
         <div className="w-full flex justify-end">
           <div
             test-id="next-button-form"
-            onClick={handleNext}
-            className="w-fit p-3 flex justify-end text-black bg-yellow-300 hover:bg-yellow-400 rounded-lg cursor-pointer"
+            onClick={isNextDisabled ? undefined : handleNext}
+            className={`w-fit p-3 flex justify-end text-black ${isNextDisabled ? 'bg-gray-200 cursor-not-allowed' : 'bg-yellow-300 hover:bg-yellow-400 cursor-pointer'} rounded-lg`}
           >
             Tiếp tục {'  '}
             <span className="ml-1 mt-1 item-center ">

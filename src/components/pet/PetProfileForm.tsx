@@ -19,7 +19,7 @@ import { getPetDetail, postPet, updatePet } from '@/src/services/pet.api';
 import { uploadMany } from '@/src/services/storage.api';
 import { GIVE_PET_STEP, QUERY_KEYS } from '@/src/utils/constants';
 import { GivePetHeaderBar } from './GivePetHeaderBar';
-import { StringUtil } from '@/src/utils/StringUtil';
+import { ValidatorManager } from '@/src/utils/ValidatorManager';
 
 const PetProfileForm = QueryProvider(
   ({ id = '' }: { id?: string; handleClose?: () => void }) => {
@@ -29,6 +29,7 @@ const PetProfileForm = QueryProvider(
     const [activeStep, setActiveStep] = useState(GIVE_PET_STEP.UPLOAD_IMAGE);
     const [isAgreed, setIsAgreed] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [detailErrors, setDetailErrors] = useState<Record<string, string>>({});
 
     // FORMS
     const { getValues, setValue, watch } = useForm<ICreatePetProfileRequest>({
@@ -57,6 +58,11 @@ const PetProfileForm = QueryProvider(
 
     // HANDLERS
     const handleNext = () => {
+      if (activeStep === GIVE_PET_STEP.PET_DETAIL) {
+        const result = ValidatorManager.petDetailValidator.validate(getValues());
+        setDetailErrors(result.errors);
+        if (!result.isValid) return;
+      }
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
     };
 
@@ -66,33 +72,27 @@ const PetProfileForm = QueryProvider(
 
     const handleSubmit = async (event: ChangeEvent<HTMLFormElement>) => {
       event.preventDefault();
-      let errorMessage = validateInputs();
-      if (errorMessage) {
-        setError(errorMessage);
-        setShowAlert(true);
-      } else {
-        setIsSubmitting(true);
-        !getValues('breed') && setValue('breed', 'Không rõ');
-        await uploadImagesMutation.mutateAsync(undefined);
-        const payload: IPetApiPayload = {
-          name: getValues('name'),
-          description: getValues('description'),
-          sex: getValues('sex'),
-          age: getValues('age'),
-          color: getValues('color'),
-          species: getValues('species'),
-          size: getValues('size'),
-          isSterillized: getValues('isSterillized'),
-          isVaccinated: getValues('isVaccinated'),
-          isAvailable: getValues('isAvailable'),
-          breed: getValues('breed'),
-          images: getValues('images'),
-          vaccineIds: getValues('vaccineIds'),
-          ...(id ? { id } : {}),
-        };
-        if (id) await updatePetMutation.mutateAsync(payload);
-        else await createPetMutation.mutateAsync(payload);
-      }
+      setIsSubmitting(true);
+      !getValues('breed') && setValue('breed', 'Không rõ');
+      await uploadImagesMutation.mutateAsync(undefined);
+      const payload: IPetApiPayload = {
+        name: getValues('name'),
+        description: getValues('description'),
+        sex: getValues('sex'),
+        age: getValues('age'),
+        color: getValues('color'),
+        species: getValues('species'),
+        size: getValues('size'),
+        isSterillized: getValues('isSterillized'),
+        isVaccinated: getValues('isVaccinated'),
+        isAvailable: getValues('isAvailable'),
+        breed: getValues('breed'),
+        images: getValues('images'),
+        vaccineIds: getValues('vaccineIds'),
+        ...(id ? { id } : {}),
+      };
+      if (id) await updatePetMutation.mutateAsync(payload);
+      else await createPetMutation.mutateAsync(payload);
     };
 
     const uploadImage = async () => {
@@ -104,46 +104,6 @@ const PetProfileForm = QueryProvider(
         const urls = res.data.data as string[];
         setValue('images', [...getValues('images'), ...urls]);
       }
-    };
-
-    const isNotChecked = (value: number) => {
-      return value === -1;
-    };
-
-    const validateInputs = () => {
-      let errorMessage = '';
-
-      errorMessage +=
-        getValues('showImages').length == 0 ? 'Ảnh không được để trống;\n' : '';
-      errorMessage += StringUtil.IsEmpty(getValues('name'))
-        ? 'Tên không được để trống;\n'
-        : '';
-      errorMessage += StringUtil.IsEmpty(getValues('description'))
-        ? 'Mô tả không được để trống;\n'
-        : '';
-      errorMessage += isNotChecked(getValues('sex'))
-        ? 'Giới tính không được để trống;\n'
-        : '';
-      errorMessage += isNotChecked(getValues('age'))
-        ? 'Tuổi không được để trống;\n'
-        : '';
-      errorMessage += isNotChecked(getValues('color'))
-        ? 'Màu lông không được để trống;\n'
-        : '';
-      errorMessage += isNotChecked(getValues('species'))
-        ? 'Loài không được để trống;\n'
-        : '';
-      errorMessage += isNotChecked(getValues('size'))
-        ? 'Kích thước không được để trống;\n'
-        : '';
-      errorMessage += isNotChecked(getValues('isSterillized'))
-        ? 'Triệt sản phải được chọn;\n'
-        : '';
-      errorMessage += isNotChecked(getValues('isVaccinated'))
-        ? 'Tiêm chủng phải được chọn;\n'
-        : '';
-
-      return errorMessage.trim(); // Trim any leading/trailing whitespace
     };
 
     // QUERIES AND MUTATIONS
@@ -206,7 +166,7 @@ const PetProfileForm = QueryProvider(
 
     return (
       <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
-        {/* breadscrum stepper */}
+        {/* breadcrumb stepper */}
         <GivePetHeaderBar activeStep={activeStep} />
 
         {/* form upload images */}
@@ -225,6 +185,7 @@ const PetProfileForm = QueryProvider(
             handleBack={handleBack}
             setValue={setValue}
             watch={watch}
+            errors={detailErrors}
           />
         )}
 
@@ -244,7 +205,7 @@ const PetProfileForm = QueryProvider(
         )}
 
         <Alert
-          message={error || 'Tạo hồ sơ thú cưng thành công'}
+          message={error}
           show={showAlert}
           setShow={setShowAlert}
           failed={true}
