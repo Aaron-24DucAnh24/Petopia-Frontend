@@ -57,17 +57,17 @@ export const UserPage = QueryProvider(({ userInfo, allowUpgrade: initialAllowUpg
             show={showEdit}
             onSuccess={() => router.refresh()}
             setShowEdit={setShowEdit} />
-
-          <ConfirmCloseModal open={showUpgrade} onClose={() => setShowUpgrade(false)}>
-            <UserUpgradeForm
-              onClose={() => setShowUpgrade(false)}
-              onSuccess={() => {
-                setAllowUpgrade(false);
-                router.refresh();
-              }} />
-          </ConfirmCloseModal>
         </div>
       </div>
+
+      <ConfirmCloseModal open={showUpgrade} onClose={() => setShowUpgrade(false)}>
+        <UserUpgradeForm
+          onClose={() => setShowUpgrade(false)}
+          onSuccess={() => {
+            setAllowUpgrade(false);
+            router.refresh();
+          }} />
+      </ConfirmCloseModal>
 
       <div className="container max-w-3xl p-5 mx-auto shadow-2xl rounded-2xl mt-8">
         <PostGrid userId={userInfo.id} canCreate />

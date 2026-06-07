@@ -1,6 +1,6 @@
 'use client';
 import { useForm } from 'react-hook-form';
-import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
+import { ChangeEvent, Dispatch, ReactNode, SetStateAction, useState } from 'react';
 import { useMutation, useQuery } from '../../utils/hooks';
 import { IApiResponse } from '../../interfaces/common';
 import { updateUser } from '../../services/user.api';
@@ -20,6 +20,21 @@ import { ValueText } from '@/src/utils/ValueText';
 import { SelectInput } from '../ui/input/SelectInput';
 import { Input } from '../ui/input/Input';
 import { HTMLArea } from '../ui/input/HTMLArea';
+import { FiUser, FiCalendar, FiPhone, FiMapPin, FiLink, FiBriefcase, FiTag, FiAlignLeft } from 'react-icons/fi';
+
+function FieldRow({ icon, label, children }: { icon: ReactNode; label: string; children: ReactNode }) {
+  return (
+    <div className="flex items-start gap-3 px-4 py-3">
+      <div className="mt-1 w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center flex-shrink-0 text-orange-400">
+        {icon}
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="text-xs text-gray-400 font-medium uppercase tracking-wide leading-none mb-2">{label}</p>
+        {children}
+      </div>
+    </div>
+  );
+}
 
 interface IUserUpdateForm {
   userInfo: IUserInfoResponse;
@@ -131,8 +146,6 @@ export const UserUpdateForm = (props: IUserUpdateForm) => {
     if (locationQuery.isLoading) return;
     event.preventDefault();
 
-    console.log(getValues());
-
     const validatingResult = userInfo.role === USER_ROLE.ORGANIZATION
       ? ValidatorManager.userUpdateOrganizationValidator.validate(getValues())
       : ValidatorManager.userUpdateIndividualValidator.validate(getValues());
@@ -175,188 +188,123 @@ export const UserUpdateForm = (props: IUserUpdateForm) => {
   return (
     <>
       <form
-        className="md:px-5 md:py-2 border w-full rounded-xl divide-y-2"
+        className="w-full rounded-2xl border border-gray-100 bg-white shadow-sm divide-y divide-gray-100"
         onSubmit={handleSubmit}>
-        {
-          userInfo.role === USER_ROLE.ORGANIZATION
-            ? (
-              <>
-                <div className='grid grid-cols-3 py-2'>
-                  <label className="text-gray-500 text-md flex items-center">
-                    Tên tổ chức:
-                  </label>
-                  <Input
-                    id='inputOrganizationName'
-                    containerClassName='col-span-2 flex flex-col'
-                    onChange={(value) => setValue('organizationName', value, { shouldDirty: true })}
-                    value={watch('organizationName')}
-                    error={errors['organizationName']} />
-                </div>
 
-                <div className='grid grid-cols-3 py-2'>
-                  <label className="text-gray-500 text-md flex items-center">
-                    Loại hình:
-                  </label>
-                  <div className='col-span-2'>
-                    <SelectInput
-                      id='inputOrganizationType'
-                      onChange={(value) => setValue('type', parseInt(value), { shouldDirty: true })}
-                      options={new ValueText(PET_ORG_TYPE_OPTION.map(option => ({ value: option.value.toString(), text: option.label })))}
-                      defaultValue={watch('type').toString()} />
-                    <span className="text-sm text-red-500 mt-2">{errors['type']}</span>
-                  </div>
-                </div>
+        {userInfo.role === USER_ROLE.ORGANIZATION ? (
+          <>
+            <FieldRow icon={<FiBriefcase size={16} />} label="Tên tổ chức">
+              <Input
+                id='inputOrganizationName'
+                onChange={(value) => setValue('organizationName', value, { shouldDirty: true })}
+                value={watch('organizationName')}
+                error={errors['organizationName']} />
+            </FieldRow>
 
-                <div className='grid grid-cols-3 py-2'>
-                  <label className="text-gray-500 text-md flex items-center">
-                    Mô tả:
-                  </label>
-                  <div className='col-span-2'>
-                    <HTMLArea
-                      id={'inputDescription'}
-                      value={watch('description')}
-                      setValue={(html) => {
-                        setValue('description', html, { shouldDirty: true });
-                      }} />
-                    <span className="text-sm text-red-500 mt-2">{errors['description']}</span>
-                  </div>
-                </div>
+            <FieldRow icon={<FiTag size={16} />} label="Loại hình">
+              <SelectInput
+                id='inputOrganizationType'
+                onChange={(value) => setValue('type', parseInt(value), { shouldDirty: true })}
+                options={new ValueText(PET_ORG_TYPE_OPTION.map(option => ({ value: option.value.toString(), text: option.label })))}
+                defaultValue={watch('type').toString()} />
+              <span className="text-sm text-red-500 mt-1">{errors['type']}</span>
+            </FieldRow>
 
-                <div className='grid grid-cols-3 py-2'>
-                  <label className="text-gray-500 text-md flex items-center">
-                    Website:
-                  </label>
-                  <Input
-                    id='inputWebsite'
-                    containerClassName='col-span-2 flex flex-col'
-                    onChange={(value) => setValue('website', value, { shouldDirty: true })}
-                    value={watch('website')}
-                    error={errors['website']} />
-                </div>
-              </>
-            )
-            : (
-              <>
-                <div className='grid grid-cols-3 py-2'>
-                  <label className="text-gray-500 text-md flex items-center">
-                    Họ:
-                  </label>
-                  <Input
-                    id='inputFirstName'
-                    containerClassName='col-span-2 flex flex-col'
-                    onChange={(value) => setValue('firstName', value, { shouldDirty: true })}
-                    value={watch('firstName')}
-                    error={errors['firstName']} />
-                </div>
+            <FieldRow icon={<FiAlignLeft size={16} />} label="Mô tả">
+              <HTMLArea
+                id='inputDescription'
+                value={watch('description')}
+                setValue={(html) => setValue('description', html, { shouldDirty: true })} />
+              <span className="text-sm text-red-500 mt-1">{errors['description']}</span>
+            </FieldRow>
 
+            <FieldRow icon={<FiLink size={16} />} label="Website">
+              <Input
+                id='inputWebsite'
+                onChange={(value) => setValue('website', value, { shouldDirty: true })}
+                value={watch('website')}
+                error={errors['website']} />
+            </FieldRow>
+          </>
+        ) : (
+          <>
+            <FieldRow icon={<FiUser size={16} />} label="Họ">
+              <Input
+                id='inputFirstName'
+                onChange={(value) => setValue('firstName', value, { shouldDirty: true })}
+                value={watch('firstName')}
+                error={errors['firstName']} />
+            </FieldRow>
 
-                <div className='grid grid-cols-3 py-2'>
-                  <label className="text-gray-500 text-md flex items-center">
-                    Tên:
-                  </label>
-                  <Input
-                    id='inputLastName'
-                    containerClassName='col-span-2 flex flex-col'
-                    onChange={(value) => setValue('lastName', value, { shouldDirty: true })}
-                    value={watch('lastName')}
-                    error={errors['lastName']} />
-                </div>
+            <FieldRow icon={<FiUser size={16} />} label="Tên">
+              <Input
+                id='inputLastName'
+                onChange={(value) => setValue('lastName', value, { shouldDirty: true })}
+                value={watch('lastName')}
+                error={errors['lastName']} />
+            </FieldRow>
 
+            <FieldRow icon={<FiCalendar size={16} />} label="Ngày sinh">
+              <DatePicker
+                id='dpBirthDate'
+                value={watch('birthDate')}
+                onChange={(date) => date && setValue('birthDate', date, { shouldDirty: true })} />
+              <span className="text-sm text-red-500 mt-1">{errors['birthDate']}</span>
+            </FieldRow>
+          </>
+        )}
 
-                <div className='grid grid-cols-3 py-2'>
-                  <label className="text-gray-500 text-md flex items-center">
-                    Ngày sinh:
-                  </label>
-                  <div className='col-span-2'>
-                    <DatePicker
-                      id='dpBirthDate'
-                      value={watch('birthDate')}
-                      onChange={(date) => date && setValue('birthDate', date, { shouldDirty: true })} />
-                    <span className="text-sm text-red-500 mt-2">{errors['birthDate']}</span>
-                  </div>
-                </div>
-              </>
-            )
-        }
-
-        <div className='grid grid-cols-3 py-2'>
-          <label className="text-gray-500 text-md flex items-center">
-            Số điện thoại:
-          </label>
+        <FieldRow icon={<FiPhone size={16} />} label="Số điện thoại">
           <Input
             id='inputPhone'
             type='tel'
-            containerClassName='col-span-2 flex flex-col'
             onChange={(value) => setValue('phone', value, { shouldDirty: true })}
             value={watch('phone')}
             error={errors['phone']} />
-        </div>
+        </FieldRow>
 
+        <FieldRow icon={<FiMapPin size={16} />} label="Tỉnh/thành phố">
+          <UserAddressInput
+            testId="province-input-dropdown"
+            options={new ValueText(provinces.map(p => ({ text: p.name, value: p.code })))}
+            onChange={handleLocationChange}
+            value={watch('provinceCode')}
+            level={LOCATION_LEVEL.PROVINCE}
+            isLoading={locationQuery.isLoading} />
+          <span className="text-sm text-red-500 mt-1">{errors['provinceCode']}</span>
+        </FieldRow>
 
-        <div className='grid grid-cols-3 py-2'>
-          <label className="text-gray-500 text-md flex items-center">
-            Tỉnh/thành phố:
-          </label>
-          <div className="col-span-2">
-            <UserAddressInput
-              testId="province-input-dropdown"
-              options={new ValueText(provinces.map(province => ({ text: province.name, value: province.code })))}
-              onChange={handleLocationChange}
-              value={watch('provinceCode')}
-              level={LOCATION_LEVEL.PROVINCE}
-              isLoading={locationQuery.isLoading} />
-            <span className="text-sm text-red-500 mt-2">{errors['provinceCode']}</span>
-          </div>
-        </div>
+        <FieldRow icon={<FiMapPin size={16} />} label="Quận/huyện">
+          <UserAddressInput
+            testId="district-input-dropdown"
+            options={new ValueText(districts.map(d => ({ text: d.name, value: d.code })))}
+            onChange={handleLocationChange}
+            value={watch('districtCode')}
+            level={LOCATION_LEVEL.DISTRICT}
+            isLoading={locationQuery.isLoading} />
+          <span className="text-sm text-red-500 mt-1">{errors['districtCode']}</span>
+        </FieldRow>
 
+        <FieldRow icon={<FiMapPin size={16} />} label="Xã/phường">
+          <UserAddressInput
+            testId="ward-input-dropdown"
+            options={new ValueText(wards.map(w => ({ text: w.name, value: w.code })))}
+            onChange={handleLocationChange}
+            value={watch('wardCode')}
+            level={LOCATION_LEVEL.WARD}
+            isLoading={locationQuery.isLoading} />
+          <span className="text-sm text-red-500 mt-1">{errors['wardCode']}</span>
+        </FieldRow>
 
-        <div className='grid grid-cols-3 py-2'>
-          <label className="text-gray-500 text-md flex items-center">
-            Quận/huyện:
-          </label>
-          <div className="col-span-2">
-            <UserAddressInput
-              testId="district-input-dropdown"
-              options={new ValueText(districts.map(district => ({ text: district.name, value: district.code })))}
-              onChange={handleLocationChange}
-              value={watch('districtCode')}
-              level={LOCATION_LEVEL.DISTRICT}
-              isLoading={locationQuery.isLoading} />
-            <span className="text-sm text-red-500 mt-2">{errors['districtCode']}</span>
-          </div>
-        </div>
-
-
-        <div className='grid grid-cols-3 py-2'>
-          <label className="text-gray-500 text-md flex items-center">
-            Xã/phường:
-          </label>
-          <div className="col-span-2">
-            <UserAddressInput
-              testId="ward-input-dropdown"
-              options={new ValueText(wards.map(ward => ({ text: ward.name, value: ward.code })))}
-              onChange={handleLocationChange}
-              value={watch('wardCode')}
-              level={LOCATION_LEVEL.WARD}
-              isLoading={locationQuery.isLoading} />
-            <span className="text-sm text-red-500 mt-2">{errors['wardCode']}</span>
-          </div>
-        </div>
-
-        <div className='grid grid-cols-3 py-2'>
-          <label className="text-gray-500 text-md flex items-center">
-            Địa chỉ chi tiết:
-          </label>
+        <FieldRow icon={<FiMapPin size={16} />} label="Địa chỉ chi tiết">
           <Input
             id='inputStreet'
-            containerClassName='col-span-2 flex flex-col'
             onChange={(value) => setValue('street', value, { shouldDirty: true })}
             value={watch('street')}
             error={errors['street']} />
-        </div>
+        </FieldRow>
 
-
-        <div className="flex justify-center border-none mt-2 space-x-2">
+        <div className="flex justify-center px-4 py-4 gap-2">
           <QueryButton
             testId="user-update-button"
             name={'Xác nhận'}

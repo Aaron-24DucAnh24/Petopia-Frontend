@@ -18,6 +18,7 @@ import { ValueText } from '@/src/utils/ValueText';
 import { SelectInput } from '../ui/input/SelectInput';
 import { Input } from '../ui/input/Input';
 import { HTMLArea } from '../ui/input/HTMLArea';
+import { TermsCheckbox } from './TermsCheckbox';
 import { AddressInput } from '../ui/input/AddressInput';
 
 interface IUserUpgradeForm {
@@ -33,7 +34,6 @@ export const UserUpgradeForm = observer((props: IUserUpgradeForm) => {
   const [alertMessage, setAlertMessage] = useState<string>('');
   const [alertShow, setAlertShow] = useState<boolean>(false);
   const [alertFail, setAlertFail] = useState<boolean>(false);
-  const [isReadTerms, setIsReadTerms] = useState<boolean>(false);
   const [provinces, setProvinces] = useState<ILocationResponse[]>([]);
   const [districts, setDistricts] = useState<ILocationResponse[]>([]);
   const [wards, setWards] = useState<ILocationResponse[]>([]);
@@ -62,11 +62,6 @@ export const UserUpgradeForm = observer((props: IUserUpgradeForm) => {
   });
 
   // HANDLERS
-  const handleClickTerm = () => {
-    setIsReadTerms(true);
-    window.open('/terms');
-  };
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const validatingResult = ValidatorManager.userUpgradeValidator.validate(getValues());
@@ -158,17 +153,17 @@ export const UserUpgradeForm = observer((props: IUserUpgradeForm) => {
   );
 
   return (
-    <div className="container h-screen py-6">
+    <div className="w-full h-screen">
       <form
         onSubmit={handleSubmit}
-        className="w-full h-full rounded-2xl bg-blue-200 p-5"
+        className="w-full h-full flex flex-col rounded-2xl bg-yellow-100 p-5"
         test-id="org-upgrade-form">
-        <h2 className="h-[5%] font-bold">Đơn xác minh tổ chức</h2>
-        <div className="w-full h-[85%] bg-gray-50 p-4 rounded-lg overflow-hidden">
+        <h2 className="font-bold mb-4 shrink-0">Đơn xác minh tổ chức</h2>
+        <div className="flex-1 min-h-0 bg-gray-50 p-4 rounded-lg overflow-hidden">
           <div className="overflow-auto h-full w-full">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 p-4">
               <div className="flex flex-col space-y-1">
-                <label htmlFor="inputOrganizationName" className="text-gray-700 text-base font-bold w-fit block">
+                <label htmlFor="inputOrganizationName" className="text-sm font-medium">
                   Tên tổ chức
                 </label>
                 <Input
@@ -179,7 +174,7 @@ export const UserUpgradeForm = observer((props: IUserUpgradeForm) => {
               </div>
 
               <div className="flex flex-col space-y-1">
-                <label htmlFor="inputEntityName" className="text-gray-700 text-base font-bold w-fit block">
+                <label htmlFor="inputEntityName" className="text-sm font-medium">
                   Tên pháp nhân
                 </label>
                 <Input
@@ -190,7 +185,7 @@ export const UserUpgradeForm = observer((props: IUserUpgradeForm) => {
               </div>
 
               <div className="flex flex-col space-y-1">
-                <label htmlFor="inputPhone" className="text-gray-700 text-base font-bold w-fit block">
+                <label htmlFor="inputPhone" className="text-sm font-medium">
                   Số điện thoại
                 </label>
                 <Input
@@ -202,7 +197,7 @@ export const UserUpgradeForm = observer((props: IUserUpgradeForm) => {
               </div>
 
               <div className="flex flex-col space-y-1">
-                <label htmlFor="inputEmail" className="text-gray-700 text-base font-bold w-fit block">
+                <label htmlFor="inputEmail" className="text-sm font-medium">
                   Email
                 </label>
                 <Input
@@ -215,7 +210,7 @@ export const UserUpgradeForm = observer((props: IUserUpgradeForm) => {
               </div>
 
               <div className="flex flex-col space-y-1">
-                <label htmlFor="inputWebsite" className="text-gray-700 text-base font-bold w-fit block">
+                <label htmlFor="inputWebsite" className="text-sm font-medium">
                   Website
                 </label>
                 <Input
@@ -226,7 +221,7 @@ export const UserUpgradeForm = observer((props: IUserUpgradeForm) => {
               </div>
 
               <div className="flex flex-col space-y-1">
-                <label htmlFor="inputTaxCode" className="text-gray-700 text-base font-bold w-fit block">
+                <label htmlFor="inputTaxCode" className="text-sm font-medium">
                   Mã số thuế
                 </label>
                 <Input
@@ -237,7 +232,7 @@ export const UserUpgradeForm = observer((props: IUserUpgradeForm) => {
               </div>
 
               <div className="flex flex-col space-y-1">
-                <label className="text-gray-700 text-base font-bold w-fit block">Tỉnh/thành phố</label>
+                <label className="text-sm font-medium">Tỉnh/thành phố</label>
                 <AddressInput
                   testId="province-input-dropdown"
                   options={new ValueText(provinces.map(ward => ({ text: ward.name, value: ward.code })))}
@@ -249,7 +244,7 @@ export const UserUpgradeForm = observer((props: IUserUpgradeForm) => {
               </div>
 
               <div className="flex flex-col space-y-1">
-                <label className="text-gray-700 text-base font-bold w-fit block">Huyện/quận</label>
+                <label className="text-sm font-medium">Huyện/quận</label>
                 <AddressInput
                   testId="district-input-dropdown"
                   options={new ValueText(districts.map(ward => ({ text: ward.name, value: ward.code })))}
@@ -261,7 +256,7 @@ export const UserUpgradeForm = observer((props: IUserUpgradeForm) => {
               </div>
 
               <div className="flex flex-col space-y-1">
-                <label className="text-gray-700 text-base font-bold w-fit block">Xã/phường</label>
+                <label className="text-sm font-medium">Xã/phường</label>
                 <AddressInput
                   testId="ward-input-dropdown"
                   options={new ValueText(wards.map(ward => ({ text: ward.name, value: ward.code })))}
@@ -273,7 +268,7 @@ export const UserUpgradeForm = observer((props: IUserUpgradeForm) => {
               </div>
 
               <div className="flex flex-col space-y-1">
-                <label className="text-gray-700 text-base font-bold w-fit block">
+                <label className="text-sm font-medium">
                   Loại tổ chức
                 </label>
                 <SelectInput
@@ -284,7 +279,7 @@ export const UserUpgradeForm = observer((props: IUserUpgradeForm) => {
               </div>
 
               <div className="flex flex-col space-y-1 col-span-2">
-                <label htmlFor="inputStreet" className="text-gray-700 text-base font-bold w-fit block">
+                <label htmlFor="inputStreet" className="text-sm font-medium">
                   Số nhà, tên đường
                 </label>
                 <Input
@@ -295,7 +290,7 @@ export const UserUpgradeForm = observer((props: IUserUpgradeForm) => {
               </div>
 
               <div className="flex flex-col space-y-1 col-span-2">
-                <label htmlFor="org-mission" className="text-gray-700 text-base font-bold w-fit block">
+                <label htmlFor="org-mission" className="text-sm font-medium">
                   Giới thiệu về tổ chức
                 </label>
                 <HTMLArea
@@ -307,28 +302,11 @@ export const UserUpgradeForm = observer((props: IUserUpgradeForm) => {
                 <span className="text-sm text-red-500 mt-2">{errors['description']}</span>
               </div>
 
-              <div className="col-span-2 flex items-center">
-                <input
-                  test-id="org-terms-tickbox"
-                  type="checkbox"
-                  required
-                  onChange={(e) => {
-                    if (!isReadTerms) e.target.checked = false;
-                  }} />
-                <span className="ml-1">
-                  {'Tôi cam kết tuân thủ các '}
-                  <i
-                    onClick={handleClickTerm}
-                    className="text-blue-700 font-bold underline cursor-pointer">
-                    {'điều khoản và điều kiện'}
-                  </i>
-                  {' của tổ chức'}
-                </span>
-              </div>
+              <TermsCheckbox />
             </div>
           </div>
         </div>
-        <div className="h-[10%] flex justify-center py-4">
+        <div className="shrink-0 flex justify-center pt-4">
           <QueryButton
             testId="org-upgrade-button"
             name={'Hoàn thành'}
