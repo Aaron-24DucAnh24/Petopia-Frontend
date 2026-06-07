@@ -20,7 +20,7 @@ import QueryButton from '../ui/button/QueryButton';
 import { useStores } from '@/src/stores';
 import { Input } from '../ui/input/Input';
 
-export const LoginForm = QueryProvider(() => {
+export const LoginForm = QueryProvider(({ clientId }: { clientId: string }) => {
   // STATES
   const [showAlert, setShowALert] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string>('');
@@ -132,7 +132,7 @@ export const LoginForm = QueryProvider(() => {
             </div>
             <QueryButton name={'Đăng nhập'} isLoading={loginMutation.isLoading} />
 
-            <GoogleLoginButton onSuccess={(tokenId) => googleLoginMutation.mutate({ tokenId: tokenId })} />
+            <GoogleLoginButton clientId={clientId} onSuccess={(tokenId) => googleLoginMutation.mutate({ tokenId: tokenId })} />
 
             <p className="text-sm font-light text-gray-500 ">
               Chưa có tài khoản?{' '}

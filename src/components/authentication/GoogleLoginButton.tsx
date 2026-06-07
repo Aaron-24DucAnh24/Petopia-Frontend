@@ -1,18 +1,16 @@
+'use client';
 import Image from 'next/image';
-import { useGoogleLogin } from '@react-oauth/google';
-import { GoogleOAuthProvider } from './GoogleOAuthProvider';
+import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
 import { STATIC_URLS } from '@/src/utils/constants';
 
-export interface IGoogleLogin {
-  onSuccess: (tokenId: string) => void,
+interface Props {
+  clientId: string;
+  onSuccess: (tokenId: string) => void;
 }
 
-export const GoogleLoginButton = GoogleOAuthProvider((props: IGoogleLogin) => {
+function Inner({ onSuccess }: { onSuccess: (tokenId: string) => void }) {
   const login = useGoogleLogin({
-    onSuccess: res => {
-      const tokenId = res.access_token;
-      props.onSuccess(tokenId);
-    }
+    onSuccess: (res) => onSuccess(res.access_token),
   });
 
   return (
@@ -26,8 +24,17 @@ export const GoogleLoginButton = GoogleOAuthProvider((props: IGoogleLogin) => {
           src={STATIC_URLS.GOOGLE_LOGIN}
           loading="lazy"
           alt="google logo" />
-        <span className="">Đăng nhập với Google</span>
+        <span>Đăng nhập với Google</span>
       </div>
     </div>
   );
-});
+}
+
+export function GoogleLoginButton({ clientId, onSuccess }: Props) {
+  if (!clientId) return null;
+  return (
+    <GoogleOAuthProvider clientId={clientId}>
+      <Inner onSuccess={onSuccess} />
+    </GoogleOAuthProvider>
+  );
+}
