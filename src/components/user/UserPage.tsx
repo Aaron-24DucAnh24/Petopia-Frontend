@@ -2,7 +2,10 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { STATIC_URLS } from '../../utils/constants';
+import { IApiResponse } from '@/src/interfaces/common';
 import { IUserInfoResponse } from '@/src/interfaces/user';
+import { IPetResponse } from '@/src/interfaces/pet';
+import { IGetPostResponse } from '@/src/interfaces/post';
 import { UserAvatar } from './UserAvatar';
 import { UserRoleName } from './UserRoleName';
 import { UserActionsBlock } from './UserActionsBlock';
@@ -11,14 +14,17 @@ import { UserUpdateForm } from './UserUpdateForm';
 import { ConfirmCloseModal } from '../ui/ConfirmCloseModal';
 import { UserUpgradeForm } from './UserUpgradeForm';
 import { PostGrid } from '../post/PostGrid';
+import { PetGrid } from '../pet/PetGrid';
 import { QueryProvider } from '../providers/QueryProvider';
 
 interface IUserPageProps {
   userInfo: IUserInfoResponse;
   allowUpgrade: boolean;
+  initialPets?: IApiResponse<IPetResponse[]>;
+  initialPosts?: IApiResponse<IGetPostResponse[]>;
 }
 
-export const UserPage = QueryProvider(({ userInfo, allowUpgrade: initialAllowUpgrade }: IUserPageProps) => {
+export const UserPage = QueryProvider(({ userInfo, allowUpgrade: initialAllowUpgrade, initialPets, initialPosts }: IUserPageProps) => {
   const router = useRouter();
 
   const [showEdit, setShowEdit] = useState(false);
@@ -70,7 +76,11 @@ export const UserPage = QueryProvider(({ userInfo, allowUpgrade: initialAllowUpg
       </ConfirmCloseModal>
 
       <div className="container max-w-3xl p-5 mx-auto shadow-2xl rounded-2xl mt-8">
-        <PostGrid userId={userInfo.id} canCreate />
+        <PetGrid userId={userInfo.id} initialData={initialPets} />
+      </div>
+
+      <div className="container max-w-3xl p-5 mx-auto shadow-2xl rounded-2xl mt-8">
+        <PostGrid userId={userInfo.id} canCreate initialData={initialPosts} />
       </div>
     </div>
   );

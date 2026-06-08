@@ -37,6 +37,24 @@ export async function serverGet<T>(path: string): Promise<T> {
   }
 }
 
+export async function serverPost<T>(path: string, body: unknown): Promise<T> {
+  const cookieStore = cookies();
+  const token = cookieStore.get(COOKIES_NAME.ACCESS_TOKEN_SERVER)?.value;
+  try {
+    const res = await serverAxios.post(path, body, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
+    return res.data as T;
+  } catch (error: any) {
+    if (error?.response?.status === UNAUTHORIZED) {
+      cookieStore.delete(COOKIES_NAME.ACCESS_TOKEN_SERVER);
+      cookieStore.delete(COOKIES_NAME.REFRESH_TOKEN_SERVER);
+      redirect('/login');
+    }
+    throw error;
+  }
+}
+
 // Like serverGet but returns null instead of redirecting on 401 or any error.
 // Safe to call from layouts that serve both authenticated and unauthenticated users.
 export async function serverGetOptional<T>(path: string): Promise<T | null> {

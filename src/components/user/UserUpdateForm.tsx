@@ -21,6 +21,7 @@ import { SelectInput } from '../ui/input/SelectInput';
 import { Input } from '../ui/input/Input';
 import { HTMLArea } from '../ui/input/HTMLArea';
 import { FiUser, FiCalendar, FiPhone, FiMapPin, FiLink, FiBriefcase, FiTag, FiAlignLeft } from 'react-icons/fi';
+import { ValueText } from '@/src/utils/ValueText';
 
 function FieldRow({ icon, label, children }: { icon: ReactNode; label: string; children: ReactNode }) {
   return (

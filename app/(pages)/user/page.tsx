@@ -4,7 +4,12 @@ import { Metadata } from 'next';
 import { UserSkeleton } from '@/src/components/user/UserSkeleton';
 import { UserPage } from '@/src/components/user/UserPage';
 import { getCurrentUserServer, getPreUpgradeServer } from '@/src/services/user.server';
+import { getPetsByUserServer } from '@/src/services/pet.server';
+import { getUserPostsServer } from '@/src/services/post.server';
+import { IApiResponse } from '@/src/interfaces/common';
 import { IUserInfoResponse } from '@/src/interfaces/user';
+import { IPetResponse } from '@/src/interfaces/pet';
+import { IGetPostResponse } from '@/src/interfaces/post';
 
 export const metadata: Metadata = {
   title: 'Hồ sơ người dùng - Petopia',
@@ -32,5 +37,22 @@ async function UserPageContent() {
     allowUpgrade = await getPreUpgradeServer();
   } catch { /* non-critical */ }
 
-  return <UserPage userInfo={userInfo} allowUpgrade={allowUpgrade} />;
+  let initialPets: IApiResponse<IPetResponse[]> | undefined;
+  try {
+    initialPets = await getPetsByUserServer(userInfo.id);
+  } catch { /* non-critical */ }
+
+  let initialPosts: IApiResponse<IGetPostResponse[]> | undefined;
+  try {
+    initialPosts = await getUserPostsServer(userInfo.id);
+  } catch { /* non-critical */ }
+
+  return (
+    <UserPage
+      userInfo={userInfo}
+      allowUpgrade={allowUpgrade}
+      initialPets={initialPets}
+      initialPosts={initialPosts}
+    />
+  );
 }

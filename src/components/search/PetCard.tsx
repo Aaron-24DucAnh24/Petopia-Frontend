@@ -62,7 +62,7 @@ function PetCardInner(props: IPetCard) {
       <Link href={`/pet/${id}`} className="block h-full">
         <div
           test-id={testId}
-          className="h-full rounded-2xl overflow-hidden bg-white border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
+          className="h-full rounded-2xl overflow-hidden bg-white border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
         >
           <div className="relative w-full pt-[100%]">
             <Image
@@ -70,10 +70,10 @@ function PetCardInner(props: IPetCard) {
               alt="profile"
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              className="object-cover top-0 left-0 group-hover:scale-[1.02] transition-transform duration-300"
+              className="object-cover top-0 left-0"
             />
             {isOrgOwned && (
-              <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm rounded-full p-1.5 shadow-sm">
+              <div className="absolute top-2 left-2 bg-white/90 backdrop-blur-sm rounded-full p-1.5 shadow-sm">
                 <FaShieldDog size={14} className="text-green-600" title="Cộng tác viên" />
               </div>
             )}
@@ -98,30 +98,31 @@ function PetCardInner(props: IPetCard) {
       </Link>
 
       {isEditable && (
-        <div className="absolute top-2 left-2 flex gap-1 z-10">
+        <div className="absolute top-2 right-2 flex gap-1 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
           <button
-            className="p-2 bg-white/90 backdrop-blur-sm rounded-full shadow hover:bg-white transition-colors"
+            className="w-7 h-7 rounded-full bg-black/50 flex items-center justify-center transition-colors hover:bg-blue-500"
             onClick={() => setIsPetFormOpen(true)}
           >
-            <CiEdit size={18} />
+            <CiEdit size={14} className="text-white" />
           </button>
-          <ConfirmCloseModal
-            open={isPetFormOpen}
-            onClose={() => setIsPetFormOpen(false)}
-            contentStyle={{ width: '90vw', maxWidth: '900px', padding: 0, borderRadius: '12px' }}
-          >
-            <div className="bg-white rounded-xl max-h-[85vh] overflow-hidden flex flex-col">
-              <PetProfileForm id={id} handleClose={() => window.location.reload()} />
-            </div>
-          </ConfirmCloseModal>
           <button
-            className="p-2 bg-white/90 backdrop-blur-sm rounded-full shadow hover:bg-white transition-colors"
+            className="w-7 h-7 rounded-full bg-black/50 flex items-center justify-center transition-colors hover:bg-red-500"
             onClick={() => setShowAlert(true)}
           >
-            <MdDelete size={18} className="text-red-500" />
+            <MdDelete size={14} className="text-white" />
           </button>
         </div>
       )}
+
+      <ConfirmCloseModal
+        open={isPetFormOpen}
+        onClose={() => setIsPetFormOpen(false)}
+        contentStyle={{ width: '90vw', maxWidth: '900px', padding: 0, borderRadius: '12px' }}
+      >
+        <div className="bg-white rounded-xl max-h-[85vh] overflow-hidden flex flex-col">
+          <PetProfileForm id={id} handleClose={() => window.location.reload()} />
+        </div>
+      </ConfirmCloseModal>
 
       <Alert
         message="Bạn có chắc muốn xoá không?"

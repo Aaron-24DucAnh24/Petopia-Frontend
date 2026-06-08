@@ -20,6 +20,7 @@ import { Input } from '../ui/input/Input';
 import { HTMLArea } from '../ui/input/HTMLArea';
 import { TermsCheckbox } from './TermsCheckbox';
 import { AddressInput } from '../ui/input/AddressInput';
+import { ValueText } from '@/src/utils/ValueText';
 
 interface IUserUpgradeForm {
   onClose: () => void,

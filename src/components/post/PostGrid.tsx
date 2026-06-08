@@ -21,19 +21,25 @@ const PAGE_SIZE = 6;
 interface IPostGridProps {
   userId: string;
   canCreate?: boolean;
+  initialData?: IApiResponse<IGetPostResponse[]>;
 }
 
-export const PostGrid = QueryProvider(({ userId, canCreate }: IPostGridProps) => {
+export const PostGrid = QueryProvider(({ userId, canCreate, initialData }: IPostGridProps) => {
   const { userStore } = useStores();
-  const [posts, setPosts] = useState<IGetPostResponse[]>([]);
+  const [posts, setPosts] = useState<IGetPostResponse[]>(initialData?.data ?? []);
   const [selectedPost, setSelectedPost] = useState<IGetPostResponse | null>(null);
   const [alertShow, setAlertShow] = useState(false);
   const [pendingDeleteId, setPendingDeleteId] = useState('');
   const [showCreatePost, setShowCreatePost] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [currentUserId, setCurrentUserId] = useState<string | undefined>(undefined);
+  useEffect(() => {
+    setCurrentUserId(userStore.userContext?.id);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userStore.userContext?.id]);
 
   const paginationForm = useForm<IPaginationModel>({
-    defaultValues: { pageIndex: 1, pageNumber: 1 },
+    defaultValues: { pageIndex: 1, pageNumber: initialData?.pageNumber ?? 1 },
   });
 
   // Use the callback form of watch — the only reliable way in RHF v7 to
@@ -52,7 +58,7 @@ export const PostGrid = QueryProvider(({ userId, canCreate }: IPostGridProps) =>
     [QUERY_KEYS.GET_USER_POSTS, currentPage],
     () => getUserPosts({ pageIndex: currentPage, pageSize: PAGE_SIZE, filter: { userId } }),
     {
-      enabled: !!userId,
+      enabled: !!userId && (currentPage !== 1 || initialData === undefined),
       onSuccess: (res) => {
         setPosts(res.data.data ?? []);
         if (res.data.pageNumber !== undefined) {
@@ -108,7 +114,7 @@ export const PostGrid = QueryProvider(({ userId, canCreate }: IPostGridProps) =>
                 post={post}
                 onClick={() => setSelectedPost(post)}
                 onDelete={
-                  userStore.userContext?.id === post.userId
+                  currentUserId === post.userId
                     ? () => handleDeleteRequest(post.id)
                     : undefined
                 }
