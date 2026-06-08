@@ -15,9 +15,9 @@ import {
 import BreedInput from './BreedInput';
 import { useQuery } from '@/src/utils/hooks';
 import { getVaccine } from '@/src/services/pet.api';
-import Dropdown from '../ui/VaccineDropdown';
 import { IApiResponse } from '@/src/interfaces/common';
 import { Input } from '../ui/input/Input';
+import { MultiSelectDropdown } from '../ui/input/MultiSelectDropdown';
 import { useState } from 'react';
 
 export default function FormPetDetail({
@@ -92,10 +92,11 @@ export default function FormPetDetail({
           ))}
 
           {vaccines && watch('isVaccinated') == 0 && (
-            <Dropdown
-              optionsList={vaccines}
-              setValue={setValue}
-              watch={watch}
+            <MultiSelectDropdown
+              label="Chọn loại vắc xin"
+              options={vaccines}
+              value={watch('vaccineIds')}
+              onChange={(ids) => setValue('vaccineIds', ids)}
             />
           )}
 

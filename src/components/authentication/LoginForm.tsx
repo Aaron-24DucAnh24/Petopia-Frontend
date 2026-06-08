@@ -44,9 +44,13 @@ export const LoginForm = QueryProvider(({ clientId }: { clientId: string }) => {
     // Set token
     setCookie(COOKIES_NAME.ACCESS_TOKEN_SERVER, data.accessToken, {
       expires: new Date(data.accessTokenExpiredDate),
+      secure: true,
+      sameSite: 'lax',
     });
-    setCookie(COOKIES_NAME.REFRESH_TOKEN_SERVER, data.accessToken, {
-      expires: new Date(data.accessTokenExpiredDate),
+    setCookie(COOKIES_NAME.REFRESH_TOKEN_SERVER, data.refreshToken, {
+      expires: new Date(data.refreshTokenExpiredDate),
+      secure: true,
+      sameSite: 'lax',
     });
 
     await userStore.fetchUserContext();
