@@ -11,26 +11,21 @@ import { UserRoleName } from './UserRoleName';
 import { UserActionsBlock } from './UserActionsBlock';
 import { UserInformationBlock } from './UserInformationBlock';
 import { UserUpdateForm } from './UserUpdateForm';
-import { ConfirmCloseModal } from '../ui/ConfirmCloseModal';
-import { UserUpgradeForm } from './UserUpgradeForm';
 import { PostGrid } from '../post/PostGrid';
 import { PetGrid } from '../pet/PetGrid';
 import { QueryProvider } from '../providers/QueryProvider';
 
 interface IUserPageProps {
   userInfo: IUserInfoResponse;
-  allowUpgrade: boolean;
   initialPets?: IApiResponse<IPetResponse[]>;
   initialPosts?: IApiResponse<IGetPostResponse[]>;
 }
 
-export const UserPage = QueryProvider(({ userInfo, allowUpgrade: initialAllowUpgrade, initialPets, initialPosts }: IUserPageProps) => {
+export const UserPage = QueryProvider(({ userInfo, initialPets, initialPosts }: IUserPageProps) => {
   const router = useRouter();
 
   const [showEdit, setShowEdit] = useState(false);
-  const [showUpgrade, setShowUpgrade] = useState(false);
   const [image, setImage] = useState<string>(userInfo.image || STATIC_URLS.NO_AVATAR);
-  const [allowUpgrade, setAllowUpgrade] = useState(initialAllowUpgrade);
 
   return (
     <div>
@@ -49,9 +44,7 @@ export const UserPage = QueryProvider(({ userInfo, allowUpgrade: initialAllowUpg
         <div className='-mt-20 space-y-2 relative'>
           <div className="flex justify-end">
             <UserActionsBlock
-              setShowEdit={setShowEdit}
-              setShowUpgrade={setShowUpgrade}
-              allowUpgrade={allowUpgrade} />
+              setShowEdit={setShowEdit} />
           </div>
 
           <UserInformationBlock
@@ -65,15 +58,6 @@ export const UserPage = QueryProvider(({ userInfo, allowUpgrade: initialAllowUpg
             setShowEdit={setShowEdit} />
         </div>
       </div>
-
-      <ConfirmCloseModal open={showUpgrade} onClose={() => setShowUpgrade(false)}>
-        <UserUpgradeForm
-          onClose={() => setShowUpgrade(false)}
-          onSuccess={() => {
-            setAllowUpgrade(false);
-            router.refresh();
-          }} />
-      </ConfirmCloseModal>
 
       <div className="container max-w-3xl p-5 mx-auto shadow-2xl rounded-2xl mt-8">
         <PetGrid userId={userInfo.id} initialData={initialPets} />

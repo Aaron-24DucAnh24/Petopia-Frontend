@@ -25,11 +25,9 @@ export const SelectInput = (props: ISelectInput) => {
     isClearable = true,
   } = props;
 
-  // States
-  const [keywords, setKeywords] = useState<string | undefined>('');
+  const [keywords, setKeywords] = useState<string>('');
   const [isFocused, setIsFocused] = useState<boolean>(false);
 
-  // Handlers
   const handleSelect = (value: string, text: string) => {
     onChange(value);
     setKeywords(text);
@@ -42,10 +40,9 @@ export const SelectInput = (props: ISelectInput) => {
       : option
   );
 
-  // Effects
   useEffect(() => {
-    setKeywords(options.GetText(defaultValue));
-  }, [options]);
+    setKeywords(options.GetText(defaultValue) ?? '');
+  }, [options, defaultValue]);
 
   return (
     <div className="relative">
@@ -56,8 +53,11 @@ export const SelectInput = (props: ISelectInput) => {
           value={keywords}
           disabled={isDisabled}
           onChange={(e) => setKeywords(e.target.value)}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setTimeout(() => setIsFocused(false), 150)} />
+          onFocus={() => { setKeywords(''); setIsFocused(true); }}
+          onBlur={() => {
+            setIsFocused(false);
+            setKeywords(options.GetText(defaultValue) ?? '');
+          }} />
       ) : (
         <span className='border-gray-300 border bg-gray-50 rounded-lg w-full py-2 px-3 text-gray-700 leading-tight'>
           <ClipLoader
@@ -69,15 +69,14 @@ export const SelectInput = (props: ISelectInput) => {
         </span>
       )}
 
-      {
-        !isLoading && isClearable && (
-          <span
-            className="absolute right-3 top-3 cursor-pointer hover:text-yellow-500"
-            onClick={() => handleSelect('', '')}>
-            <IoMdCloseCircle size={16} />
-          </span>
-        )
-      }
+      {!isLoading && isClearable && (
+        <span
+          className="absolute right-3 top-3 cursor-pointer hover:text-yellow-500"
+          onMouseDown={(e) => e.preventDefault()}
+          onClick={() => handleSelect('', '')}>
+          <IoMdCloseCircle size={16} />
+        </span>
+      )}
 
       {!isLoading && isFocused && filteredOptions.length > 0 && (
         <ul className="absolute z-10 w-full bg-white border border-gray-200 rounded shadow-md max-h-48 overflow-y-auto">
@@ -85,6 +84,7 @@ export const SelectInput = (props: ISelectInput) => {
             <li
               key={option.value}
               className="px-3 py-2 cursor-pointer hover:bg-yellow-100"
+              onMouseDown={(e) => e.preventDefault()}
               onClick={() => handleSelect(option.value, option.text)}>
               {option.text}
             </li>

@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 import { Metadata } from 'next';
 import { UserSkeleton } from '@/src/components/user/UserSkeleton';
 import { UserPage } from '@/src/components/user/UserPage';
-import { getCurrentUserServer, getPreUpgradeServer } from '@/src/services/user.server';
+import { getCurrentUserServer } from '@/src/services/user.server';
 import { getPetsByUserServer } from '@/src/services/pet.server';
 import { getUserPostsServer } from '@/src/services/post.server';
 import { IApiResponse } from '@/src/interfaces/common';
@@ -32,11 +32,6 @@ async function UserPageContent() {
     redirect('/login');
   }
 
-  let allowUpgrade = false;
-  try {
-    allowUpgrade = await getPreUpgradeServer();
-  } catch { /* non-critical */ }
-
   let initialPets: IApiResponse<IPetResponse[]> | undefined;
   try {
     initialPets = await getPetsByUserServer(userInfo.id);
@@ -50,7 +45,6 @@ async function UserPageContent() {
   return (
     <UserPage
       userInfo={userInfo}
-      allowUpgrade={allowUpgrade}
       initialPets={initialPets}
       initialPosts={initialPosts}
     />

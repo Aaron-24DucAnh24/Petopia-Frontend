@@ -7,11 +7,15 @@ import { getPetsByUser } from '@/src/services/pet.api';
 import { useQuery } from '@/src/utils/hooks';
 import { QUERY_KEYS } from '@/src/utils/constants';
 import { PetCard } from '../search/PetCard';
+import { AddButton } from '../ui/button/AddButton';
 import { QueryProvider } from '../providers/QueryProvider';
 import Pagination from '../ui/Pagination';
 import { useStores } from '@/src/stores';
+import { ConfirmCloseModal } from '../ui/ConfirmCloseModal';
+import PetProfileForm from './PetProfileForm';
 
 const PAGE_SIZE = 6;
+
 
 interface IPetGridProps {
   userId: string;
@@ -22,6 +26,7 @@ export const PetGrid = QueryProvider(({ userId, initialData }: IPetGridProps) =>
   const { userStore } = useStores();
   const [pets, setPets] = useState<IPetResponse[]>(initialData?.data ?? []);
   const [currentPage, setCurrentPage] = useState(1);
+  const [showCreatePet, setShowCreatePet] = useState(false);
 
   const paginationForm = useForm<IPaginationModel>({
     defaultValues: { pageIndex: 1, pageNumber: initialData?.pageNumber ?? 1 },
@@ -63,6 +68,7 @@ export const PetGrid = QueryProvider(({ userId, initialData }: IPetGridProps) =>
       <div className="flex items-center gap-3 mb-4">
         <h2 className="text-base font-semibold text-gray-700 uppercase tracking-widest">Thú cưng</h2>
         <div className="flex-1 h-px bg-gray-200" />
+        {isOwner && <AddButton onClick={() => setShowCreatePet(true)} title="Thêm thú cưng" />}
       </div>
 
       <div className="grid grid-cols-3 gap-2">
@@ -81,6 +87,18 @@ export const PetGrid = QueryProvider(({ userId, initialData }: IPetGridProps) =>
         disable={getPetsQuery.isFetching}
         show={paginationForm.getValues('pageNumber') > 1}
       />
+
+      <ConfirmCloseModal
+        open={showCreatePet}
+        onClose={() => setShowCreatePet(false)}
+        contentStyle={{ width: '90vw', maxWidth: '900px', padding: 0, borderRadius: '12px' }}>
+        <div className="bg-white rounded-xl max-h-[90vh] overflow-hidden flex flex-col">
+          <PetProfileForm handleClose={() => {
+            setShowCreatePet(false);
+            getPetsQuery.refetch();
+          }} />
+        </div>
+      </ConfirmCloseModal>
     </>
   );
 });

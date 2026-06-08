@@ -23,14 +23,12 @@ import { AddressInput } from '../ui/input/AddressInput';
 import { ValueText } from '@/src/utils/ValueText';
 
 interface IUserUpgradeForm {
-  onClose: () => void,
-  onSuccess: () => void,
+  onClose: () => void;
+  onSuccess: () => void;
 }
 
 export const UserUpgradeForm = observer((props: IUserUpgradeForm) => {
   const { onClose, onSuccess } = props;
-
-  // STATES
   const { userStore } = useStores();
   const [alertMessage, setAlertMessage] = useState<string>('');
   const [alertShow, setAlertShow] = useState<boolean>(false);
@@ -40,11 +38,10 @@ export const UserUpgradeForm = observer((props: IUserUpgradeForm) => {
   const [wards, setWards] = useState<ILocationResponse[]>([]);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  // FORMS
   const { getValues, setValue, watch } = useForm<IOrgUpgradeRequest>({
     defaultValues: {
       entityName: '',
-      email: userStore.userContext?.email || '',
+      email: userStore.userContext?.email ?? '',
       organizationName: '',
       phone: '',
       provinceCode: '',
@@ -62,7 +59,6 @@ export const UserUpgradeForm = observer((props: IUserUpgradeForm) => {
     defaultValues: { Level: LOCATION_LEVEL.PROVINCE },
   });
 
-  // HANDLERS
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const validatingResult = ValidatorManager.userUpgradeValidator.validate(getValues());
@@ -99,7 +95,6 @@ export const UserUpgradeForm = observer((props: IUserUpgradeForm) => {
     }
   };
 
-  // QUERIES AND MUTATIONS
   const upgradeAccountMutation = useMutation<IApiResponse<boolean>, IOrgUpgradeRequest>(
     upgradeToOrg,
     {
@@ -131,18 +126,10 @@ export const UserUpgradeForm = observer((props: IUserUpgradeForm) => {
         switch (locationForm.getValues('Level')) {
           case LOCATION_LEVEL.PROVINCE:
             setProvinces(res.data.data);
-            if (watch('provinceCode')) {
-              locationForm.setValue('Code', watch('provinceCode'));
-              locationForm.setValue('Level', LOCATION_LEVEL.DISTRICT);
-            }
             break;
           case LOCATION_LEVEL.DISTRICT:
             setDistricts(res.data.data);
             setWards([]);
-            if (watch('districtCode')) {
-              locationForm.setValue('Code', watch('districtCode'));
-              locationForm.setValue('Level', LOCATION_LEVEL.WARD);
-            }
             break;
           case LOCATION_LEVEL.WARD:
             setWards(res.data.data);
@@ -154,7 +141,7 @@ export const UserUpgradeForm = observer((props: IUserUpgradeForm) => {
   );
 
   return (
-    <div className="w-full h-screen">
+    <div className="w-full h-full">
       <form
         onSubmit={handleSubmit}
         className="w-full h-full flex flex-col rounded-2xl bg-yellow-100 p-5"
@@ -236,7 +223,7 @@ export const UserUpgradeForm = observer((props: IUserUpgradeForm) => {
                 <label className="text-sm font-medium">Tỉnh/thành phố</label>
                 <AddressInput
                   testId="province-input-dropdown"
-                  options={new ValueText(provinces.map(ward => ({ text: ward.name, value: ward.code })))}
+                  options={new ValueText(provinces.map(p => ({ text: p.name, value: p.code })))}
                   onChange={handleLocationChange}
                   value={watch('provinceCode')}
                   level={LOCATION_LEVEL.PROVINCE}
@@ -248,7 +235,7 @@ export const UserUpgradeForm = observer((props: IUserUpgradeForm) => {
                 <label className="text-sm font-medium">Huyện/quận</label>
                 <AddressInput
                   testId="district-input-dropdown"
-                  options={new ValueText(districts.map(ward => ({ text: ward.name, value: ward.code })))}
+                  options={new ValueText(districts.map(d => ({ text: d.name, value: d.code })))}
                   onChange={handleLocationChange}
                   value={watch('districtCode')}
                   level={LOCATION_LEVEL.DISTRICT}
@@ -260,7 +247,7 @@ export const UserUpgradeForm = observer((props: IUserUpgradeForm) => {
                 <label className="text-sm font-medium">Xã/phường</label>
                 <AddressInput
                   testId="ward-input-dropdown"
-                  options={new ValueText(wards.map(ward => ({ text: ward.name, value: ward.code })))}
+                  options={new ValueText(wards.map(w => ({ text: w.name, value: w.code })))}
                   onChange={handleLocationChange}
                   value={watch('wardCode')}
                   level={LOCATION_LEVEL.WARD}
@@ -269,9 +256,7 @@ export const UserUpgradeForm = observer((props: IUserUpgradeForm) => {
               </div>
 
               <div className="flex flex-col space-y-1">
-                <label className="text-sm font-medium">
-                  Loại tổ chức
-                </label>
+                <label className="text-sm font-medium">Loại tổ chức</label>
                 <SelectInput
                   onChange={(value) => setValue('type', parseInt(value))}
                   options={ValueTextManager.OrganizationType}
@@ -297,9 +282,7 @@ export const UserUpgradeForm = observer((props: IUserUpgradeForm) => {
                 <HTMLArea
                   id={'inputDescription'}
                   value={watch('description')}
-                  setValue={(html) => {
-                    setValue('description', html);
-                  }} />
+                  setValue={(html) => setValue('description', html)} />
                 <span className="text-sm text-red-500 mt-2">{errors['description']}</span>
               </div>
 
@@ -307,10 +290,10 @@ export const UserUpgradeForm = observer((props: IUserUpgradeForm) => {
             </div>
           </div>
         </div>
-        <div className="shrink-0 flex justify-center pt-4">
+        <div className="shrink-0 flex justify-end pt-4">
           <QueryButton
             testId="org-upgrade-button"
-            name={'Hoàn thành'}
+            name="Hoàn thành"
             isLoading={upgradeAccountMutation.isLoading} />
         </div>
       </form>
@@ -323,5 +306,4 @@ export const UserUpgradeForm = observer((props: IUserUpgradeForm) => {
         action={() => !alertFail && onClose()} />
     </div>
   );
-}
-);
+});

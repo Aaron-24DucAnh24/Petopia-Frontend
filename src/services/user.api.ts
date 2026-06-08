@@ -45,7 +45,14 @@ export const changePassword = async (data: IChangePasswordRequest) =>
 export const upgradeToOrg = async (data: IOrgUpgradeRequest) =>
   await http.post('/User/UpgradeAccount', data);
 
-export const getPreUpgrade = async () => await http.get('/User/PreUpgrade');
+export const getUpgradeRequests = async () =>
+  await http.get('/User/Upgrade/Get');
+
+export const getUpgradeRequestById = async (id: string) =>
+  await http.get(`/User/Upgrade/${id}`);
+
+export const cancelUpgradeRequest = async (id: string) =>
+  await http.put(`/User/Upgrade/${id}/Cancel`);
 
 export const report = async (data: IReportRequest) =>
   await http.post('/Report/Report', data);

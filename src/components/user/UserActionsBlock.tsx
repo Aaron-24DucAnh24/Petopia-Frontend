@@ -4,15 +4,17 @@ import { useClickOutside } from '@/src/utils/hooks';
 import { Dispatch, SetStateAction, useRef, useState } from 'react';
 import { SlOptions } from 'react-icons/sl';
 import { FiEdit2, FiLock, FiAward } from 'react-icons/fi';
+import { useStores } from '@/src/stores';
+import { USER_ROLE } from '@/src/utils/constants';
 
 interface IUserActionsBlock {
   setShowEdit: Dispatch<SetStateAction<boolean>>;
-  setShowUpgrade: Dispatch<SetStateAction<boolean>>;
-  allowUpgrade: boolean;
 }
 
 export const UserActionsBlock = (props: IUserActionsBlock) => {
-  const { setShowEdit, setShowUpgrade, allowUpgrade } = props;
+  const { setShowEdit } = props;
+  const { userStore } = useStores();
+  const isOrg = userStore.userContext?.role === USER_ROLE.ORGANIZATION;
 
   const [showOptions, setShowOptions] = useState<boolean>(false);
 
@@ -50,28 +52,23 @@ export const UserActionsBlock = (props: IUserActionsBlock) => {
           </button>
 
           <Link
-            href="user/change-password"
+            href="/user/change-password"
             className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
           >
             <FiLock size={15} className="text-gray-400 flex-shrink-0" />
             Đổi mật khẩu
           </Link>
 
-          {allowUpgrade && (
+          {!isOrg && (
             <>
               <div className="mx-4 my-1 border-t border-gray-100" />
-              <button
-                test-id="show-upgrade-button"
-                onClick={() => {
-                  setShowUpgrade((prev) => !prev);
-                  setShowEdit(false);
-                  setShowOptions(false);
-                }}
+              <Link
+                href="/user/upgrade"
                 className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-orange-500 hover:bg-orange-50 transition-colors"
               >
                 <FiAward size={15} className="flex-shrink-0" />
-                Đăng ký tổ chức
-              </button>
+                Đơn xác minh tổ chức
+              </Link>
             </>
           )}
         </div>

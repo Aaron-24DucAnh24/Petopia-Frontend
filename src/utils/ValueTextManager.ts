@@ -14,4 +14,5 @@ export class ValueTextManager {
   static HouseType = new ValueText(valueTextsData.houseTypes);
   static AdoptDelay = new ValueText(valueTextsData.adoptDelays);
   static BlogCategory = new ValueText(valueTextsData.blogCategories);
+  static UpgradeStatus = new ValueText(valueTextsData.upgradeStatuses);
 }

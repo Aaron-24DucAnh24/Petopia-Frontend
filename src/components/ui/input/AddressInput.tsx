@@ -12,15 +12,8 @@ interface IAddressInput {
 }
 
 export const AddressInput = (props: IAddressInput) => {
-  const {
-    options,
-    onChange,
-    level,
-    value,
-    isLoading,
-  } = props;
+  const { options, onChange, level, value, isLoading } = props;
 
-  // HANDLERS
   const handleOnChange = (value: string) => {
     onChange(level, value);
   };

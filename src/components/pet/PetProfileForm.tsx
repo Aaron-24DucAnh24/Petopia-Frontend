@@ -22,7 +22,7 @@ import { GivePetHeaderBar } from './GivePetHeaderBar';
 import { ValidatorManager } from '@/src/utils/ValidatorManager';
 
 const PetProfileForm = QueryProvider(
-  ({ id = '' }: { id?: string; handleClose?: () => void }) => {
+  ({ id = '', handleClose }: { id?: string; handleClose?: () => void }) => {
     // STATES
     const [error, setError] = useState<string>('');
     const [showAlert, setShowAlert] = useState<boolean>(false);
@@ -158,7 +158,11 @@ const PetProfileForm = QueryProvider(
         setShowAlert(true);
       },
       onSuccess: (res) => {
-        window.location.replace(`/pet/${res.data.data.id}`);
+        if (handleClose) {
+          handleClose();
+        } else {
+          window.location.replace(`/pet/${res.data.data.id}`);
+        }
       },
     });
 

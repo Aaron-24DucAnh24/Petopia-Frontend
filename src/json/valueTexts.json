@@ -66,5 +66,11 @@
     { "value": "1", "text": "Huấn luyện" },
     { "value": "2", "text": "Sản phẩm" },
     { "value": "3", "text": "Nghệ thuật" }
+  ],
+  "upgradeStatuses": [
+    { "value": "0", "text": "Chờ xét duyệt" },
+    { "value": "1", "text": "Đã phê duyệt" },
+    { "value": "2", "text": "Bị từ chối" },
+    { "value": "3", "text": "Đã hủy" }
   ]
 }

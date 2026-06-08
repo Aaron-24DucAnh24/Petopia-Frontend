@@ -7,9 +7,6 @@ export const getOtherUserServer = (userId: string) =>
 export const getCurrentUserServer = () =>
   serverGet<IUserInfoResponse>('/User/CurrentUser');
 
-export const getPreUpgradeServer = () =>
-  serverGet<boolean>('/User/PreUpgrade');
-
 // Returns null instead of redirecting — safe to call from public layouts.
 export const getCurrentUserCoreServer = () =>
   serverGetOptional<ICurrentUserCoreResponse>('/User/CurrentUserCore');
