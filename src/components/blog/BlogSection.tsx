@@ -7,10 +7,10 @@ import { useForm } from 'react-hook-form';
 import { IApiResponse, IPaginationModel } from '@/src/interfaces/common';
 import {
   BLOG_CATEGORIES,
-  BLOG_CATEGORIES_OPTION,
   PAGE_SIZE,
   QUERY_KEYS,
 } from '@/src/utils/constants';
+import { ValueTextManager } from '@/src/utils/ValueTextManager';
 import { IBlogCardResponse, IBlogResponse } from '@/src/interfaces/blog';
 import { useQuery } from '@/src/utils/hooks';
 import { QueryProvider } from '../providers/QueryProvider';
@@ -76,15 +76,18 @@ const BlogSection = QueryProvider(() => {
         <nav className="flex justify-center my-5">
           {
             <ul className="flex">
-              {BLOG_CATEGORIES_OPTION.map((category, index) => (
+              {[
+                { label: 'Tất cả', value: undefined as BLOG_CATEGORIES | undefined },
+                ...ValueTextManager.BlogCategory.GetValueTexts().map(vt => ({
+                  label: vt.text,
+                  value: Number(vt.value) as BLOG_CATEGORIES,
+                })),
+              ].map((category, index) => (
                 <li
                   test-id={'blog-category-filter-option'}
                   key={index}
-                  className={`mr-5 cursor-pointer ${selectedCategory === category.value ? 'underline' : ''
-                    }`}
-                  onClick={() => {
-                    setSelectedCategory(category.value);
-                  }}
+                  className={`mr-5 cursor-pointer ${selectedCategory === category.value ? 'underline' : ''}`}
+                  onClick={() => setSelectedCategory(category.value)}
                 >
                   {category.label}
                 </li>

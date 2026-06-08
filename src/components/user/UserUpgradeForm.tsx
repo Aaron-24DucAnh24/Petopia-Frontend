@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { Alert } from '../ui/Alert';
-import { LOCATION_LEVEL, ORG_TYPE, PET_ORG_TYPE_OPTION, QUERY_KEYS } from '@/src/utils/constants';
+import { LOCATION_LEVEL, ORG_TYPE, QUERY_KEYS } from '@/src/utils/constants';
 import { useForm } from 'react-hook-form';
 import { IOrgUpgradeRequest } from '@/src/interfaces/org';
 import { observer } from 'mobx-react-lite';
@@ -14,7 +14,7 @@ import { getErrorMessage } from '@/src/helpers/getErrorMessage';
 import { ILocationRequest, ILocationResponse } from '@/src/interfaces/pet';
 import { getProvince } from '@/src/services/pet.api';
 import { ValidatorManager } from '@/src/utils/ValidatorManager';
-import { ValueText } from '@/src/utils/ValueText';
+import { ValueTextManager } from '@/src/utils/ValueTextManager';
 import { SelectInput } from '../ui/input/SelectInput';
 import { Input } from '../ui/input/Input';
 import { HTMLArea } from '../ui/input/HTMLArea';
@@ -273,7 +273,7 @@ export const UserUpgradeForm = observer((props: IUserUpgradeForm) => {
                 </label>
                 <SelectInput
                   onChange={(value) => setValue('type', parseInt(value))}
-                  options={new ValueText(PET_ORG_TYPE_OPTION.map(option => ({ text: option.label, value: option.value.toString() })))}
+                  options={ValueTextManager.OrganizationType}
                   defaultValue={watch('type').toString()}
                   isClearable={false} />
               </div>

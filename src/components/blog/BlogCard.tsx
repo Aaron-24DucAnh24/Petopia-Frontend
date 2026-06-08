@@ -1,6 +1,6 @@
 import { IBlogCardResponse } from '@/src/interfaces/blog';
 import Image from 'next/image';
-import { BLOG_CATEGORIES_OPTION } from '@/src/utils/constants';
+import { ValueTextManager } from '@/src/utils/ValueTextManager';
 import Link from 'next/link';
 import { BlogCardActions } from './BlogCardActions';
 
@@ -40,7 +40,7 @@ const BlogCard = ({
                 test-id="blog-category-tag"
                 className="bg-yellow-400 text-black text-xs font-bold uppercase px-2 py-1 absolute top-0 left-0 rounded-br-lg"
               >
-                {BLOG_CATEGORIES_OPTION[category + 1].label}
+                {ValueTextManager.BlogCategory.GetText(category.toString())}
               </div>
             </div>
             <div className="p-2 md:p-4">

@@ -10,13 +10,13 @@ import { IUserInfoResponse, IUserUpdate } from '@/src/interfaces/user';
 import { getErrorMessage } from '@/src/helpers/getErrorMessage';
 import Button from '../ui/button/Button';
 import { ILocationRequest, ILocationResponse } from '@/src/interfaces/pet';
-import { LOCATION_LEVEL, ORG_TYPE, PET_ORG_TYPE_OPTION, QUERY_KEYS, USER_ROLE } from '@/src/utils/constants';
+import { LOCATION_LEVEL, ORG_TYPE, QUERY_KEYS, USER_ROLE } from '@/src/utils/constants';
 import { getProvince } from '@/src/services/pet.api';
 import { UserAddressInput } from './UserAddressInput';
 import { useStores } from '@/src/stores';
 import { DatePicker } from '../ui/input/DatePicker';
 import { ValidatorManager } from '@/src/utils/ValidatorManager';
-import { ValueText } from '@/src/utils/ValueText';
+import { ValueTextManager } from '@/src/utils/ValueTextManager';
 import { SelectInput } from '../ui/input/SelectInput';
 import { Input } from '../ui/input/Input';
 import { HTMLArea } from '../ui/input/HTMLArea';
@@ -205,7 +205,7 @@ export const UserUpdateForm = (props: IUserUpdateForm) => {
               <SelectInput
                 id='inputOrganizationType'
                 onChange={(value) => setValue('type', parseInt(value), { shouldDirty: true })}
-                options={new ValueText(PET_ORG_TYPE_OPTION.map(option => ({ value: option.value.toString(), text: option.label })))}
+                options={ValueTextManager.OrganizationType}
                 defaultValue={watch('type').toString()} />
               <span className="text-sm text-red-500 mt-1">{errors['type']}</span>
             </FieldRow>

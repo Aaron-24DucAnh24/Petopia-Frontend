@@ -1,23 +1,17 @@
-import { ORG_TYPE, PET_SPECIES, USER_ROLE } from './constants';
 import { ValueText } from './ValueText';
+import valueTextsData from '../json/valueTexts.json';
 
 export class ValueTextManager {
-  static UserRole = new ValueText([
-    { value: USER_ROLE.STANDARD_USER.toString(), text: 'Người dùng' },
-    { value: USER_ROLE.SYSTEM_ADMIN.toString(), text: 'Quản trị viên' },
-    { value: USER_ROLE.ORGANIZATION.toString(), text: 'Tổ chức' },
-  ]);
-
-  static OrganizationType = new ValueText([
-    { value: ORG_TYPE.BUSINESS.toString(), text: 'Doanh nghiệp' },
-    { value: ORG_TYPE.OTHER.toString(), text: 'Tổ chức' },
-    { value: ORG_TYPE.VET.toString(), text: 'Thú y' },
-    { value: ORG_TYPE.RESCUE.toString(), text: 'Cứu hộ' },
-  ]);
-
-  static PetSpecies = new ValueText([
-    { value: PET_SPECIES.DOG.toString(), text: 'Chó' },
-    { value: PET_SPECIES.CAT.toString(), text: 'Mèo' },
-    { value: PET_SPECIES.OTHER.toString(), text: 'Khác' },
-  ]);
+  static UserRole = new ValueText(valueTextsData.userRoles);
+  static OrganizationType = new ValueText(valueTextsData.orgTypes);
+  static PetSpecies = new ValueText(valueTextsData.petSpecies);
+  static PetSex = new ValueText(valueTextsData.petSex);
+  static PetColor = new ValueText(valueTextsData.petColor);
+  static PetSize = new ValueText(valueTextsData.petSize);
+  static PetAge = new ValueText(valueTextsData.petAge);
+  static PetVaccinated = new ValueText(valueTextsData.petVaccinated);
+  static PetSterilized = new ValueText(valueTextsData.petSterilized);
+  static HouseType = new ValueText(valueTextsData.houseTypes);
+  static AdoptDelay = new ValueText(valueTextsData.adoptDelays);
+  static BlogCategory = new ValueText(valueTextsData.blogCategories);
 }

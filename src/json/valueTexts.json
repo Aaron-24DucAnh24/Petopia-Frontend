@@ -1,0 +1,70 @@
+{
+  "userRoles": [
+    { "value": "0", "text": "Người dùng" },
+    { "value": "1", "text": "Quản trị viên" },
+    { "value": "2", "text": "Tổ chức" }
+  ],
+  "orgTypes": [
+    { "value": "0", "text": "Giải cứu động vật" },
+    { "value": "1", "text": "Doanh nghiệp" },
+    { "value": "2", "text": "Thú Y" },
+    { "value": "3", "text": "Khác" }
+  ],
+  "petSpecies": [
+    { "value": "0", "text": "Chó" },
+    { "value": "1", "text": "Mèo" },
+    { "value": "2", "text": "Khác" }
+  ],
+  "petSex": [
+    { "value": "0", "text": "Đực" },
+    { "value": "1", "text": "Cái" },
+    { "value": "2", "text": "Không rõ" }
+  ],
+  "petColor": [
+    { "value": "0", "text": "Đen" },
+    { "value": "1", "text": "Trắng" },
+    { "value": "3", "text": "Vàng" },
+    { "value": "2", "text": "Nâu" },
+    { "value": "4", "text": "Xám" },
+    { "value": "5", "text": "Khác" }
+  ],
+  "petSize": [
+    { "value": "0", "text": "Nhỏ" },
+    { "value": "1", "text": "Trung bình" },
+    { "value": "2", "text": "Lớn" }
+  ],
+  "petAge": [
+    { "value": "0", "text": "Dưới 1 năm" },
+    { "value": "1", "text": "Từ 1 đến 3 năm" },
+    { "value": "2", "text": "Hơn 3 năm" }
+  ],
+  "petVaccinated": [
+    { "value": "0", "text": "Đã tiêm" },
+    { "value": "1", "text": "Chưa tiêm" },
+    { "value": "2", "text": "Chưa rõ" }
+  ],
+  "petSterilized": [
+    { "value": "0", "text": "Đã triệt sản" },
+    { "value": "1", "text": "Chưa triệt sản" },
+    { "value": "2", "text": "Chưa rõ" }
+  ],
+  "houseTypes": [
+    { "value": "0", "text": "Chung cư" },
+    { "value": "1", "text": "Nhà riêng" },
+    { "value": "2", "text": "Kí túc xá" },
+    { "value": "3", "text": "Trạm cứu hộ" },
+    { "value": "4", "text": "Khác" }
+  ],
+  "adoptDelays": [
+    { "value": "0", "text": "Ngay lập tức" },
+    { "value": "1", "text": "Vài ngày" },
+    { "value": "2", "text": "1 tuần" },
+    { "value": "3", "text": "Chưa rõ" }
+  ],
+  "blogCategories": [
+    { "value": "0", "text": "Sức khỏe" },
+    { "value": "1", "text": "Huấn luyện" },
+    { "value": "2", "text": "Sản phẩm" },
+    { "value": "3", "text": "Nghệ thuật" }
+  ]
+}

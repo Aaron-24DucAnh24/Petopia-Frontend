@@ -1,4 +1,5 @@
-import { IPetFilter, IPetSelect } from '../interfaces/pet';
+import { IPetFilter, IPetFilterItem, IPetSelect } from '../interfaces/pet';
+import { ValueTextManager } from './ValueTextManager';
 
 export const STATIC_URLS = {
   GIRL_DOG: '/img/girl_dog.webp',
@@ -150,199 +151,33 @@ export enum ORG_TYPE {
   OTHER,
 }
 
+const toFilterItems = (valueTexts: { value: string; text: string }[]): IPetFilterItem[] =>
+  valueTexts.map((vt, i) => ({ id: i + 1, label: vt.text, value: Number(vt.value) }));
+
 export const PET_SPECIES_FILTER: IPetFilter = {
   id: 1,
   label: 'Loài',
   labelGetValues: 'species',
-  items: [
-    {
-      id: 1,
-      label: 'Chó',
-      value: PET_SPECIES.DOG,
-    },
-    {
-      id: 2,
-      label: 'Mèo',
-      value: PET_SPECIES.CAT,
-    },
-    {
-      id: 3,
-      label: 'Khác',
-      value: PET_SPECIES.OTHER,
-    },
-  ],
-};
-
-export const PET_SEX_FILTER: IPetFilter = {
-  id: 2,
-  label: 'Giới tính',
-  labelGetValues: 'sex',
-  items: [
-    {
-      id: 1,
-      label: 'Đực',
-      value: PET_SEX.MALE,
-    },
-    {
-      id: 2,
-      label: 'Cái',
-      value: PET_SEX.FEMALE,
-    },
-    {
-      id: 3,
-      label: 'Không rõ',
-      value: PET_SEX.UNKNOWN,
-    },
-  ],
-};
-
-export const PET_COLOR_FILTER: IPetFilter = {
-  id: 3,
-  label: 'Màu sắc',
-  labelGetValues: 'color',
-  items: [
-    {
-      id: 1,
-      label: 'Đen',
-      value: PET_COLOR.BLACK,
-    },
-    {
-      id: 2,
-      label: 'Trắng',
-      value: PET_COLOR.WHITE,
-    },
-    {
-      id: 3,
-      label: 'Vàng',
-      value: PET_COLOR.YELLOW,
-    },
-    {
-      id: 4,
-      label: 'Nâu',
-      value: PET_COLOR.BROWN,
-    },
-    {
-      id: 5,
-      label: 'Xám',
-      value: PET_COLOR.SILVER,
-    },
-    {
-      id: 6,
-      label: 'Khác',
-      value: PET_COLOR.OTHER,
-    },
-  ],
-};
-
-export const PET_SIZE_FILTER: IPetFilter = {
-  id: 4,
-  label: 'Kích thước',
-  labelGetValues: 'size',
-  items: [
-    {
-      id: 1,
-      label: 'Nhỏ',
-      value: PET_SIZE.SMALL,
-    },
-    {
-      id: 2,
-      label: 'Trung bình',
-      value: PET_SIZE.MEDIUM,
-    },
-    {
-      id: 3,
-      label: 'Lớn',
-      value: PET_SIZE.BIG,
-    },
-  ],
-};
-
-export const PET_AGE_FILTER: IPetFilter = {
-  id: 5,
-  label: 'Độ tuổi',
-  labelGetValues: 'age',
-  items: [
-    {
-      id: 1,
-      label: 'Dưới 1 năm',
-      value: PET_AGE.LESS_THAN_ONE_YEAR,
-    },
-    {
-      id: 2,
-      label: 'Từ 1 đến 3 năm',
-      value: PET_AGE.ONE_TO_THREE_YEAR,
-    },
-    {
-      id: 3,
-      label: 'Hơn 3 năm',
-      value: PET_AGE.MORE_THAN_THREE_YEAR,
-    },
-  ],
-};
-
-export const PET_VACCINATED_FILTER: IPetFilter = {
-  id: 6,
-  label: 'Tiêm chủng',
-  labelGetValues: 'isVaccinated',
-  items: [
-    {
-      id: 1,
-      label: 'Đã tiêm',
-      value: PET_MEDICAL_STATUS.YES,
-    },
-    {
-      id: 2,
-      label: 'Chưa tiêm',
-      value: PET_MEDICAL_STATUS.NO,
-    },
-    {
-      id: 3,
-      label: 'Chưa rõ',
-      value: PET_MEDICAL_STATUS.UNKNOWN,
-    },
-  ],
-};
-
-export const PET_STERILIZED_FILTER: IPetFilter = {
-  id: 7,
-  label: 'Triệt sản',
-  labelGetValues: 'isSterillized',
-  items: [
-    {
-      id: 1,
-      label: 'Đã triệt sản',
-      value: PET_MEDICAL_STATUS.YES,
-    },
-    {
-      id: 2,
-      label: 'Chưa triệt sản',
-      value: PET_MEDICAL_STATUS.NO,
-    },
-    {
-      id: 3,
-      label: 'Chưa rõ',
-      value: PET_MEDICAL_STATUS.UNKNOWN,
-    },
-  ],
+  items: toFilterItems(ValueTextManager.PetSpecies.GetValueTexts()),
 };
 
 export const PET_FILTERS: IPetFilter[] = [
   PET_SPECIES_FILTER,
-  PET_AGE_FILTER,
-  PET_COLOR_FILTER,
-  PET_SEX_FILTER,
-  PET_SIZE_FILTER,
-  PET_VACCINATED_FILTER,
-  PET_STERILIZED_FILTER,
+  { id: 5, label: 'Độ tuổi', labelGetValues: 'age', items: toFilterItems(ValueTextManager.PetAge.GetValueTexts()) },
+  { id: 3, label: 'Màu sắc', labelGetValues: 'color', items: toFilterItems(ValueTextManager.PetColor.GetValueTexts()) },
+  { id: 2, label: 'Giới tính', labelGetValues: 'sex', items: toFilterItems(ValueTextManager.PetSex.GetValueTexts()) },
+  { id: 4, label: 'Kích thước', labelGetValues: 'size', items: toFilterItems(ValueTextManager.PetSize.GetValueTexts()) },
+  { id: 6, label: 'Tiêm chủng', labelGetValues: 'isVaccinated', items: toFilterItems(ValueTextManager.PetVaccinated.GetValueTexts()) },
+  { id: 7, label: 'Triệt sản', labelGetValues: 'isSterillized', items: toFilterItems(ValueTextManager.PetSterilized.GetValueTexts()) },
 ];
 
 export const PET_SELECT: IPetSelect[] = [
-  { ...PET_SEX_FILTER, kind: 'sex' },
-  { ...PET_COLOR_FILTER, kind: 'color' },
-  { ...PET_SIZE_FILTER, kind: 'size' },
-  { ...PET_AGE_FILTER, kind: 'age' },
-  { ...PET_STERILIZED_FILTER, kind: 'isSterillized' },
-  { ...PET_VACCINATED_FILTER, kind: 'isVaccinated' },
+  { id: 2, label: 'Giới tính', labelGetValues: 'sex', kind: 'sex', items: toFilterItems(ValueTextManager.PetSex.GetValueTexts()) },
+  { id: 3, label: 'Màu sắc', labelGetValues: 'color', kind: 'color', items: toFilterItems(ValueTextManager.PetColor.GetValueTexts()) },
+  { id: 4, label: 'Kích thước', labelGetValues: 'size', kind: 'size', items: toFilterItems(ValueTextManager.PetSize.GetValueTexts()) },
+  { id: 5, label: 'Độ tuổi', labelGetValues: 'age', kind: 'age', items: toFilterItems(ValueTextManager.PetAge.GetValueTexts()) },
+  { id: 7, label: 'Triệt sản', labelGetValues: 'isSterillized', kind: 'isSterillized', items: toFilterItems(ValueTextManager.PetSterilized.GetValueTexts()) },
+  { id: 6, label: 'Tiêm chủng', labelGetValues: 'isVaccinated', kind: 'isVaccinated', items: toFilterItems(ValueTextManager.PetVaccinated.GetValueTexts()) },
 ];
 
 export const SEARCH_PARAMS = {
@@ -356,48 +191,6 @@ export enum USER_ROLE {
   SYSTEM_ADMIN = 1,
   ORGANIZATION = 2,
 }
-
-export const HOUSE_TYPE_OPTION = [
-  {
-    label: 'Chung cư',
-    value: HOUSE_TYPE.Apartment,
-  },
-  {
-    label: 'Nhà riêng',
-    value: HOUSE_TYPE.House,
-  },
-  {
-    label: 'Kí túc xá',
-    value: HOUSE_TYPE.Dormitory,
-  },
-  {
-    label: 'Trạm cứu hộ',
-    value: HOUSE_TYPE.Shelter,
-  },
-  {
-    label: 'Khác',
-    value: HOUSE_TYPE.Other,
-  },
-];
-
-export const ADOPT_TIME_OPTION = [
-  {
-    label: 'Ngay lập tức',
-    value: ADOPT_DELAY_DURATION.Immediately,
-  },
-  {
-    label: 'Vài ngày',
-    value: ADOPT_DELAY_DURATION.FewDays,
-  },
-  {
-    label: '1 tuần',
-    value: ADOPT_DELAY_DURATION.OneWeek,
-  },
-  {
-    label: 'Chưa rõ',
-    value: ADOPT_DELAY_DURATION.Other,
-  },
-];
 
 export const ADOPT_ACTION = {
   ACCEPT: 'Accept',
@@ -413,47 +206,6 @@ export enum ADOPT_STATUS {
   Adopted = 3,
   Cancel = 4,
 }
-
-export const BLOG_CATEGORIES_OPTION = [
-  {
-    label: 'Tất cả',
-    value: undefined,
-  },
-  {
-    label: 'Sức khỏe',
-    value: BLOG_CATEGORIES.HEALTH,
-  },
-  {
-    label: 'Huấn luyện',
-    value: BLOG_CATEGORIES.TRAINING,
-  },
-  {
-    label: 'Sản phẩm',
-    value: BLOG_CATEGORIES.PRODUCT,
-  },
-  {
-    label: 'Nghệ thuật',
-    value: BLOG_CATEGORIES.ART,
-  },
-];
-export const PET_ORG_TYPE_OPTION = [
-  {
-    label: 'Giải cứu động vật',
-    value: ORG_TYPE.RESCUE,
-  },
-  {
-    label: 'Doanh nghiệp',
-    value: ORG_TYPE.BUSINESS,
-  },
-  {
-    label: 'Thú Y',
-    value: ORG_TYPE.VET,
-  },
-  {
-    label: 'Khác',
-    value: ORG_TYPE.OTHER,
-  },
-];
 
 export const REPORT_TYPE = {
   SPAM: 0,

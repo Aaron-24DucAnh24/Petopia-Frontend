@@ -1,11 +1,30 @@
 {
-  "name": { "required": true, "maxLength": 128 },
-  "description": { "required": true },
-  "species": { "notValue": -1 },
-  "sex": { "notValue": -1 },
-  "age": { "notValue": -1 },
-  "color": { "notValue": -1 },
-  "size": { "notValue": -1 },
-  "isSterillized": { "notValue": -1 },
-  "isVaccinated": { "notValue": -1 }
+  "name": {
+    "required": true,
+    "maxLength": 128
+  },
+  "description": {
+    "required": true
+  },
+  "species": {
+    "notValue": -1
+  },
+  "sex": {
+    "notValue": -1
+  },
+  "age": {
+    "notValue": -1
+  },
+  "color": {
+    "notValue": -1
+  },
+  "size": {
+    "notValue": -1
+  },
+  "isSterillized": {
+    "notValue": -1
+  },
+  "isVaccinated": {
+    "notValue": -1
+  }
 }
