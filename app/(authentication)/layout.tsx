@@ -1,25 +1,10 @@
-import { Inter } from 'next/font/google';
-import '../globals.css';
-import '../datepicker.css';
 import { Metadata } from 'next';
-
-const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Authentication - Petopia',
   description: 'Mạng xã hội dành cho thú cưng',
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <html lang="en">
-      <body test-id="authentication-layout" className={inter.className}>
-        {children}
-      </body>
-    </html>
-  );
+export default function AuthLayout({ children }: { children: React.ReactNode }) {
+  return <div test-id="authentication-layout">{children}</div>;
 }

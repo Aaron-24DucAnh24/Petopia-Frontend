@@ -6,9 +6,10 @@ import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
 interface PostImageCarouselProps {
   images: string[];
   onClick: () => void;
+  priority?: boolean;
 }
 
-export function PostImageCarousel({ images, onClick }: PostImageCarouselProps) {
+export function PostImageCarousel({ images, onClick, priority = false }: PostImageCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const canGoBack = currentIndex > 0;
@@ -21,7 +22,7 @@ export function PostImageCarousel({ images, onClick }: PostImageCarouselProps) {
     >
       {images.length > 0 ? (
         <>
-          <Image src={images[currentIndex]} alt="post" fill className="object-cover" />
+          <Image src={images[currentIndex]} alt="post" fill sizes="(max-width: 640px) 100vw, 33vw" priority={priority} className="object-cover" />
 
           {images.length > 1 && (
             <>

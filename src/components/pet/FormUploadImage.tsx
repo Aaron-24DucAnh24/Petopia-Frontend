@@ -87,6 +87,7 @@ export default function FormUploadImage({
                   src={file}
                   alt="preview"
                   fill
+                  sizes="(max-width: 640px) 33vw, 200px"
                   className="object-cover rounded-lg"
                 ></Image>
                 <div

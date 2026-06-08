@@ -17,7 +17,7 @@ function ImageGrid({ images }: { images: string[] }) {
   if (n === 1) {
     return (
       <div className="relative w-full h-44 overflow-hidden rounded-t-2xl">
-        <Image src={images[0]} alt="post" fill className="object-cover" />
+        <Image src={images[0]} alt="post" fill sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw" className="object-cover" />
       </div>
     );
   }
@@ -27,7 +27,7 @@ function ImageGrid({ images }: { images: string[] }) {
       <div className="flex gap-0.5 h-44 overflow-hidden rounded-t-2xl">
         {images.map((img, i) => (
           <div key={i} className="flex-1 relative overflow-hidden">
-            <Image src={img} alt="post" fill className="object-cover" />
+            <Image src={img} alt="post" fill sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw" className="object-cover" />
           </div>
         ))}
       </div>
@@ -38,14 +38,14 @@ function ImageGrid({ images }: { images: string[] }) {
     return (
       <div className="flex gap-0.5 h-44 overflow-hidden rounded-t-2xl">
         <div className="flex-1 relative overflow-hidden">
-          <Image src={images[0]} alt="post" fill className="object-cover" />
+          <Image src={images[0]} alt="post" fill sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw" className="object-cover" />
         </div>
         <div className="flex-1 flex flex-col gap-0.5">
           <div className="flex-1 relative overflow-hidden">
-            <Image src={images[1]} alt="post" fill className="object-cover" />
+            <Image src={images[1]} alt="post" fill sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw" className="object-cover" />
           </div>
           <div className="flex-1 relative overflow-hidden">
-            <Image src={images[2]} alt="post" fill className="object-cover" />
+            <Image src={images[2]} alt="post" fill sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw" className="object-cover" />
           </div>
         </div>
       </div>
@@ -60,7 +60,7 @@ function ImageGrid({ images }: { images: string[] }) {
     <div className="grid grid-cols-2 gap-0.5 h-44 overflow-hidden rounded-t-2xl">
       {visible.map((img, i) => (
         <div key={i} className="relative overflow-hidden">
-          <Image src={img} alt="post" fill className="object-cover" />
+          <Image src={img} alt="post" fill sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw" className="object-cover" />
           {i === 3 && extra > 0 && (
             <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
               <span className="text-white text-xl font-bold">+{extra}</span>

@@ -8,9 +8,11 @@ import { PostLikeButton } from './PostLikeButton';
 export function FeedPostCard({
   post,
   onClick,
+  priority = false,
 }: {
   post: IGetPostResponse;
   onClick: () => void;
+  priority?: boolean;
 }) {
   const hasLongContent = post.content.length > 200;
 
@@ -20,7 +22,7 @@ export function FeedPostCard({
       <div className="flex items-center gap-3 px-4 py-3 border-b border-gray-100">
         <a href={`/user/${post.userId}`} className="flex items-center gap-3 min-w-0">
           <div className="relative w-10 h-10 flex-shrink-0 rounded-full overflow-hidden">
-            <Image src={post.userImage} alt="avatar" fill className="object-cover" />
+            <Image src={post.userImage} alt="avatar" fill sizes="40px" className="object-cover" />
           </div>
           <div className="min-w-0">
             <div className="font-semibold text-gray-900 text-sm truncate">{post.userName}</div>
@@ -30,7 +32,7 @@ export function FeedPostCard({
       </div>
 
       {/* Image carousel island */}
-      <PostImageCarousel images={post.images} onClick={onClick} />
+      <PostImageCarousel images={post.images} onClick={onClick} priority={priority} />
 
       {/* Like / comment action bar island */}
       <PostLikeButton

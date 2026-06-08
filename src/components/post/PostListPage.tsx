@@ -51,11 +51,12 @@ export const PostListPage = QueryProvider(() => {
 
   return (
     <div className="w-1/3 mx-auto px-4 py-6 flex flex-col gap-4">
-      {posts.map((post) => (
+      {posts.map((post, index) => (
         <FeedPostCard
           key={post.id}
           post={post}
           onClick={() => setSelectedPost(post)}
+          priority={index === 0}
         />
       ))}
 

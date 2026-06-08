@@ -1,11 +1,10 @@
 'use client';
 import { IApiResponse } from '@/src/interfaces/common';
 import { logout } from '@/src/services/authentication.api';
-import { useStores } from '@/src/stores';
 import { COOKIES_NAME } from '@/src/utils/constants';
 import { useClickOutside, useMutation } from '@/src/utils/hooks';
+import { userStore } from '@/src/stores/user.store';
 import { deleteCookie } from 'cookies-next';
-import { observer } from 'mobx-react-lite';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Dispatch, SetStateAction, useRef, useState } from 'react';
@@ -17,11 +16,11 @@ import { ConfirmCloseModal } from '@/src/components/ui/ConfirmCloseModal';
 interface INavOptionsBlock {
   isOpenMenu: boolean;
   setIsOpenMenu: Dispatch<SetStateAction<boolean>>;
+  isLoggedIn: boolean;
 }
 
-export const NavOptionsBlock = observer((props: INavOptionsBlock) => {
-  const { isOpenMenu, setIsOpenMenu } = props;
-  const { userStore } = useStores();
+export const NavOptionsBlock = (props: INavOptionsBlock) => {
+  const { isOpenMenu, setIsOpenMenu, isLoggedIn } = props;
   const pathname = usePathname();
 
   const activeTab = 'bg-yellow-300 rounded-full font-medium text-black';
@@ -41,6 +40,7 @@ export const NavOptionsBlock = observer((props: INavOptionsBlock) => {
       deleteCookie(COOKIES_NAME.ACCESS_TOKEN_SERVER);
       deleteCookie(COOKIES_NAME.REDIRECT);
       deleteCookie(COOKIES_NAME.REFRESH_TOKEN_SERVER);
+      userStore.clearUserContext();
       window.location.replace('/login');
     },
   });
@@ -80,7 +80,7 @@ export const NavOptionsBlock = observer((props: INavOptionsBlock) => {
               Blog
             </Link>
           </li>
-          {userStore.userContext && (
+          {isLoggedIn && (
             <>
               {/* Desktop: dropdown trigger */}
               <li className="relative hidden md:block" onClick={(e) => e.stopPropagation()}>
@@ -153,7 +153,7 @@ export const NavOptionsBlock = observer((props: INavOptionsBlock) => {
       </div>
 
       {/* Create Post Modal */}
-      {userStore.userContext && (
+      {isLoggedIn && (
         <ConfirmCloseModal
           open={isPostModalOpen}
           onClose={() => setIsPostModalOpen(false)}>
@@ -162,7 +162,7 @@ export const NavOptionsBlock = observer((props: INavOptionsBlock) => {
       )}
 
       {/* Create Pet Modal */}
-      {userStore.userContext && (
+      {isLoggedIn && (
         <ConfirmCloseModal
           open={isPetModalOpen}
           onClose={() => setIsPetModalOpen(false)}
@@ -174,4 +174,4 @@ export const NavOptionsBlock = observer((props: INavOptionsBlock) => {
       )}
     </>
   );
-});
+};

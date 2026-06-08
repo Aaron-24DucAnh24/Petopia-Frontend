@@ -36,3 +36,18 @@ export async function serverGet<T>(path: string): Promise<T> {
     throw error;
   }
 }
+
+// Like serverGet but returns null instead of redirecting on 401 or any error.
+// Safe to call from layouts that serve both authenticated and unauthenticated users.
+export async function serverGetOptional<T>(path: string): Promise<T | null> {
+  const token = cookies().get(COOKIES_NAME.ACCESS_TOKEN_SERVER)?.value;
+  if (!token) return null;
+  try {
+    const res = await serverAxios.get(path, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return res.data.data as T;
+  } catch {
+    return null;
+  }
+}

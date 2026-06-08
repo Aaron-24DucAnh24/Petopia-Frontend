@@ -1,31 +1,17 @@
 'use client';
-import { useEffect, useState } from 'react';
-import { observer } from 'mobx-react-lite';
-import { useStores } from '@/src/stores';
+import { useState } from 'react';
+import { ICurrentUserCoreResponse } from '@/src/interfaces/user';
 import { QueryProvider } from '../../providers/QueryProvider';
 import { NavProfileBlock } from './NavProfileBlock';
 import { NavOptionsBlock } from './NavOptionsBlock';
 import Link from 'next/link';
 
-export const Navbar = QueryProvider(observer(() => {
-  // STATES
+interface INavbar {
+  userContext: ICurrentUserCoreResponse | null;
+}
+
+export const Navbar = QueryProvider(({ userContext }: INavbar) => {
   const [isOpenMenu, setIsOpenMenu] = useState(false);
-  const { userStore } = useStores();
-
-  // EFFECTS
-  useEffect(() => {
-    userStore.hydrateFromLocalStorage();
-  }, []);
-
-  if (!userStore.hydrated) {
-    return (
-      <nav className="border-gray-200 w-full fixed top-0 bg-white z-50">
-        <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4">
-          <span className="text-gray-500">Loading...</span>
-        </div>
-      </nav>
-    );
-  }
 
   return (
     <nav className="border-b border-gray-100 shadow-sm w-full fixed top-0 bg-white z-50">
@@ -35,11 +21,11 @@ export const Navbar = QueryProvider(observer(() => {
             <span className="text-yellow-300">Pet</span>opia
           </span>
         </Link>
-        {userStore.userContext
+        {userContext
           ? (<NavProfileBlock
-            name={userStore.userContext.name}
-            image={userStore.userContext.image}
-            email={userStore.userContext.email} />)
+            name={userContext.name}
+            image={userContext.image}
+            email={userContext.email} />)
           : (<div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
             <Link href="/register">
               <button className="mx-4">Đăng kí</button>
@@ -74,9 +60,9 @@ export const Navbar = QueryProvider(observer(() => {
         </button>
         <NavOptionsBlock
           isOpenMenu={isOpenMenu}
-          setIsOpenMenu={setIsOpenMenu} />
+          setIsOpenMenu={setIsOpenMenu}
+          isLoggedIn={!!userContext} />
       </div>
     </nav>
   );
-})
-);
+});

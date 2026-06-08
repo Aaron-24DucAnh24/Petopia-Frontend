@@ -3,6 +3,7 @@ import { IApiResponse } from '@/src/interfaces/common';
 import { logout } from '@/src/services/authentication.api';
 import { COOKIES_NAME, STATIC_URLS } from '@/src/utils/constants';
 import { useClickOutside, useMutation } from '@/src/utils/hooks';
+import { userStore } from '@/src/stores/user.store';
 import { deleteCookie } from 'cookies-next';
 import Image from 'next/image';
 import { useRef, useState } from 'react';
@@ -28,6 +29,7 @@ export const NavProfileBlock = (props: INavProfileBlock) => {
         deleteCookie(COOKIES_NAME.ACCESS_TOKEN_SERVER);
         deleteCookie(COOKIES_NAME.REFRESH_TOKEN_SERVER);
         deleteCookie(COOKIES_NAME.REDIRECT);
+        userStore.clearUserContext();
         window.location.replace('/login');
       },
     }
@@ -53,7 +55,8 @@ export const NavProfileBlock = (props: INavProfileBlock) => {
             className="object-cover"
             alt="user photo"
             src={image || STATIC_URLS.NO_AVATAR}
-            fill />
+            fill
+            sizes="32px" />
         </button>
         {isOpenProfile &&
           <div

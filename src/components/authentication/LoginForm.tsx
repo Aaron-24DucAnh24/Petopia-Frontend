@@ -17,14 +17,12 @@ import { IApiResponse } from '@/src/interfaces/common';
 import { googleLogin, login } from '@/src/services/authentication.api';
 import { getErrorMessage } from '@/src/helpers/getErrorMessage';
 import QueryButton from '../ui/button/QueryButton';
-import { useStores } from '@/src/stores';
 import { Input } from '../ui/input/Input';
 
 export const LoginForm = QueryProvider(({ clientId }: { clientId: string }) => {
   // STATES
   const [showAlert, setShowALert] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string>('');
-  const { userStore } = useStores();
 
   // FORMS
   const { getValues, setValue, watch } = useForm<ILoginRequest>({
@@ -40,8 +38,7 @@ export const LoginForm = QueryProvider(({ clientId }: { clientId: string }) => {
     loginMutation.mutate(getValues());
   };
 
-  const handleOnLoginSuccess = async (data: ILoginResponse) => {
-    // Set token
+  const handleOnLoginSuccess = (data: ILoginResponse) => {
     setCookie(COOKIES_NAME.ACCESS_TOKEN_SERVER, data.accessToken, {
       expires: new Date(data.accessTokenExpiredDate),
       secure: true,
@@ -53,9 +50,6 @@ export const LoginForm = QueryProvider(({ clientId }: { clientId: string }) => {
       sameSite: 'lax',
     });
 
-    await userStore.fetchUserContext();
-
-    // Redirect
     const redirect = getCookie(COOKIES_NAME.REDIRECT);
     if (redirect) {
       deleteCookie(COOKIES_NAME.REDIRECT);
