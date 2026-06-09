@@ -1,5 +1,7 @@
 'use client';
 import React, { useState } from 'react';
+import Link from 'next/link';
+import { observer } from 'mobx-react-lite';
 import BlogCard from './BlogCard';
 import Pagination from '../ui/Pagination';
 import { getBlogs } from '@/src/services/blog.api';
@@ -9,6 +11,7 @@ import {
   BLOG_CATEGORIES,
   PAGE_SIZE,
   QUERY_KEYS,
+  USER_ROLE,
 } from '@/src/utils/constants';
 import { ValueTextManager } from '@/src/utils/ValueTextManager';
 import { IBlogCardResponse, IBlogResponse } from '@/src/interfaces/blog';
@@ -17,8 +20,13 @@ import { QueryProvider } from '../providers/QueryProvider';
 import CardSkeleton from '../ui/CardSkeleton';
 import AdvertisementCarousel from './AdvertisementCarousel';
 import { SortBlock } from '../ui/SortBlock';
+import { useStores } from '@/src/stores';
 
-const BlogSection = QueryProvider(() => {
+const BlogSection = QueryProvider(observer(() => {
+  const { userStore } = useStores();
+  const canCreate =
+    userStore.userContext?.role === USER_ROLE.SYSTEM_ADMIN ||
+    userStore.userContext?.role === USER_ROLE.ORGANIZATION;
   const [selectedCategory, setSelectedCategory] = useState<
     BLOG_CATEGORIES | undefined
   >();
@@ -73,6 +81,15 @@ const BlogSection = QueryProvider(() => {
 
       {/* Blog Cards Grid */}
       <div className="container max-w-5xl mx-auto p-5 justify-center">
+        {canCreate && (
+          <div className="flex justify-end mb-2">
+            <Link href="/blog/new">
+              <button className="bg-yellow-300 hover:bg-yellow-500 text-black font-medium rounded-lg text-sm px-5 py-2.5">
+                Tạo bài viết
+              </button>
+            </Link>
+          </div>
+        )}
         <nav className="flex justify-center my-5">
           {
             <ul className="flex">
@@ -131,6 +148,6 @@ const BlogSection = QueryProvider(() => {
       </div>
     </section>
   );
-});
+}));  // observer wraps the inner fn so it reacts to userStore changes
 
 export default BlogSection;
