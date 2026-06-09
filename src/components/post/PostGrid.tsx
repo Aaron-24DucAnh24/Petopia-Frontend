@@ -105,24 +105,24 @@ export const PostGrid = QueryProvider(({ userId, canCreate, initialData }: IPost
         {canCreate && <AddButton onClick={() => setShowCreatePost(true)} title="Tạo bài đăng" />}
       </div>
 
-      <div>
-        <div>
-          <div className="grid grid-cols-3 gap-2">
-            {posts.map((post) => (
-              <PostCard
-                key={post.id}
-                post={post}
-                onClick={() => setSelectedPost(post)}
-                onDelete={
-                  currentUserId === post.userId
-                    ? () => handleDeleteRequest(post.id)
-                    : undefined
-                }
-              />
-            ))}
-          </div>
+      {!getPostsQuery.isFetching && posts.length === 0 ? (
+        <p className="text-sm text-gray-500 text-center py-8">Bạn chưa có bài đăng nào.</p>
+      ) : (
+        <div className="grid grid-cols-3 gap-2">
+          {posts.map((post) => (
+            <PostCard
+              key={post.id}
+              post={post}
+              onClick={() => setSelectedPost(post)}
+              onDelete={
+                currentUserId === post.userId
+                  ? () => handleDeleteRequest(post.id)
+                  : undefined
+              }
+            />
+          ))}
         </div>
-      </div>
+      )}
 
       <Pagination
         paginationForm={paginationForm}

@@ -71,16 +71,20 @@ export const PetGrid = QueryProvider(({ userId, initialData }: IPetGridProps) =>
         {isOwner && <AddButton onClick={() => setShowCreatePet(true)} title="Thêm thú cưng" />}
       </div>
 
-      <div className="grid grid-cols-3 gap-2">
-        {pets.map((pet) => (
-          <PetCard
-            key={pet.id}
-            {...pet}
-            isEditable={isOwner}
-            getPetQuery={getPetsQuery as any}
-          />
-        ))}
-      </div>
+      {!getPetsQuery.isFetching && pets.length === 0 ? (
+        <p className="text-sm text-gray-500 text-center py-8">Bạn chưa có thú cưng nào.</p>
+      ) : (
+        <div className="grid grid-cols-3 gap-2">
+          {pets.map((pet) => (
+            <PetCard
+              key={pet.id}
+              {...pet}
+              isEditable={isOwner}
+              getPetQuery={getPetsQuery as any}
+            />
+          ))}
+        </div>
+      )}
 
       <Pagination
         paginationForm={paginationForm}

@@ -45,9 +45,6 @@ export const changePassword = async (data: IChangePasswordRequest) =>
 export const upgradeToOrg = async (data: IOrgUpgradeRequest) =>
   await http.post('/User/UpgradeAccount', data);
 
-export const getUpgradeRequests = async () =>
-  await http.get('/User/Upgrade/Get');
-
 export const getUpgradeRequestById = async (id: string) =>
   await http.get(`/User/Upgrade/${id}`);
 

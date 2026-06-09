@@ -1,33 +1,28 @@
 'use client';
 import { useState } from 'react';
-import { useQuery } from '@/src/utils/hooks';
-import { QUERY_KEYS } from '@/src/utils/constants';
-import { IApiResponse } from '@/src/interfaces/common';
+import { useRouter } from 'next/navigation';
 import { IUpgradeResponse } from '@/src/interfaces/org';
-import { getUpgradeRequests } from '@/src/services/user.api';
-import { QueryProvider } from '../providers/QueryProvider';
 import { ConfirmCloseModal } from '../ui/ConfirmCloseModal';
 import { UserUpgradeForm } from './UserUpgradeForm';
 import { UpgradeRequestDetailModal, UPGRADE_MODAL_STYLE } from './UpgradeRequestDetailModal';
 import { UpgradeStatusBadge } from './UpgradeStatusBadge';
 import { formatDate } from '@/src/helpers/formatDate';
-import { FiPlusCircle } from 'react-icons/fi';
+import { AddButton } from '../ui/button/AddButton';
+import { QueryProvider } from '../providers/QueryProvider';
 
-export const UpgradeRequestsPage = QueryProvider(() => {
+interface IUpgradeRequestsPageProps {
+  initialData: IUpgradeResponse[];
+}
+
+export const UpgradeRequestsPage = QueryProvider(({ initialData }: IUpgradeRequestsPageProps) => {
+  const router = useRouter();
   const [showCreate, setShowCreate] = useState(false);
   const [selectedRequestId, setSelectedRequestId] = useState<string | null>(null);
-  const [requests, setRequests] = useState<IUpgradeResponse[]>([]);
 
-  const { isLoading, refetch } = useQuery<IApiResponse<IUpgradeResponse[]>>(
-    [QUERY_KEYS.GET_UPGRADE_REQUESTS],
-    () => getUpgradeRequests(),
-    {
-      onSuccess: (res) => {
-        setRequests(res.data.data ?? []);
-      },
-      refetchOnWindowFocus: false,
-    }
-  );
+  const handleSuccess = () => {
+    setShowCreate(false);
+    router.refresh();
+  };
 
   return (
     <div className="container max-w-3xl p-5 mx-auto shadow-2xl rounded-2xl mt-8">
@@ -36,26 +31,14 @@ export const UpgradeRequestsPage = QueryProvider(() => {
           Đơn xác minh tổ chức
         </h2>
         <div className="flex-1 h-px bg-gray-200" />
-        <button
-          onClick={() => setShowCreate(true)}
-          className="flex items-center gap-2 text-sm text-orange-500 hover:text-orange-600 font-medium transition-colors"
-        >
-          <FiPlusCircle size={16} />
-          Tạo đơn mới
-        </button>
+        <AddButton onClick={() => setShowCreate(true)} title="Tạo đơn mới" />
       </div>
 
-      {isLoading ? (
-        <div className="space-y-3">
-          {[...Array(3)].map((_, i) => (
-            <div key={i} className="h-16 bg-gray-100 rounded-xl animate-pulse" />
-          ))}
-        </div>
-      ) : requests.length === 0 ? (
+      {initialData.length === 0 ? (
         <p className="text-sm text-gray-500 text-center py-8">Bạn chưa có đơn xác minh nào.</p>
       ) : (
         <div className="space-y-3">
-          {requests.map((req) => (
+          {initialData.map((req) => (
             <button
               key={req.id}
               onClick={() => setSelectedRequestId(req.id)}
@@ -83,10 +66,7 @@ export const UpgradeRequestsPage = QueryProvider(() => {
       >
         <UserUpgradeForm
           onClose={() => setShowCreate(false)}
-          onSuccess={() => {
-            refetch();
-            setShowCreate(false);
-          }}
+          onSuccess={handleSuccess}
         />
       </ConfirmCloseModal>
 
@@ -94,8 +74,8 @@ export const UpgradeRequestsPage = QueryProvider(() => {
         requestId={selectedRequestId}
         onClose={() => setSelectedRequestId(null)}
         onSuccess={() => {
-          refetch();
           setSelectedRequestId(null);
+          router.refresh();
         }}
       />
     </div>
