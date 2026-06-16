@@ -6,6 +6,7 @@ import { IApiResponse } from '@/src/interfaces/common';
 import { IUserInfoResponse } from '@/src/interfaces/user';
 import { IPetResponse } from '@/src/interfaces/pet';
 import { IGetPostResponse } from '@/src/interfaces/post';
+import { IBlogCardResponse } from '@/src/interfaces/blog';
 import { UserAvatar } from './UserAvatar';
 import { UserRoleName } from './UserRoleName';
 import { UserActionsBlock } from './UserActionsBlock';
@@ -13,15 +14,17 @@ import { UserInformationBlock } from './UserInformationBlock';
 import { UserUpdateForm } from './UserUpdateForm';
 import { PostGrid } from '../post/PostGrid';
 import { PetGrid } from '../pet/PetGrid';
+import { UserBlogGrid } from '../blog/UserBlogGrid';
 import { QueryProvider } from '../providers/QueryProvider';
 
 interface IUserPageProps {
   userInfo: IUserInfoResponse;
   initialPets?: IApiResponse<IPetResponse[]>;
   initialPosts?: IApiResponse<IGetPostResponse[]>;
+  initialBlogs?: IApiResponse<IBlogCardResponse[]>;
 }
 
-export const UserPage = QueryProvider(({ userInfo, initialPets, initialPosts }: IUserPageProps) => {
+export const UserPage = QueryProvider(({ userInfo, initialPets, initialPosts, initialBlogs }: IUserPageProps) => {
   const router = useRouter();
 
   const [showEdit, setShowEdit] = useState(false);
@@ -65,6 +68,10 @@ export const UserPage = QueryProvider(({ userInfo, initialPets, initialPosts }: 
 
       <div className="container max-w-3xl p-5 mx-auto shadow-2xl rounded-2xl mt-8">
         <PostGrid userId={userInfo.id} canCreate initialData={initialPosts} />
+      </div>
+
+      <div className="container max-w-3xl p-5 mx-auto shadow-2xl rounded-2xl mt-8">
+        <UserBlogGrid userId={userInfo.id} initialData={initialBlogs} />
       </div>
     </div>
   );

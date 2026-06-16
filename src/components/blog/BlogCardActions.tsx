@@ -20,13 +20,13 @@ export function BlogCardActions({ id, onRefetch }: BlogCardActionsProps) {
   });
 
   return (
-    <div className="absolute top-2 right-2 flex gap-1">
+    <div className="absolute top-2 right-2 flex gap-1 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
       <Popup
         modal
         overlayStyle={{ background: 'rgba(0, 0, 0, 0.5)' }}
         trigger={
-          <button className="p-2 bg-gray-200 rounded-full hover:bg-gray-300">
-            <CiEdit size={20} />
+          <button className="w-7 h-7 rounded-full bg-black/50 flex items-center justify-center transition-colors hover:bg-blue-500">
+            <CiEdit size={14} className="text-white" />
           </button>
         }
       >
@@ -41,10 +41,10 @@ export function BlogCardActions({ id, onRefetch }: BlogCardActionsProps) {
       </Popup>
 
       <button
-        className="p-2 bg-gray-200 rounded-full hover:bg-gray-300"
+        className="w-7 h-7 rounded-full bg-black/50 flex items-center justify-center transition-colors hover:bg-red-500"
         onClick={() => setShowAlert(true)}
       >
-        <MdDelete size={20} />
+        <MdDelete size={14} className="text-white" />
       </button>
 
       <Alert

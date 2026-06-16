@@ -1,4 +1,3 @@
-import BlogSection from '@/src/components/blog/BlogSection';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -10,7 +9,7 @@ export default function page() {
   return (
     <div className="container mx-auto my-10">
       <div className="mt-20">
-        <BlogSection />
+        {/* TODO */}
       </div>
     </div>
   );

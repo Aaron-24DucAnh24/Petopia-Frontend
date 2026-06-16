@@ -21,37 +21,35 @@ const BlogCard = ({
   testId,
 }: IBlogCard) => {
   return (
-    <div className="relative">
-      <Link href={`/blog/${id}`}>
+    <div className="relative group h-full">
+      <Link href={`/blog/${id}`} className="block h-full">
         <div
-          className="max-w-xs p-2 h-full bg-white border border-gray-200 rounded-2xl shadow-lg"
           test-id={testId}
+          className="h-full rounded-2xl overflow-hidden bg-white border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
         >
-          <div className="flex flex-col" key={id}>
-            <div className="relative w-full pt-[100%]">
-              <Image
-                src={image}
-                alt={title}
-                fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                className="w-full h-full top-0 left-0 object-cover rounded-2xl"
-              />
-              <div
-                test-id="blog-category-tag"
-                className="bg-yellow-400 text-black text-xs font-bold uppercase px-2 py-1 absolute top-0 left-0 rounded-br-lg"
-              >
-                {ValueTextManager.BlogCategory.GetText(category.toString())}
-              </div>
+          <div className="relative w-full pt-[100%]">
+            <Image
+              src={image}
+              alt={title}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              className="object-cover top-0 left-0"
+            />
+            <div
+              test-id="blog-category-tag"
+              className="absolute top-2 left-2 bg-white/90 backdrop-blur-sm text-black text-xs font-bold uppercase px-2.5 py-1 rounded-full shadow-sm"
+            >
+              {ValueTextManager.BlogCategory.GetText(category.toString())}
             </div>
-            <div className="p-2 md:p-4">
-              <h2
-                test-id={testId + '-title'}
-                className="text-lg font-bold mb-2 line-clamp-2"
-              >
-                {title}
-              </h2>
-              <p className="text-sm text-gray-600 line-clamp-3">{excerpt}</p>
-            </div>
+          </div>
+          <div className="p-3">
+            <h2
+              test-id={testId + '-title'}
+              className="font-bold text-gray-900 text-base line-clamp-2 mb-1"
+            >
+              {title}
+            </h2>
+            <p className="text-sm text-gray-400 line-clamp-2">{excerpt}</p>
           </div>
         </div>
       </Link>

@@ -6,10 +6,12 @@ import { UserPage } from '@/src/components/user/UserPage';
 import { getCurrentUserServer } from '@/src/services/user.server';
 import { getPetsByUserServer } from '@/src/services/pet.server';
 import { getUserPostsServer } from '@/src/services/post.server';
+import { getBlogsByUserServer } from '@/src/services/blog.server';
 import { IApiResponse } from '@/src/interfaces/common';
 import { IUserInfoResponse } from '@/src/interfaces/user';
 import { IPetResponse } from '@/src/interfaces/pet';
 import { IGetPostResponse } from '@/src/interfaces/post';
+import { IBlogCardResponse } from '@/src/interfaces/blog';
 
 export const metadata: Metadata = {
   title: 'Hồ sơ người dùng - Petopia',
@@ -42,11 +44,17 @@ async function UserPageContent() {
     initialPosts = await getUserPostsServer(userInfo.id);
   } catch { /* non-critical */ }
 
+  let initialBlogs: IApiResponse<IBlogCardResponse[]> | undefined;
+  try {
+    initialBlogs = await getBlogsByUserServer(userInfo.id);
+  } catch { /* non-critical */ }
+
   return (
     <UserPage
       userInfo={userInfo}
       initialPets={initialPets}
       initialPosts={initialPosts}
+      initialBlogs={initialBlogs}
     />
   );
 }
