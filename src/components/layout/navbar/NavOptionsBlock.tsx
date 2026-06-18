@@ -86,6 +86,7 @@ export const NavOptionsBlock = (props: INavOptionsBlock) => {
               <li className="relative hidden md:block" onClick={(e) => e.stopPropagation()}>
                 <button
                   ref={createButtonRef}
+                  test-id="create-new-button"
                   onClick={() => setIsOpenCreate(!isOpenCreate)}
                   className="flex items-center gap-1.5 py-1.5 px-3 bg-yellow-300 rounded-full hover:bg-yellow-400 transition-colors font-medium text-black">
                   <FaPlus size={12} />
@@ -99,6 +100,7 @@ export const NavOptionsBlock = (props: INavOptionsBlock) => {
                     ref={createDropdownRef}
                     className="absolute top-full left-0 mt-2 w-44 bg-white border border-gray-100 rounded-xl shadow-lg z-50 overflow-hidden">
                     <button
+                      test-id="create-post-option"
                       onClick={() => { setIsOpenCreate(false); setIsPostModalOpen(true); }}
                       className="flex items-center gap-2 w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-yellow-50 transition-colors">
                       <FaNewspaper size={13} />
@@ -132,7 +134,6 @@ export const NavOptionsBlock = (props: INavOptionsBlock) => {
               </li>
               <li>
                 <a
-                  test-id="user-profile-link-mobile"
                   onClick={() => window.location.replace('/user')}
                   className="flex items-center gap-2 py-2 px-3 text-gray-700 rounded hover:bg-gray-100 md:hidden cursor-pointer">
                   <FaUser size={13} />
@@ -141,7 +142,6 @@ export const NavOptionsBlock = (props: INavOptionsBlock) => {
               </li>
               <li>
                 <a
-                  test-id="logout-link"
                   onClick={() => logoutMutation.mutate(undefined)}
                   className="block py-2 px-3 text-yellow-500 rounded hover:bg-gray-100 md:hidden cursor-pointer">
                   Đăng xuất

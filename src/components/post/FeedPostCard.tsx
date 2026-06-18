@@ -17,7 +17,7 @@ export function FeedPostCard({
   const hasLongContent = post.content.length > 200;
 
   return (
-    <article className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+    <article test-id="feed-post-card" className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
       {/* Header */}
       <div className="flex items-center gap-3 px-4 py-3 border-b border-gray-100">
         <a href={`/user/${post.userId}`} className="flex items-center gap-3 min-w-0">

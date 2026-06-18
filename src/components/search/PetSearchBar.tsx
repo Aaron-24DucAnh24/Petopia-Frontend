@@ -65,7 +65,6 @@ export function PetSearchBar({ text: textProp, onSearch, disable }: IPetSearchBa
           <SearchIcon className="text-gray-400" size={18} />
         </label>
         <input
-          test-id="search-pet-bar"
           type="search"
           ref={inputRef}
           id="text-search"

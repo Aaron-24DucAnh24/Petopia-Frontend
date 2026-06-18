@@ -80,7 +80,7 @@ export function PostDetailModal({
       <div className="absolute inset-0 bg-black/75" onClick={onClose} />
 
       {/* Modal */}
-      <div className="relative z-10 bg-white rounded-2xl shadow-2xl w-full max-w-5xl h-[90vh] flex flex-col md:flex-row overflow-hidden">
+      <div test-id="post-detail-modal" className="relative z-10 bg-white rounded-2xl shadow-2xl w-full max-w-5xl h-[90vh] flex flex-col md:flex-row overflow-hidden">
 
         {/* Left: image viewer */}
         <div className="md:w-[55%] bg-black flex items-center justify-center relative min-h-[260px] md:min-h-0">

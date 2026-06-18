@@ -195,7 +195,6 @@ export const SearchPetSection = QueryProvider(() => {
                   disable={getPetsQuery.isFetching}
                 />
                 <button
-                  test-id="filter-button-mobile"
                   type="button"
                   className="relative flex-shrink-0 flex items-center gap-1.5 px-3 py-2.5 text-sm font-medium text-gray-700 border border-gray-200 rounded-full hover:bg-gray-50 transition-colors lg:hidden"
                   onClick={() => setShowFilterMobile(true)}

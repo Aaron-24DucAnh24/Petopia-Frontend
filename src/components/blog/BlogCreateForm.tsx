@@ -163,6 +163,7 @@ export const BlogCreateForm = QueryProvider(() => {
         </div>
 
         <QueryButton
+          testId="blog-post-button"
           name="Tạo bài viết"
           isLoading={isLoading}
           isDisabled={!isSubmittable}

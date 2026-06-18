@@ -105,6 +105,7 @@ export const UserPostCreateForm = observer((props: IUserPostCreateForm) => {
         </div>
         <div className="flex justify-center">
           <QueryButton
+            testId="create-post-submit"
             name={'Tạo bài đăng'}
             isLoading={createPostMutation.isLoading || isLoading}
             isDisabled={!createPostForm.watch('content') || !uploadImageForm.watch('files').length} />

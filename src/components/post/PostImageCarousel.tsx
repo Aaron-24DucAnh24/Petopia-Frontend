@@ -17,6 +17,7 @@ export function PostImageCarousel({ images, onClick, priority = false }: PostIma
 
   return (
     <div
+      test-id="post-image-carousel"
       className="relative w-full aspect-square bg-gray-100 cursor-pointer border-b border-gray-100"
       onClick={onClick}
     >
