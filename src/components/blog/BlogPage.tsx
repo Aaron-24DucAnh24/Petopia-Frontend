@@ -32,6 +32,11 @@ const BlogPage: React.FC<Props> = ({ blog }) => {
         <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-black text-xs font-bold uppercase px-2.5 py-1 rounded-full shadow-sm">
           {ValueTextManager.BlogCategory.GetText(blog.category.toString())}
         </div>
+        {blog.isAdvertised && (
+          <div className="absolute top-3 right-3 bg-yellow-400 text-white text-xs font-bold uppercase px-2.5 py-1 rounded-full shadow-sm">
+            Quảng cáo
+          </div>
+        )}
       </div>
 
       <h1

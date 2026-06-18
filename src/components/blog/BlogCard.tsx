@@ -16,6 +16,7 @@ const BlogCard = ({
   category,
   title,
   excerpt,
+  isAdvertised,
   isEditable,
   onRefetch,
   testId,
@@ -25,7 +26,7 @@ const BlogCard = ({
       <Link href={`/blog/${id}`} className="block h-full">
         <div
           test-id={testId}
-          className="h-full rounded-2xl overflow-hidden bg-white border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
+          className={`h-full rounded-2xl overflow-hidden bg-white border shadow-sm hover:shadow-md transition-shadow ${isAdvertised ? 'border-yellow-400 shadow-yellow-100' : 'border-gray-100'}`}
         >
           <div className="relative w-full pt-[100%]">
             <Image
@@ -41,6 +42,11 @@ const BlogCard = ({
             >
               {ValueTextManager.BlogCategory.GetText(category.toString())}
             </div>
+            {isAdvertised && (
+              <div className="absolute top-2 right-2 bg-yellow-400 text-white text-xs font-bold uppercase px-2.5 py-1 rounded-full shadow-sm">
+                Quảng cáo
+              </div>
+            )}
           </div>
           <div className="p-3">
             <h2

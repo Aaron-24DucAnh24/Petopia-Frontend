@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import Popup from 'reactjs-popup';
+import { useRouter } from 'next/navigation';
 import { CiEdit } from 'react-icons/ci';
 import { MdDelete } from 'react-icons/md';
 import { Alert } from '../ui/Alert';
@@ -13,6 +13,7 @@ interface BlogCardActionsProps {
 }
 
 export function BlogCardActions({ id, onRefetch }: BlogCardActionsProps) {
+  const router = useRouter();
   const [showAlert, setShowAlert] = useState(false);
 
   const deleteBlogMutation = useMutation(deleteBlog, {
@@ -21,24 +22,12 @@ export function BlogCardActions({ id, onRefetch }: BlogCardActionsProps) {
 
   return (
     <div className="absolute top-2 right-2 flex gap-1 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
-      <Popup
-        modal
-        overlayStyle={{ background: 'rgba(0, 0, 0, 0.5)' }}
-        trigger={
-          <button className="w-7 h-7 rounded-full bg-black/50 flex items-center justify-center transition-colors hover:bg-blue-500">
-            <CiEdit size={14} className="text-white" />
-          </button>
-        }
+      <button
+        className="w-7 h-7 rounded-full bg-black/50 flex items-center justify-center transition-colors hover:bg-blue-500"
+        onClick={() => router.push(`/blog/${id}/edit`)}
       >
-        <div className="container max-w-xs md:max-w-3xl rounded-2xl bg-yellow-100 p-5">
-          <div
-            className="w-full p-5 mb-5 bg-gray-50 rounded-lg overflow-auto"
-            style={{ maxHeight: '400px' }}
-          >
-            {/* Blog editor placeholder */}
-          </div>
-        </div>
-      </Popup>
+        <CiEdit size={14} className="text-white" />
+      </button>
 
       <button
         className="w-7 h-7 rounded-full bg-black/50 flex items-center justify-center transition-colors hover:bg-red-500"

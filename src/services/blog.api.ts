@@ -1,4 +1,4 @@
-import { IBlog } from '../interfaces/blog';
+import { IBlog, IBlogUpdate } from '../interfaces/blog';
 import { IPaginationRequest } from '../interfaces/common';
 import { BLOG_CATEGORIES } from '../utils/constants';
 import { http } from './http';
@@ -16,6 +16,6 @@ export const getBlogs = async (data: IPaginationRequest<IBlogFilterModel>) =>
 export const deleteBlog = async (id: string) =>
   await http.delete(`/Blog/${id}`);
 
-export const updateBlog = async (data: IBlog) => await http.put('/Blog', data);
+export const updateBlog = async (data: IBlogUpdate) => await http.put('/Blog', data);
 
 export const getBlogAd = async () => await http.get('/Blog/Advertisement');

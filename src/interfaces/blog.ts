@@ -11,6 +11,7 @@ export interface IBlogResponse {
   userName: string;
   userImage: string;
   isAdvertised: boolean;
+  advertisingDate: string | null;
 }
 
 export interface IBlogCardResponse {
@@ -19,6 +20,7 @@ export interface IBlogCardResponse {
   excerpt: string;
   image: string;
   category: number;
+  isAdvertised: boolean;
 }
 
 export interface IBlog {
