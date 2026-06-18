@@ -3,6 +3,7 @@ import https from 'https';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { COOKIES_NAME } from '@/src/utils/constants';
+import { ILoginResponse } from '@/src/interfaces/authentication';
 
 const UNAUTHORIZED = 401;
 
@@ -19,6 +20,18 @@ const serverAxios = axios.create({
     : undefined,
 });
 
+async function refreshServerToken(refreshToken: string): Promise<string | null> {
+  try {
+    const response = await serverAxios.get('/Authentication/Refresh', {
+      params: { refreshToken },
+    });
+    const data = response.data.data as ILoginResponse;
+    return data.accessToken;
+  } catch {
+    return null;
+  }
+}
+
 export async function serverGet<T>(path: string): Promise<T> {
   const cookieStore = cookies();
   const token = cookieStore.get(COOKIES_NAME.ACCESS_TOKEN_SERVER)?.value;
@@ -29,8 +42,20 @@ export async function serverGet<T>(path: string): Promise<T> {
     return res.data.data as T;
   } catch (error: any) {
     if (error?.response?.status === UNAUTHORIZED) {
-      cookieStore.delete(COOKIES_NAME.ACCESS_TOKEN_SERVER);
-      cookieStore.delete(COOKIES_NAME.REFRESH_TOKEN_SERVER);
+      const refreshToken = cookieStore.get(COOKIES_NAME.REFRESH_TOKEN_SERVER)?.value;
+      if (refreshToken) {
+        const newToken = await refreshServerToken(refreshToken);
+        if (newToken) {
+          try {
+            const res = await serverAxios.get(path, {
+              headers: { Authorization: `Bearer ${newToken}` },
+            });
+            return res.data.data as T;
+          } catch (retryError: any) {
+            if (retryError?.response?.status !== UNAUTHORIZED) throw retryError;
+          }
+        }
+      }
       redirect('/login');
     }
     throw error;
@@ -47,8 +72,20 @@ export async function serverPost<T>(path: string, body: unknown): Promise<T> {
     return res.data as T;
   } catch (error: any) {
     if (error?.response?.status === UNAUTHORIZED) {
-      cookieStore.delete(COOKIES_NAME.ACCESS_TOKEN_SERVER);
-      cookieStore.delete(COOKIES_NAME.REFRESH_TOKEN_SERVER);
+      const refreshToken = cookieStore.get(COOKIES_NAME.REFRESH_TOKEN_SERVER)?.value;
+      if (refreshToken) {
+        const newToken = await refreshServerToken(refreshToken);
+        if (newToken) {
+          try {
+            const res = await serverAxios.post(path, body, {
+              headers: { Authorization: `Bearer ${newToken}` },
+            });
+            return res.data as T;
+          } catch (retryError: any) {
+            if (retryError?.response?.status !== UNAUTHORIZED) throw retryError;
+          }
+        }
+      }
       redirect('/login');
     }
     throw error;

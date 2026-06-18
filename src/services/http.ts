@@ -1,6 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { deleteCookie, getCookie } from 'cookies-next';
+import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 import { COOKIES_NAME } from '../utils/constants';
+import { ILoginResponse } from '../interfaces/authentication';
 
 const UNAUTHORIZED = 401;
 
@@ -14,6 +15,8 @@ const headers: Readonly<Record<string, string | boolean>> = {
 class Http {
   private instance: AxiosInstance | null = null;
   private urlAPI: string | undefined = process.env.NEXT_PUBLIC_API_ENDPOINT;
+  private refreshPromise: Promise<string> | null = null;
+
   private get http(): AxiosInstance {
     return this.instance ? this.instance : this.initHttp();
   }
@@ -40,6 +43,44 @@ class Http {
     this.urlAPI = urlAPI;
   }
 
+  private async refreshAccessToken(): Promise<string> {
+    if (this.refreshPromise) return this.refreshPromise;
+
+    this.refreshPromise = (async () => {
+      try {
+        const refreshToken = getCookie(COOKIES_NAME.REFRESH_TOKEN_SERVER) as string | undefined;
+        if (!refreshToken) throw new Error('No refresh token');
+
+        const response = await axios.get(`${this.urlAPI}/Authentication/Refresh`, {
+          params: { refreshToken },
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json; charset=utf-8',
+          },
+        });
+
+        const data = response.data.data as ILoginResponse;
+        setCookie(COOKIES_NAME.ACCESS_TOKEN_SERVER, data.accessToken, {
+          expires: new Date(data.accessTokenExpiredDate),
+          secure: true,
+          sameSite: 'lax',
+        });
+        if (data.refreshToken) {
+          setCookie(COOKIES_NAME.REFRESH_TOKEN_SERVER, data.refreshToken, {
+            expires: new Date(data.refreshTokenExpiredDate),
+            secure: true,
+            sameSite: 'lax',
+          });
+        }
+        return data.accessToken;
+      } finally {
+        this.refreshPromise = null;
+      }
+    })();
+
+    return this.refreshPromise;
+  }
+
   initHttp() {
     const http = axios.create({
       baseURL: this.urlAPI,
@@ -56,17 +97,28 @@ class Http {
 
     http.interceptors.response.use(
       (response) => response,
-      (error) => {
-        const { response } = error;
-        if (response) {
-          const { status } = response;
-          if (status === UNAUTHORIZED) {
-            deleteCookie(COOKIES_NAME.ACCESS_TOKEN_SERVER);
-            deleteCookie(COOKIES_NAME.REFRESH_TOKEN_SERVER);
-            window.location.replace('/login');
+      async (error) => {
+        const { response, config: originalRequest } = error;
+        if (response?.status === UNAUTHORIZED && !(originalRequest as any)._retry) {
+          (originalRequest as any)._retry = true;
+          try {
+            const newToken = await this.refreshAccessToken();
+            originalRequest.headers.Authorization = `Bearer ${newToken}`;
+            return this.http(originalRequest);
+          } catch (refreshError) {
+            const isDefinitiveAuthFailure =
+              !axios.isAxiosError(refreshError) ||
+              refreshError.response?.status === 401 ||
+              refreshError.response?.status === 403;
+            if (isDefinitiveAuthFailure) {
+              deleteCookie(COOKIES_NAME.ACCESS_TOKEN_SERVER);
+              deleteCookie(COOKIES_NAME.REFRESH_TOKEN_SERVER);
+              window.location.replace('/login');
+            }
+            return Promise.reject(response);
           }
-          if (response) return Promise.reject(response);
         }
+        if (response) return Promise.reject(response);
         return Promise.reject();
       }
     );
