@@ -1,14 +1,15 @@
 'use client';
 import { IApiResponse } from '@/src/interfaces/common';
+import { ICurrentUserCoreResponse } from '@/src/interfaces/user';
 import { logout } from '@/src/services/authentication.api';
-import { COOKIES_NAME } from '@/src/utils/constants';
+import { COOKIES_NAME, USER_ROLE } from '@/src/utils/constants';
 import { useClickOutside, useMutation } from '@/src/utils/hooks';
 import { userStore } from '@/src/stores/user.store';
 import { deleteCookie } from 'cookies-next';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Dispatch, SetStateAction, useRef, useState } from 'react';
-import { FaNewspaper, FaPaw, FaFeather, FaPlus, FaUser } from 'react-icons/fa6';
+import { FaNewspaper, FaPaw, FaFeather, FaPlus, FaUser, FaShield } from 'react-icons/fa6';
 import { UserPostCreateForm } from '@/src/components/user/UserPostCreateForm';
 import PetProfileForm from '@/src/components/pet/PetProfileForm';
 import { ConfirmCloseModal } from '@/src/components/ui/ConfirmCloseModal';
@@ -16,12 +17,16 @@ import { ConfirmCloseModal } from '@/src/components/ui/ConfirmCloseModal';
 interface INavOptionsBlock {
   isOpenMenu: boolean;
   setIsOpenMenu: Dispatch<SetStateAction<boolean>>;
-  isLoggedIn: boolean;
+  userContext: ICurrentUserCoreResponse | null;
 }
 
 export const NavOptionsBlock = (props: INavOptionsBlock) => {
-  const { isOpenMenu, setIsOpenMenu, isLoggedIn } = props;
+  const { isOpenMenu, setIsOpenMenu, userContext } = props;
   const pathname = usePathname();
+
+  const isLoggedIn = !!userContext;
+  const isAdmin = userContext?.role === USER_ROLE.SYSTEM_ADMIN;
+  const isOrgOrAdmin = userContext?.role === USER_ROLE.ORGANIZATION || userContext?.role === USER_ROLE.SYSTEM_ADMIN;
 
   const activeTab = 'bg-yellow-300 rounded-full font-medium text-black';
   const inactiveTab = 'text-gray-600 hover:bg-yellow-50 rounded-full transition-colors';
@@ -34,7 +39,6 @@ export const NavOptionsBlock = (props: INavOptionsBlock) => {
 
   useClickOutside(() => setIsOpenCreate(false), [createButtonRef, createDropdownRef]);
 
-  // LOGOUT
   const logoutMutation = useMutation<IApiResponse<boolean>, undefined>(logout, {
     onSuccess: () => {
       deleteCookie(COOKIES_NAME.ACCESS_TOKEN_SERVER);
@@ -80,6 +84,16 @@ export const NavOptionsBlock = (props: INavOptionsBlock) => {
               Blog
             </Link>
           </li>
+          {isAdmin && (
+            <li>
+              <Link
+                href="/admin"
+                className={`flex items-center gap-1.5 py-1.5 px-3 ${pathname.startsWith('/admin') ? activeTab : inactiveTab} rounded-full`}>
+                <FaShield size={13} />
+                Admin
+              </Link>
+            </li>
+          )}
           {isLoggedIn && (
             <>
               {/* Desktop: dropdown trigger */}
@@ -112,10 +126,19 @@ export const NavOptionsBlock = (props: INavOptionsBlock) => {
                       <FaPaw size={13} />
                       Tạo thú cưng
                     </button>
+                    {isOrgOrAdmin && (
+                      <Link
+                        href="/blog/new"
+                        onClick={() => setIsOpenCreate(false)}
+                        className="flex items-center gap-2 w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-yellow-50 transition-colors">
+                        <FaFeather size={13} />
+                        Tạo blog
+                      </Link>
+                    )}
                   </div>
                 )}
               </li>
-              {/* Mobile: two direct items */}
+              {/* Mobile: direct items */}
               <li className="md:hidden">
                 <button
                   onClick={() => { setIsOpenMenu(false); setIsPostModalOpen(true); }}
@@ -132,6 +155,17 @@ export const NavOptionsBlock = (props: INavOptionsBlock) => {
                   Tạo thú cưng
                 </button>
               </li>
+              {isOrgOrAdmin && (
+                <li className="md:hidden">
+                  <Link
+                    href="/blog/new"
+                    onClick={() => setIsOpenMenu(false)}
+                    className="flex items-center gap-2 py-2 px-3 text-gray-700 rounded hover:bg-gray-100">
+                    <FaFeather size={13} />
+                    Tạo blog
+                  </Link>
+                </li>
+              )}
               <li>
                 <a
                   onClick={() => window.location.replace('/user')}
@@ -140,6 +174,16 @@ export const NavOptionsBlock = (props: INavOptionsBlock) => {
                   Hồ sơ
                 </a>
               </li>
+              {isAdmin && (
+                <li>
+                  <a
+                    onClick={() => window.location.replace('/admin')}
+                    className="flex items-center gap-2 py-2 px-3 text-gray-700 rounded hover:bg-gray-100 md:hidden cursor-pointer">
+                    <FaShield size={13} />
+                    Admin
+                  </a>
+                </li>
+              )}
               <li>
                 <a
                   onClick={() => logoutMutation.mutate(undefined)}
@@ -152,7 +196,6 @@ export const NavOptionsBlock = (props: INavOptionsBlock) => {
         </ul>
       </div>
 
-      {/* Create Post Modal */}
       {isLoggedIn && (
         <ConfirmCloseModal
           open={isPostModalOpen}
@@ -161,7 +204,6 @@ export const NavOptionsBlock = (props: INavOptionsBlock) => {
         </ConfirmCloseModal>
       )}
 
-      {/* Create Pet Modal */}
       {isLoggedIn && (
         <ConfirmCloseModal
           open={isPetModalOpen}

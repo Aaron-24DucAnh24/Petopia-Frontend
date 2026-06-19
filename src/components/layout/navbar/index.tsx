@@ -60,7 +60,7 @@ export const Navbar = QueryProvider(({ userContext }: INavbar) => {
         <NavOptionsBlock
           isOpenMenu={isOpenMenu}
           setIsOpenMenu={setIsOpenMenu}
-          isLoggedIn={!!userContext} />
+          userContext={userContext} />
       </div>
     </nav>
   );

@@ -7,6 +7,10 @@ function isProtected(pathname: string): boolean {
   return PROTECTED_PATHS.some((p) => pathname === p || pathname.startsWith(p + '/'));
 }
 
+function isAdminPath(pathname: string): boolean {
+  return pathname === '/admin' || pathname.startsWith('/admin/');
+}
+
 export default function middleware(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
 
@@ -17,7 +21,7 @@ export default function middleware(request: NextRequest) {
       return NextResponse.redirect(url);
     }
 
-    if (isProtected(pathname)) {
+    if (isProtected(pathname) || isAdminPath(pathname)) {
       const response = NextResponse.redirect(new URL('/login', request.url));
       response.cookies.set(
         COOKIES_NAME.REDIRECT,
