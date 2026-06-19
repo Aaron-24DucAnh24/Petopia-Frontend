@@ -65,13 +65,12 @@ class Http {
           secure: true,
           sameSite: 'lax',
         });
-        if (data.refreshToken) {
-          setCookie(COOKIES_NAME.REFRESH_TOKEN_SERVER, data.refreshToken, {
-            expires: new Date(data.refreshTokenExpiredDate),
-            secure: true,
-            sameSite: 'lax',
-          });
-        }
+        setCookie(COOKIES_NAME.REFRESH_TOKEN_SERVER, data.refreshToken, {
+          expires: new Date(data.refreshTokenExpiredDate),
+          secure: true,
+          sameSite: 'lax',
+        });
+
         return data.accessToken;
       } finally {
         this.refreshPromise = null;
