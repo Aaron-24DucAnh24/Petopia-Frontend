@@ -15,11 +15,12 @@ import Image from 'next/image';
 import { QueryProvider } from '../providers/QueryProvider';
 import { formatDate } from '@/src/helpers/formatDate';
 import { FaExternalLinkAlt } from 'react-icons/fa';
+import { ValueTextManager } from '@/src/utils/ValueTextManager';
 
-const ROLE_LABELS: Record<USER_ROLE, string> = {
-  [USER_ROLE.STANDARD_USER]: 'Người dùng',
-  [USER_ROLE.SYSTEM_ADMIN]: 'Quản trị viên',
-  [USER_ROLE.ORGANIZATION]: 'Tổ chức',
+const ROLE_COLORS: Record<USER_ROLE, string> = {
+  [USER_ROLE.STANDARD_USER]: 'bg-gray-100 text-gray-600',
+  [USER_ROLE.SYSTEM_ADMIN]: 'bg-red-100 text-red-700',
+  [USER_ROLE.ORGANIZATION]: 'bg-purple-100 text-purple-700',
 };
 
 const PAGE_SIZE = 10;
@@ -124,8 +125,8 @@ export const AdminUsersList = QueryProvider(() => {
                     </td>
                     <td className="px-4 py-3 text-gray-500 hidden md:table-cell truncate max-w-[180px]">{user.email}</td>
                     <td className="px-4 py-3 hidden sm:table-cell">
-                      <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">
-                        {ROLE_LABELS[user.role] ?? 'Không xác định'}
+                      <span className={`text-xs px-2 py-1 rounded-full font-medium ${ROLE_COLORS[user.role] ?? 'bg-gray-100 text-gray-600'}`}>
+                        {ValueTextManager.UserRole.GetText(String(user.role)) ?? 'Không xác định'}
                       </span>
                     </td>
                     <td className="px-4 py-3 text-gray-400 hidden lg:table-cell text-xs">{formatDate(user.isCreatedAt)}</td>

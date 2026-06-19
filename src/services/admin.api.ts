@@ -46,3 +46,12 @@ export const getAdminReports = async (data: IPaginationRequest<IAdminSearchFilte
 
 export const resolveReport = async (data: { targetId: string; targetType: number }) =>
   await http.put('/Admin/Report/Resolve', data);
+
+export const getAdminUpgrades = async (data: IPaginationRequest<IAdminSearchFilter>) =>
+  await http.post('/Admin/Upgrade/Search', data);
+
+export const approveUpgrade = async (id: string) =>
+  await http.put(`/Admin/Upgrade/${id}/Approve`);
+
+export const rejectUpgrade = async (id: string) =>
+  await http.put(`/Admin/Upgrade/${id}/Reject`);

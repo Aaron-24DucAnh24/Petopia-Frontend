@@ -9,6 +9,7 @@ import {
   FaBook,
   FaCreditCard,
   FaFlag,
+  FaBuilding,
   FaSignOutAlt,
 } from 'react-icons/fa';
 
@@ -20,6 +21,7 @@ const NAV_ITEMS = [
   { href: '/admin/blogs', label: 'Blog', icon: FaBook },
   { href: '/admin/payments', label: 'Thanh toán', icon: FaCreditCard },
   { href: '/admin/reports', label: 'Báo cáo', icon: FaFlag },
+  { href: '/admin/upgrades', label: 'Xác minh tổ chức', icon: FaBuilding },
 ];
 
 export function AdminSidebar() {

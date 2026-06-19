@@ -1,4 +1,4 @@
-import { BLOG_CATEGORIES, PET_SPECIES, REPORT_ENTITY, USER_ROLE } from '../utils/constants';
+import { BLOG_CATEGORIES, ORG_TYPE, PET_SPECIES, REPORT_ENTITY, UPGRADE_STATUS, USER_ROLE } from '../utils/constants';
 
 export interface IAdminStatistics {
   totalUsers: number;
@@ -65,6 +65,7 @@ export interface IAdminBlogResponse {
   userId: string;
   view: number;
   isActive: boolean;
+  advertisingDate: string | null;
   isCreatedAt: string;
 }
 
@@ -90,7 +91,26 @@ export interface IAdminReportResponse {
   lastReportAt: string;
 }
 
+export interface IAdminUpgradeResponse {
+  id: string;
+  userId: string;
+  userImage: string;
+  userName: string;
+  status: UPGRADE_STATUS;
+  organizationName: string;
+  entityName: string;
+  email: string;
+  phone: string;
+  address: string;
+  website: string;
+  taxCode: string;
+  type: ORG_TYPE;
+  description: string;
+  isCreatedAt: string;
+}
+
 export interface IAdminSearchFilter {
   keyword?: string;
   isActive?: boolean;
+  upgradeStatus?: number;
 }

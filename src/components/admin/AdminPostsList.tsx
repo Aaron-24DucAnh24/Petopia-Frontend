@@ -13,7 +13,7 @@ import { AdminToggleButton } from './AdminToggleButton';
 import Pagination from '@/src/components/ui/Pagination';
 import { QueryProvider } from '../providers/QueryProvider';
 import { formatDate } from '@/src/helpers/formatDate';
-import { FaHeart } from 'react-icons/fa';
+import { FaHeart, FaExternalLinkAlt } from 'react-icons/fa';
 
 const PAGE_SIZE = 10;
 
@@ -103,7 +103,20 @@ export const AdminPostsList = QueryProvider(() => {
                     <td className="px-4 py-3 max-w-[200px]">
                       <p className="text-gray-700 truncate">{post.content}</p>
                     </td>
-                    <td className="px-4 py-3 text-gray-500 hidden sm:table-cell">{post.userName}</td>
+                    <td className="px-4 py-3 hidden sm:table-cell">
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-gray-500 truncate max-w-[120px]">{post.userName}</span>
+                        <a
+                          href={`/user/${post.userId}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-gray-300 hover:text-amber-500 transition-colors shrink-0"
+                          title="Xem trang người dùng"
+                        >
+                          <FaExternalLinkAlt className="w-2.5 h-2.5" />
+                        </a>
+                      </div>
+                    </td>
                     <td className="px-4 py-3 hidden md:table-cell">
                       <span className="flex items-center gap-1 text-pink-500 font-medium">
                         <FaHeart className="w-3 h-3" />{post.like}

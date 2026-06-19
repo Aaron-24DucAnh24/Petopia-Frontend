@@ -14,12 +14,7 @@ import Pagination from '@/src/components/ui/Pagination';
 import { QueryProvider } from '../providers/QueryProvider';
 import { formatDate } from '@/src/helpers/formatDate';
 import { FaExternalLinkAlt } from 'react-icons/fa';
-
-const SPECIES_LABELS: Record<PET_SPECIES, string> = {
-  [PET_SPECIES.DOG]: 'Chó',
-  [PET_SPECIES.CAT]: 'Mèo',
-  [PET_SPECIES.OTHER]: 'Khác',
-};
+import { ValueTextManager } from '@/src/utils/ValueTextManager';
 
 const PAGE_SIZE = 10;
 
@@ -109,10 +104,23 @@ export const AdminPetsList = QueryProvider(() => {
                   <tr key={pet.id} className="hover:bg-gray-50 transition-colors">
                     <td className="px-4 py-3 font-medium text-gray-800">{pet.name}</td>
                     <td className="px-4 py-3 text-gray-500 hidden sm:table-cell">
-                      {SPECIES_LABELS[pet.species] ?? 'Khác'}
+                      {ValueTextManager.PetSpecies.GetText(String(pet.species)) ?? 'Khác'}
                     </td>
                     <td className="px-4 py-3 text-gray-500 hidden md:table-cell">{pet.breed}</td>
-                    <td className="px-4 py-3 text-gray-500 hidden md:table-cell truncate max-w-[120px]">{pet.ownerName}</td>
+                    <td className="px-4 py-3 hidden md:table-cell">
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-gray-500 truncate max-w-[110px]">{pet.ownerName}</span>
+                        <a
+                          href={`/user/${pet.ownerId}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-gray-300 hover:text-amber-500 transition-colors shrink-0"
+                          title="Xem trang người dùng"
+                        >
+                          <FaExternalLinkAlt className="w-2.5 h-2.5" />
+                        </a>
+                      </div>
+                    </td>
                     <td className="px-4 py-3 text-gray-400 hidden lg:table-cell text-xs">{formatDate(pet.isCreatedAt)}</td>
                     <td className="px-4 py-3">
                       <div className="flex flex-col gap-1">

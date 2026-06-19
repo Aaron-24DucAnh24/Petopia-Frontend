@@ -69,8 +69,8 @@
   ],
   "upgradeStatuses": [
     { "value": "0", "text": "Chờ xét duyệt" },
-    { "value": "1", "text": "Đã phê duyệt" },
-    { "value": "2", "text": "Bị từ chối" },
+    { "value": "1", "text": "Bị từ chối" },
+    { "value": "2", "text": "Đã phê duyệt" },
     { "value": "3", "text": "Đã hủy" }
   ]
 }

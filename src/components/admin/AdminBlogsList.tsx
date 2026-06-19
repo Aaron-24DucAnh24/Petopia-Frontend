@@ -14,13 +14,7 @@ import Pagination from '@/src/components/ui/Pagination';
 import { QueryProvider } from '../providers/QueryProvider';
 import { formatDate } from '@/src/helpers/formatDate';
 import { FaEye, FaExternalLinkAlt } from 'react-icons/fa';
-
-const CATEGORY_LABELS: Record<BLOG_CATEGORIES, string> = {
-  [BLOG_CATEGORIES.HEALTH]: 'Sức khoẻ',
-  [BLOG_CATEGORIES.TRAINING]: 'Huấn luyện',
-  [BLOG_CATEGORIES.PRODUCT]: 'Sản phẩm',
-  [BLOG_CATEGORIES.ART]: 'Nghệ thuật',
-};
+import { ValueTextManager } from '@/src/utils/ValueTextManager';
 
 const CATEGORY_COLORS: Record<BLOG_CATEGORIES, string> = {
   [BLOG_CATEGORIES.HEALTH]: 'bg-green-100 text-green-700',
@@ -120,10 +114,23 @@ export const AdminBlogsList = QueryProvider(() => {
                     </td>
                     <td className="px-4 py-3 hidden sm:table-cell">
                       <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${CATEGORY_COLORS[blog.category] ?? 'bg-gray-100 text-gray-600'}`}>
-                        {CATEGORY_LABELS[blog.category] ?? 'Khác'}
+                        {ValueTextManager.BlogCategory.GetText(String(blog.category)) ?? 'Khác'}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-gray-500 hidden md:table-cell">{blog.userName}</td>
+                    <td className="px-4 py-3 hidden md:table-cell">
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-gray-500 truncate max-w-[120px]">{blog.userName}</span>
+                        <a
+                          href={`/user/${blog.userId}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-gray-300 hover:text-amber-500 transition-colors shrink-0"
+                          title="Xem trang người dùng"
+                        >
+                          <FaExternalLinkAlt className="w-2.5 h-2.5" />
+                        </a>
+                      </div>
+                    </td>
                     <td className="px-4 py-3 hidden md:table-cell">
                       <span className="flex items-center gap-1 text-gray-500">
                         <FaEye className="w-3 h-3" />{blog.view?.toLocaleString()}
@@ -131,7 +138,21 @@ export const AdminBlogsList = QueryProvider(() => {
                     </td>
                     <td className="px-4 py-3 text-gray-400 hidden lg:table-cell text-xs">{formatDate(blog.isCreatedAt)}</td>
                     <td className="px-4 py-3">
-                      <AdminStatusBadge isActive={blog.isActive} />
+                      <div className="flex flex-col gap-1">
+                        <AdminStatusBadge isActive={blog.isActive} />
+                        {blog.advertisingDate && (
+                          new Date(blog.advertisingDate) > new Date()
+                            ? (
+                              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs bg-amber-100 text-amber-700 font-medium whitespace-nowrap">
+                                Đến {formatDate(blog.advertisingDate)}
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs bg-gray-100 text-gray-500 font-medium whitespace-nowrap">
+                                HH {formatDate(blog.advertisingDate)}
+                              </span>
+                            )
+                        )}
+                      </div>
                     </td>
                     <td className="px-4 py-3 text-right">
                       <div className="flex items-center justify-end gap-2">
