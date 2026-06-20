@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useQuery } from '@/src/utils/hooks';
-import { QUERY_KEYS } from '@/src/utils/constants';
+import { QUERY_KEYS, ADMIN_PAGE_SIZE } from '@/src/utils/constants';
 import { IAdminPaymentResponse, IAdminSearchFilter } from '@/src/interfaces/admin';
 import { IApiResponse, IPaginationModel } from '@/src/interfaces/common';
 import { getAdminPayments } from '@/src/services/admin.api';
@@ -13,8 +13,6 @@ import { QueryProvider } from '../providers/QueryProvider';
 import { formatDate } from '@/src/helpers/formatDate';
 import { FaExternalLinkAlt } from 'react-icons/fa';
 
-const PAGE_SIZE = 10;
-
 export const AdminPaymentsList = QueryProvider(() => {
   const [keyword, setKeyword] = useState('');
   const paginationForm = useForm<IPaginationModel>({ defaultValues: { pageIndex: 1, pageNumber: 1 } });
@@ -22,11 +20,11 @@ export const AdminPaymentsList = QueryProvider(() => {
 
   const { data, isLoading } = useQuery<IApiResponse<IAdminPaymentResponse[]>>(
     [QUERY_KEYS.ADMIN_PAYMENTS, pageIndex, keyword],
-    () => getAdminPayments({ pageIndex, pageSize: PAGE_SIZE, filter: { keyword: keyword || undefined } }),
+    () => getAdminPayments({ pageIndex, pageSize: ADMIN_PAGE_SIZE, filter: { keyword: keyword || undefined } }),
     {
       onSuccess: (res: AxiosResponse<IApiResponse<IAdminPaymentResponse[]>>) => {
         const total = res.data.totalNumber ?? 0;
-        paginationForm.setValue('pageNumber', Math.max(1, Math.ceil(total / PAGE_SIZE)));
+        paginationForm.setValue('pageNumber', Math.max(1, Math.ceil(total / ADMIN_PAGE_SIZE)));
       },
     }
   );

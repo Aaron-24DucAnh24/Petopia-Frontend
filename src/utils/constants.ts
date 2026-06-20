@@ -81,6 +81,7 @@ export const EVENT_NAMES = {
 };
 
 export const PAGE_SIZE = 9;
+export const ADMIN_PAGE_SIZE = 10;
 
 export enum PET_SEX {
   MALE = 0,

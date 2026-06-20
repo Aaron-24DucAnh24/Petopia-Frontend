@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useQuery, useMutation } from '@/src/utils/hooks';
-import { QUERY_KEYS, USER_ROLE, STATIC_URLS } from '@/src/utils/constants';
+import { QUERY_KEYS, USER_ROLE, STATIC_URLS, ADMIN_PAGE_SIZE } from '@/src/utils/constants';
 import { IAdminUserResponse, IAdminSearchFilter } from '@/src/interfaces/admin';
 import { IApiResponse, IPaginationModel } from '@/src/interfaces/common';
 import { getAdminUsers, deactivateUser, activateUser } from '@/src/services/admin.api';
@@ -23,8 +23,6 @@ const ROLE_COLORS: Record<USER_ROLE, string> = {
   [USER_ROLE.ORGANIZATION]: 'bg-purple-100 text-purple-700',
 };
 
-const PAGE_SIZE = 10;
-
 export const AdminUsersList = QueryProvider(() => {
   const [keyword, setKeyword] = useState('');
   const [statusFilter, setStatusFilter] = useState<boolean | undefined>(undefined);
@@ -35,11 +33,11 @@ export const AdminUsersList = QueryProvider(() => {
 
   const { data, refetch, isLoading } = useQuery<IApiResponse<IAdminUserResponse[]>>(
     [QUERY_KEYS.ADMIN_USERS, pageIndex, keyword, statusFilter],
-    () => getAdminUsers({ pageIndex, pageSize: PAGE_SIZE, filter }),
+    () => getAdminUsers({ pageIndex, pageSize: ADMIN_PAGE_SIZE, filter }),
     {
       onSuccess: (res: AxiosResponse<IApiResponse<IAdminUserResponse[]>>) => {
         const total = res.data.totalNumber ?? 0;
-        paginationForm.setValue('pageNumber', Math.max(1, Math.ceil(total / PAGE_SIZE)));
+        paginationForm.setValue('pageNumber', Math.max(1, Math.ceil(total / ADMIN_PAGE_SIZE)));
       },
     }
   );

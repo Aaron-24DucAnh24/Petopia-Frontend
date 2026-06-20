@@ -167,21 +167,21 @@ export const NavOptionsBlock = (props: INavOptionsBlock) => {
                 </li>
               )}
               <li>
-                <a
-                  onClick={() => window.location.replace('/user')}
+                <Link
+                  href="/user"
                   className="flex items-center gap-2 py-2 px-3 text-gray-700 rounded hover:bg-gray-100 md:hidden cursor-pointer">
                   <FaUser size={13} />
                   Hồ sơ
-                </a>
+                </Link>
               </li>
               {isAdmin && (
                 <li>
-                  <a
-                    onClick={() => window.location.replace('/admin')}
+                  <Link
+                    href="/admin"
                     className="flex items-center gap-2 py-2 px-3 text-gray-700 rounded hover:bg-gray-100 md:hidden cursor-pointer">
                     <FaShield size={13} />
                     Admin
-                  </a>
+                  </Link>
                 </li>
               )}
               <li>

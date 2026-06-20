@@ -9,7 +9,6 @@ const headers: Readonly<Record<string, string | boolean>> = {
   Accept: 'application/json',
   'Content-Type': 'application/json; charset=utf-8',
   'Access-Control-Allow-Credentials': true,
-  'ngrok-skip-browser-warning': true,
 };
 
 let refreshPromise: Promise<string> | null = null;

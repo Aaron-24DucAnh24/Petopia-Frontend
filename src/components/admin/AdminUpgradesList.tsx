@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useQuery, useMutation } from '@/src/utils/hooks';
-import { QUERY_KEYS, UPGRADE_STATUS, ORG_TYPE, STATIC_URLS } from '@/src/utils/constants';
+import { QUERY_KEYS, UPGRADE_STATUS, ORG_TYPE, STATIC_URLS, ADMIN_PAGE_SIZE } from '@/src/utils/constants';
 import { IAdminUpgradeResponse, IAdminSearchFilter } from '@/src/interfaces/admin';
 import { IApiResponse, IPaginationModel } from '@/src/interfaces/common';
 import { getAdminUpgrades, approveUpgrade, rejectUpgrade } from '@/src/services/admin.api';
@@ -42,8 +42,6 @@ const ORG_TYPE_COLORS: Record<ORG_TYPE, string> = {
   [ORG_TYPE.OTHER]: 'bg-gray-100 text-gray-600',
 };
 
-const PAGE_SIZE = 10;
-
 export const AdminUpgradesList = QueryProvider(() => {
   const [statusFilter, setStatusFilter] = useState<UPGRADE_STATUS | undefined>(undefined);
   const [selectedRequest, setSelectedRequest] = useState<IAdminUpgradeResponse | null>(null);
@@ -60,11 +58,11 @@ export const AdminUpgradesList = QueryProvider(() => {
 
   const { data, refetch, isLoading } = useQuery<IApiResponse<IAdminUpgradeResponse[]>>(
     [QUERY_KEYS.ADMIN_UPGRADES, pageIndex, keyword, statusFilter],
-    () => getAdminUpgrades({ pageIndex, pageSize: PAGE_SIZE, filter }),
+    () => getAdminUpgrades({ pageIndex, pageSize: ADMIN_PAGE_SIZE, filter }),
     {
       onSuccess: (res: AxiosResponse<IApiResponse<IAdminUpgradeResponse[]>>) => {
         const total = res.data.totalNumber ?? 0;
-        paginationForm.setValue('pageNumber', Math.max(1, Math.ceil(total / PAGE_SIZE)));
+        paginationForm.setValue('pageNumber', Math.max(1, Math.ceil(total / ADMIN_PAGE_SIZE)));
       },
     }
   );

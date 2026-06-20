@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useQuery, useMutation } from '@/src/utils/hooks';
-import { QUERY_KEYS, REPORT_ENTITY } from '@/src/utils/constants';
+import { QUERY_KEYS, REPORT_ENTITY, ADMIN_PAGE_SIZE } from '@/src/utils/constants';
 import { IAdminReportResponse, IAdminSearchFilter } from '@/src/interfaces/admin';
 import { IApiResponse, IPaginationModel } from '@/src/interfaces/common';
 import { getAdminReports, resolveReport } from '@/src/services/admin.api';
@@ -24,8 +24,6 @@ const ENTITY_COLORS: Record<REPORT_ENTITY, string> = {
   [REPORT_ENTITY.Blog]: 'bg-pink-100 text-pink-700',
 };
 
-const PAGE_SIZE = 10;
-
 export const AdminReportsList = QueryProvider(() => {
   const [resolvedFilter, setResolvedFilter] = useState<boolean | undefined>(undefined);
   const [pendingReport, setPendingReport] = useState<IAdminReportResponse | null>(null);
@@ -34,11 +32,11 @@ export const AdminReportsList = QueryProvider(() => {
 
   const { data, refetch, isLoading } = useQuery<IApiResponse<IAdminReportResponse[]>>(
     [QUERY_KEYS.ADMIN_REPORTS, pageIndex, resolvedFilter],
-    () => getAdminReports({ pageIndex, pageSize: PAGE_SIZE, filter: { isActive: resolvedFilter === undefined ? undefined : !resolvedFilter } }),
+    () => getAdminReports({ pageIndex, pageSize: ADMIN_PAGE_SIZE, filter: { isActive: resolvedFilter === undefined ? undefined : !resolvedFilter } }),
     {
       onSuccess: (res: AxiosResponse<IApiResponse<IAdminReportResponse[]>>) => {
         const total = res.data.totalNumber ?? 0;
-        paginationForm.setValue('pageNumber', Math.max(1, Math.ceil(total / PAGE_SIZE)));
+        paginationForm.setValue('pageNumber', Math.max(1, Math.ceil(total / ADMIN_PAGE_SIZE)));
       },
     }
   );

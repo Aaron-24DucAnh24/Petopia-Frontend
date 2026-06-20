@@ -12,8 +12,8 @@ import {
 import { AxiosResponse } from 'axios';
 import {
   RefObject,
+  useCallback,
   useEffect,
-  useRef
 } from 'react';
 
 // Use mutation
@@ -39,33 +39,20 @@ export function useQuery<TData = any, TQueryFnData = any, TQueryKey extends Quer
   return useQueryLib(queryKey, queryFn, options);
 }
 
-// Use run once
-export const useRunOnce = (fn: () => any) => {
-  const triggered = useRef<boolean>(false);
-
-  useEffect(() => {
-    const hasBeenTriggered = triggered.current;
-    if (!hasBeenTriggered) {
-      fn();
-      triggered.current = true;
-    }
-  }, [fn]);
-
-  return null;
-};
-
 // Use click outside
 export const useClickOutside = (
   action: () => void,
   dependencyList: RefObject<HTMLElement>[]
 ) => {
+  const handler = useCallback((event: MouseEvent) => {
+    const isOutSide = dependencyList.every(ref =>
+      ref.current && !ref.current.contains(event.target as HTMLElement)
+    );
+    if (isOutSide) action();
+  }, [action, dependencyList]);
+
   useEffect(() => {
-    document.addEventListener('mousedown', async (event) => {
-      const isOutSide = dependencyList.every(ref =>
-        ref.current && !ref.current.contains(event.target as HTMLElement)
-      );
-      isOutSide && action();
-    });
-    return () => document.removeEventListener('mousedown', () => { });
-  }, []);
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [handler]);
 };

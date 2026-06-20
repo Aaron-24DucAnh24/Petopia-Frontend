@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useQuery, useMutation } from '@/src/utils/hooks';
-import { BLOG_CATEGORIES, QUERY_KEYS } from '@/src/utils/constants';
+import { BLOG_CATEGORIES, QUERY_KEYS, ADMIN_PAGE_SIZE } from '@/src/utils/constants';
 import { IAdminBlogResponse, IAdminSearchFilter } from '@/src/interfaces/admin';
 import { IApiResponse, IPaginationModel } from '@/src/interfaces/common';
 import { getAdminBlogs, deactivateBlog, activateBlog } from '@/src/services/admin.api';
@@ -23,8 +23,6 @@ const CATEGORY_COLORS: Record<BLOG_CATEGORIES, string> = {
   [BLOG_CATEGORIES.ART]: 'bg-pink-100 text-pink-700',
 };
 
-const PAGE_SIZE = 10;
-
 export const AdminBlogsList = QueryProvider(() => {
   const [keyword, setKeyword] = useState('');
   const [statusFilter, setStatusFilter] = useState<boolean | undefined>(undefined);
@@ -33,11 +31,11 @@ export const AdminBlogsList = QueryProvider(() => {
 
   const { data, refetch, isLoading } = useQuery<IApiResponse<IAdminBlogResponse[]>>(
     [QUERY_KEYS.ADMIN_BLOGS, pageIndex, keyword, statusFilter],
-    () => getAdminBlogs({ pageIndex, pageSize: PAGE_SIZE, filter: { keyword: keyword || undefined, isActive: statusFilter } }),
+    () => getAdminBlogs({ pageIndex, pageSize: ADMIN_PAGE_SIZE, filter: { keyword: keyword || undefined, isActive: statusFilter } }),
     {
       onSuccess: (res: AxiosResponse<IApiResponse<IAdminBlogResponse[]>>) => {
         const total = res.data.totalNumber ?? 0;
-        paginationForm.setValue('pageNumber', Math.max(1, Math.ceil(total / PAGE_SIZE)));
+        paginationForm.setValue('pageNumber', Math.max(1, Math.ceil(total / ADMIN_PAGE_SIZE)));
       },
     }
   );

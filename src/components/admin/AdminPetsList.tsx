@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useQuery, useMutation } from '@/src/utils/hooks';
-import { QUERY_KEYS, PET_SPECIES } from '@/src/utils/constants';
+import { QUERY_KEYS, PET_SPECIES, ADMIN_PAGE_SIZE } from '@/src/utils/constants';
 import { IAdminPetResponse, IAdminSearchFilter } from '@/src/interfaces/admin';
 import { IApiResponse, IPaginationModel } from '@/src/interfaces/common';
 import { getAdminPets, deactivatePet, activatePet } from '@/src/services/admin.api';
@@ -16,8 +16,6 @@ import { formatDate } from '@/src/helpers/formatDate';
 import { FaExternalLinkAlt } from 'react-icons/fa';
 import { ValueTextManager } from '@/src/utils/ValueTextManager';
 
-const PAGE_SIZE = 10;
-
 export const AdminPetsList = QueryProvider(() => {
   const [keyword, setKeyword] = useState('');
   const [statusFilter, setStatusFilter] = useState<boolean | undefined>(undefined);
@@ -26,11 +24,11 @@ export const AdminPetsList = QueryProvider(() => {
 
   const { data, refetch, isLoading } = useQuery<IApiResponse<IAdminPetResponse[]>>(
     [QUERY_KEYS.ADMIN_PETS, pageIndex, keyword, statusFilter],
-    () => getAdminPets({ pageIndex, pageSize: PAGE_SIZE, filter: { keyword: keyword || undefined, isActive: statusFilter } }),
+    () => getAdminPets({ pageIndex, pageSize: ADMIN_PAGE_SIZE, filter: { keyword: keyword || undefined, isActive: statusFilter } }),
     {
       onSuccess: (res: AxiosResponse<IApiResponse<IAdminPetResponse[]>>) => {
         const total = res.data.totalNumber ?? 0;
-        paginationForm.setValue('pageNumber', Math.max(1, Math.ceil(total / PAGE_SIZE)));
+        paginationForm.setValue('pageNumber', Math.max(1, Math.ceil(total / ADMIN_PAGE_SIZE)));
       },
     }
   );

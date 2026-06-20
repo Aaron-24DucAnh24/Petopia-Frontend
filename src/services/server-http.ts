@@ -12,7 +12,6 @@ const serverAxios = axios.create({
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json; charset=utf-8',
-    'ngrok-skip-browser-warning': true,
   },
   // Allow self-signed certs in non-production environments (dev backend on 127.0.0.1)
   httpsAgent: process.env.NODE_ENV !== 'production'

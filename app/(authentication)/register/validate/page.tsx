@@ -1,11 +1,11 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { useMutation, useRunOnce } from '@/src/utils/hooks';
+import { useMutation } from '@/src/utils/hooks';
 import { IApiResponse } from '@/src/interfaces/common';
 import { validateRegister } from '@/src/services/authentication.api';
 import { IValidateRegisterRequest } from '@/src/interfaces/authentication';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { QueryProvider } from '@/src/components/providers/QueryProvider';
 import { getErrorMessage } from '@/src/helpers/getErrorMessage';
 import { Alert } from '@/src/components/ui/Alert';
@@ -34,12 +34,16 @@ const ValidatePage = QueryProvider(() => {
   );
 
   // Effects
-  useRunOnce(() => {
-    email && validateRegisterToken && validateRegisterMutation.mutate({
-      email,
-      validateRegisterToken,
-    });
-  });
+  const hasRun = useRef(false);
+  useEffect(() => {
+    if (!hasRun.current) {
+      hasRun.current = true;
+      email && validateRegisterToken && validateRegisterMutation.mutate({
+        email,
+        validateRegisterToken,
+      });
+    }
+  }, []);
 
   return (
     <div className="flex items-center justify-center h-screen bg-yellow-300">

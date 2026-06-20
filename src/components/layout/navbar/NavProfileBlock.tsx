@@ -7,6 +7,7 @@ import { useClickOutside, useMutation } from '@/src/utils/hooks';
 import { userStore } from '@/src/stores/user.store';
 import { deleteCookie } from 'cookies-next';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 import { NavNotificationBlock } from './NavNotificationBlock';
 
@@ -19,6 +20,7 @@ interface INavProfileBlock {
 
 export const NavProfileBlock = (props: INavProfileBlock) => {
   const { image, name, email, notifications } = props;
+  const router = useRouter();
 
   // STATES
   const [isOpenProfile, setIsOpenProfile] = useState(false);
@@ -67,7 +69,7 @@ export const NavProfileBlock = (props: INavProfileBlock) => {
             <div
               test-id="user-profile-link"
               className="px-4 py-3 select-none cursor-pointer"
-              onClick={() => window.location.replace('/user')}>
+              onClick={() => router.push('/user')}>
               <span className="block text-sm text-gray-900 ">{name}</span>
               <span className="block text-sm  text-gray-500 truncate ">{email}</span>
             </div>
