@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { ICurrentUserCoreResponse } from '@/src/interfaces/user';
+import { INotificationResponse } from '@/src/interfaces/notification';
 import { QueryProvider } from '../../providers/QueryProvider';
 import { NavProfileBlock } from './NavProfileBlock';
 import { NavOptionsBlock } from './NavOptionsBlock';
@@ -8,9 +9,10 @@ import Link from 'next/link';
 
 interface INavbar {
   userContext: ICurrentUserCoreResponse | null;
+  notifications: INotificationResponse[];
 }
 
-export const Navbar = QueryProvider(({ userContext }: INavbar) => {
+export const Navbar = QueryProvider(({ userContext, notifications }: INavbar) => {
   const [isOpenMenu, setIsOpenMenu] = useState(false);
 
   return (
@@ -25,7 +27,8 @@ export const Navbar = QueryProvider(({ userContext }: INavbar) => {
           ? (<NavProfileBlock
             name={userContext.name}
             image={userContext.image}
-            email={userContext.email} />)
+            email={userContext.email}
+            notifications={notifications} />)
           : (<div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
             <Link href="/register">
               <button className="mx-4">Đăng kí</button>

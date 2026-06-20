@@ -1,5 +1,6 @@
 'use client';
 import { IApiResponse } from '@/src/interfaces/common';
+import { INotificationResponse } from '@/src/interfaces/notification';
 import { logout } from '@/src/services/authentication.api';
 import { COOKIES_NAME, STATIC_URLS } from '@/src/utils/constants';
 import { useClickOutside, useMutation } from '@/src/utils/hooks';
@@ -13,10 +14,11 @@ interface INavProfileBlock {
   image: string,
   name: string,
   email: string,
+  notifications: INotificationResponse[],
 }
 
 export const NavProfileBlock = (props: INavProfileBlock) => {
-  const { image, name, email } = props;
+  const { image, name, email, notifications } = props;
 
   // STATES
   const [isOpenProfile, setIsOpenProfile] = useState(false);
@@ -44,7 +46,7 @@ export const NavProfileBlock = (props: INavProfileBlock) => {
 
   return (
     <div className="hidden md:flex items-center md:order-2 space-x-3 md:space-x-2 rtl:space-x-reverse">
-      <NavNotificationBlock />
+      <NavNotificationBlock initialNotifications={notifications} />
       <div className="flex flex-col relative">
         <button
           test-id="user-picture-button"

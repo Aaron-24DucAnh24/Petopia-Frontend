@@ -12,10 +12,51 @@ const headers: Readonly<Record<string, string | boolean>> = {
   'ngrok-skip-browser-warning': true,
 };
 
+let refreshPromise: Promise<string> | null = null;
+
+export async function refreshAccessToken(): Promise<string> {
+  if (refreshPromise) return refreshPromise;
+
+  refreshPromise = (async () => {
+    try {
+      const refreshToken = getCookie(COOKIES_NAME.REFRESH_TOKEN_SERVER) as string | undefined;
+      if (!refreshToken) throw new Error('No refresh token');
+
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_ENDPOINT}/Authentication/Refresh`,
+        {
+          params: { refreshToken },
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json; charset=utf-8',
+          },
+        }
+      );
+
+      const data = response.data.data as ILoginResponse;
+      setCookie(COOKIES_NAME.ACCESS_TOKEN_SERVER, data.accessToken, {
+        expires: new Date(data.accessTokenExpiredDate),
+        secure: true,
+        sameSite: 'lax',
+      });
+      setCookie(COOKIES_NAME.REFRESH_TOKEN_SERVER, data.refreshToken, {
+        expires: new Date(data.refreshTokenExpiredDate),
+        secure: true,
+        sameSite: 'lax',
+      });
+
+      return data.accessToken;
+    } finally {
+      refreshPromise = null;
+    }
+  })();
+
+  return refreshPromise;
+}
+
 class Http {
   private instance: AxiosInstance | null = null;
   private urlAPI: string | undefined = process.env.NEXT_PUBLIC_API_ENDPOINT;
-  private refreshPromise: Promise<string> | null = null;
 
   private get http(): AxiosInstance {
     return this.instance ? this.instance : this.initHttp();
@@ -43,43 +84,6 @@ class Http {
     this.urlAPI = urlAPI;
   }
 
-  private async refreshAccessToken(): Promise<string> {
-    if (this.refreshPromise) return this.refreshPromise;
-
-    this.refreshPromise = (async () => {
-      try {
-        const refreshToken = getCookie(COOKIES_NAME.REFRESH_TOKEN_SERVER) as string | undefined;
-        if (!refreshToken) throw new Error('No refresh token');
-
-        const response = await axios.get(`${this.urlAPI}/Authentication/Refresh`, {
-          params: { refreshToken },
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json; charset=utf-8',
-          },
-        });
-
-        const data = response.data.data as ILoginResponse;
-        setCookie(COOKIES_NAME.ACCESS_TOKEN_SERVER, data.accessToken, {
-          expires: new Date(data.accessTokenExpiredDate),
-          secure: true,
-          sameSite: 'lax',
-        });
-        setCookie(COOKIES_NAME.REFRESH_TOKEN_SERVER, data.refreshToken, {
-          expires: new Date(data.refreshTokenExpiredDate),
-          secure: true,
-          sameSite: 'lax',
-        });
-
-        return data.accessToken;
-      } finally {
-        this.refreshPromise = null;
-      }
-    })();
-
-    return this.refreshPromise;
-  }
-
   initHttp() {
     const http = axios.create({
       baseURL: this.urlAPI,
@@ -101,7 +105,7 @@ class Http {
         if (response?.status === UNAUTHORIZED && !(originalRequest as any)._retry) {
           (originalRequest as any)._retry = true;
           try {
-            const newToken = await this.refreshAccessToken();
+            const newToken = await refreshAccessToken();
             originalRequest.headers.Authorization = `Bearer ${newToken}`;
             return this.http(originalRequest);
           } catch (refreshError) {
