@@ -8,6 +8,7 @@ import { QUERY_KEYS } from '@/src/utils/constants';
 import { FeedPostCard } from './FeedPostCard';
 import { PostDetailModal } from './PostDetailModal';
 import { QueryProvider } from '../providers/QueryProvider';
+import { AdvertisedBlogSection } from '../blog/AdvertisedBlogSection';
 
 const PAGE_SIZE = 20;
 
@@ -51,6 +52,7 @@ export const PostListPage = QueryProvider(() => {
 
   return (
     <div className="w-1/3 mx-auto px-4 py-6 flex flex-col gap-4">
+      <AdvertisedBlogSection variant="landing" />
       {posts.map((post, index) => (
         <FeedPostCard
           key={post.id}

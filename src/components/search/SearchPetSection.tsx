@@ -26,6 +26,7 @@ import {
 import CardSkeleton from '../ui/CardSkeleton';
 import { FaFilter } from 'react-icons/fa';
 import { NoResultBackground } from '../ui/NoResultBackground';
+import { AdvertisedBlogSection } from '../blog/AdvertisedBlogSection';
 
 type SearchParams = Pick<URLSearchParams, 'get' | 'getAll'>;
 
@@ -207,6 +208,10 @@ export const SearchPetSection = QueryProvider(() => {
                     </span>
                   )}
                 </button>
+              </div>
+
+              <div className="mb-6">
+                <AdvertisedBlogSection variant="search" />
               </div>
 
               {/* Result label */}

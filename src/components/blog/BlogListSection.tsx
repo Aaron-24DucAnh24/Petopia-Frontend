@@ -13,6 +13,7 @@ import { QueryProvider } from '../providers/QueryProvider';
 import Pagination from '../ui/Pagination';
 import CardSkeleton from '../ui/CardSkeleton';
 import { NoResultBackground } from '../ui/NoResultBackground';
+import { AdvertisedBlogSection } from './AdvertisedBlogSection';
 
 const ALL_CATEGORIES = [
   BLOG_CATEGORIES.HEALTH,
@@ -127,6 +128,10 @@ export const BlogListSection = QueryProvider(({ initialData }: IBlogListSectionP
             {ValueTextManager.BlogCategory.GetText(String(cat))}
           </button>
         ))}
+      </div>
+
+      <div className="mb-6">
+        <AdvertisedBlogSection variant="blog" />
       </div>
 
       {/* Blog grid */}

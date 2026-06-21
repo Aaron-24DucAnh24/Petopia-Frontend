@@ -10,6 +10,7 @@ import { uploadMany } from '@/src/services/storage.api';
 import { useMutation } from '@/src/utils/hooks';
 import { QueryProvider } from '../providers/QueryProvider';
 import { Input } from '../ui/input/Input';
+import { TextArea } from '../ui/input/TextArea';
 import { SelectInput } from '../ui/input/SelectInput';
 import Dropzone from '../ui/Dropzone';
 import QueryButton from '../ui/button/QueryButton';
@@ -158,8 +159,9 @@ export const BlogEditForm = QueryProvider(({ blog }: BlogEditFormProps) => {
           <label htmlFor="blog-excerpt" className="block text-sm font-medium mb-2">
             Tóm tắt <span className="text-red-500">*</span>
           </label>
-          <Input
+          <TextArea
             id="blog-excerpt"
+            rows={3}
             value={excerptValue}
             onChange={(v) => blogForm.setValue('excerpt', v)}
           />
