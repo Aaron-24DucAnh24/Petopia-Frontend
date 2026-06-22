@@ -4,14 +4,17 @@ import Link from 'next/link';
 import { IoEye } from 'react-icons/io5';
 import { ReportBlock } from '../ui/ReportBlock';
 import { IBlogResponse } from '@/src/interfaces/blog';
+import { ICommentResponse } from '@/src/interfaces/post';
 import { REPORT_ENTITY } from '@/src/utils/constants';
 import { ValueTextManager } from '@/src/utils/ValueTextManager';
+import BlogCommentSection from './BlogCommentSection';
 
 interface Props {
   blog: IBlogResponse;
+  initialComments: ICommentResponse[];
 }
 
-const BlogPage: React.FC<Props> = ({ blog }) => {
+const BlogPage: React.FC<Props> = ({ blog, initialComments }) => {
   // Modify only the images within the htmlContent
   const styledHTMLContent = blog.content.replace(
     /<img/g,
@@ -80,6 +83,8 @@ const BlogPage: React.FC<Props> = ({ blog }) => {
         className="prose prose-img:rounded-xl max-w-none text-justify text-gray-800 leading-relaxed mt-8"
         dangerouslySetInnerHTML={{ __html: styledHTMLContent }}
       />
+
+      <BlogCommentSection blogId={blog.id} blogUserId={blog.userId} initialComments={initialComments} />
     </div>
   );
 };

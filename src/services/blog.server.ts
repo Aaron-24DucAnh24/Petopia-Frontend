@@ -1,6 +1,7 @@
 import { serverGet, serverPost } from './server-http';
 import { IApiResponse } from '@/src/interfaces/common';
 import { IBlogCardResponse, IBlogResponse } from '@/src/interfaces/blog';
+import { ICommentResponse } from '@/src/interfaces/post';
 import { BLOG_CATEGORIES, PAGE_SIZE } from '@/src/utils/constants';
 
 export const getBlogsByUserServer = (userId: string) =>
@@ -19,3 +20,11 @@ export const getBlogsServer = (pageIndex: number, categories: BLOG_CATEGORIES[])
     pageSize: PAGE_SIZE,
     filter: categories.length > 0 ? { category: categories } : {},
   });
+
+export const getCommentsBlogServer = async (blogId: string): Promise<ICommentResponse[]> => {
+  try {
+    return await serverGet<ICommentResponse[]>(`/Comment/blog/${blogId}`);
+  } catch {
+    return [];
+  }
+};

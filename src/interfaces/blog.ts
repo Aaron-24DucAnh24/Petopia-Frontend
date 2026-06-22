@@ -48,3 +48,8 @@ export interface IBlogAd{
   category: number;
   userName: string;
 }
+
+export interface ICommentBlog {
+  blogId: string;
+  content: string;
+}

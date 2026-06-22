@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { IBlogResponse } from '@/src/interfaces/blog';
-import { getBlogDetailServer } from '@/src/services/blog.server';
+import { getBlogDetailServer, getCommentsBlogServer } from '@/src/services/blog.server';
 import BlogPage from '@/src/components/blog/BlogPage';
 import BlogDetailSkeleton from '@/src/components/blog/BlogDetailSkeleton';
 import { NoResultBackground } from '@/src/components/ui/NoResultBackground';
@@ -21,5 +21,7 @@ async function BlogDetailContent({ blogId }: { blogId: string }) {
     return <NoResultBackground className="h-fit-screen w-full items-center mt-10" />;
   }
 
-  return <BlogPage blog={blog} />;
+  const initialComments = await getCommentsBlogServer(blogId);
+
+  return <BlogPage blog={blog} initialComments={initialComments} />;
 }
