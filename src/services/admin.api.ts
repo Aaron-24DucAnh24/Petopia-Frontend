@@ -55,3 +55,7 @@ export const approveUpgrade = async (id: string) =>
 
 export const rejectUpgrade = async (id: string) =>
   await http.put(`/Admin/Upgrade/${id}/Reject`);
+
+export const getAdminEmailTemplates = async () =>
+  await http.get('/Admin/EmailTemplate');
+

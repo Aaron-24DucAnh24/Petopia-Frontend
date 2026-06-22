@@ -114,3 +114,14 @@ export interface IAdminSearchFilter {
   isActive?: boolean;
   upgradeStatus?: number;
 }
+
+export interface IAdminEmailTemplateResponse {
+  id: string;
+  subject: string;
+  body: string;
+  type: number;
+  typeName: string;
+  placeholders: string[];
+}
+
+

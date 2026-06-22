@@ -38,6 +38,9 @@ export const DOMAIN_ERROR_MESSAGES = {
   '12002': 'Không thể nhận nuôi thú cưng của chính bạn.',
   '12003': 'Bạn đã gửi yêu cầu nhận nuôi thú cưng này rồi.',
   '10010': 'Vui lòng nhập địa chỉ.',
+  '14003': 'Bạn đã lưu tối đa 5 thẻ. Vui lòng xóa thẻ cũ trước khi thêm mới.',
+  '14004': 'Không thể lưu thẻ. Vui lòng thử lại.',
+  '14005': 'Không thể xóa thẻ. Vui lòng thử lại.',
 };
 
 export const QUERY_KEYS = {
@@ -74,6 +77,8 @@ export const QUERY_KEYS = {
   ADMIN_PAYMENTS: 'ADMIN_PAYMENTS',
   ADMIN_REPORTS: 'ADMIN_REPORTS',
   ADMIN_UPGRADES: 'ADMIN_UPGRADES',
+  ADMIN_EMAIL_TEMPLATES: 'ADMIN_EMAIL_TEMPLATES',
+  GET_SAVED_CARDS: 'GET_SAVED_CARDS',
 };
 
 export const EVENT_NAMES = {

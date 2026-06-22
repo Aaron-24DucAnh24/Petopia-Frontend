@@ -19,6 +19,10 @@ const nextConfig = {
         port: '9000',
         pathname: '/**/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'assets.braintreegateway.com',
+      },
     ],
   },
 };

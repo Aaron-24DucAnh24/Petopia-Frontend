@@ -3,7 +3,8 @@ import { CKEditor, useCKEditorCloud } from '@ckeditor/ckeditor5-react';
 interface IHTMLArea {
   id: string,
   value: string,
-  setValue: (value: string) => void
+  setValue: (value: string) => void,
+  onReady?: (editor: any) => void,
 }
 
 export const HTMLArea = (props: IHTMLArea) => {
@@ -41,6 +42,7 @@ export const HTMLArea = (props: IHTMLArea) => {
     <CKEditor
       editor={ClassicEditor}
       data={value}
+      onReady={(editor) => props.onReady?.(editor)}
       onChange={(_, editor) => {
         setValue(editor.getData());
       }}

@@ -4,13 +4,15 @@ import Popup from 'reactjs-popup';
 import { useForm } from 'react-hook-form';
 import { useQuery, useMutation } from '@/src/utils/hooks';
 import { QueryProvider } from '../providers/QueryProvider';
-import { createPayment, getAdTypes } from '@/src/services/payment.api';
+import { createPayment, getAdTypes, getSavedCards, vaultCard, deleteSavedCard } from '@/src/services/payment.api';
 import { IApiResponse } from '@/src/interfaces/common';
-import { ICreatePaymentRequest, IPaymentTypesResponse } from '@/src/interfaces/payment';
+import { ICreatePaymentRequest, IPaymentTypesResponse, ISavedCardResponse } from '@/src/interfaces/payment';
 import { QUERY_KEYS } from '@/src/utils/constants';
 import PaymentDropIn from '../payment/PaymentDropIn';
+import SavedCardSelector from '../payment/SavedCardSelector';
 import QueryButton from '../ui/button/QueryButton';
 import { Alert } from '../ui/Alert';
+import { AxiosResponse } from 'axios';
 
 interface BlogAdModalProps {
   blogId: string;
@@ -24,9 +26,11 @@ export const BlogAdModal = QueryProvider(({ blogId, show, onClose, onPaymentSucc
   const [alertShow, setAlertShow] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [alertFailed, setAlertFailed] = useState(false);
+  const [selectedCardToken, setSelectedCardToken] = useState<string | null | undefined>(undefined);
+  const [saveNewCard, setSaveNewCard] = useState(false);
 
   const paymentForm = useForm<ICreatePaymentRequest>({
-    defaultValues: { blogId, advertisementId: '', nonce: '' },
+    defaultValues: { blogId, advertisementId: '', nonce: undefined, paymentMethodToken: undefined },
   });
 
   useQuery<IApiResponse<IPaymentTypesResponse[]>>(
@@ -43,11 +47,51 @@ export const BlogAdModal = QueryProvider(({ blogId, show, onClose, onPaymentSucc
     }
   );
 
+  const { data: savedCardsData, refetch: refetchCards } = useQuery<IApiResponse<ISavedCardResponse[]>>(
+    [QUERY_KEYS.GET_SAVED_CARDS],
+    () => getSavedCards(),
+    {
+      onSuccess: (res: AxiosResponse<IApiResponse<ISavedCardResponse[]>>) => {
+        const cards = res.data.data ?? [];
+        if (cards.length > 0 && selectedCardToken === undefined) {
+          setSelectedCardToken(cards[0].token);
+        } else if (cards.length === 0) {
+          setSelectedCardToken(null);
+        }
+      },
+      refetchOnWindowFocus: false,
+    }
+  );
+
+  const savedCards = (savedCardsData as AxiosResponse<IApiResponse<ISavedCardResponse[]>>)?.data?.data ?? [];
+
+  const vaultCardMutation = useMutation(vaultCard, {
+    onSuccess: () => refetchCards(),
+    onError: () => {
+      setAlertMessage('Không thể lưu thẻ. Vui lòng thử lại.');
+      setAlertFailed(true);
+      setAlertShow(true);
+    },
+  });
+
+  const deleteCardMutation = useMutation(deleteSavedCard, {
+    onSuccess: () => {
+      refetchCards();
+      setSelectedCardToken(null);
+    },
+    onError: () => {
+      setAlertMessage('Không thể xóa thẻ.');
+      setAlertFailed(true);
+      setAlertShow(true);
+    },
+  });
+
   const createPaymentMutation = useMutation<IApiResponse<boolean>, ICreatePaymentRequest>(
     createPayment,
     {
       onError: () => {
-        paymentForm.setValue('nonce', '');
+        paymentForm.setValue('nonce', undefined);
+        paymentForm.setValue('paymentMethodToken', undefined);
         setAlertMessage('Thanh toán thất bại.');
         setAlertFailed(true);
         setAlertShow(true);
@@ -63,7 +107,36 @@ export const BlogAdModal = QueryProvider(({ blogId, show, onClose, onPaymentSucc
 
   const selectedId = paymentForm.watch('advertisementId');
   const nonce = paymentForm.watch('nonce');
-  const showBtn = !!nonce && !!selectedId;
+  const usingSavedCard = selectedCardToken !== null && selectedCardToken !== undefined;
+  const showPayBtn = !!selectedId && (usingSavedCard || !!nonce);
+
+  const handlePay = async () => {
+    if (usingSavedCard) {
+      createPaymentMutation.mutate({
+        blogId,
+        advertisementId: paymentForm.getValues('advertisementId'),
+        paymentMethodToken: selectedCardToken!,
+      });
+    } else {
+      const currentNonce = paymentForm.getValues('nonce');
+      if (saveNewCard && currentNonce && savedCards.length < 5) {
+        try {
+          const result = await vaultCardMutation.mutateAsync({ nonce: currentNonce });
+          const vaultedToken = (result as AxiosResponse<IApiResponse<ISavedCardResponse>>).data.data.token;
+          createPaymentMutation.mutate({
+            blogId,
+            advertisementId: paymentForm.getValues('advertisementId'),
+            paymentMethodToken: vaultedToken,
+          });
+        } catch {
+          // Vault failed — vaultCardMutation.onError already surfaces the error;
+          // do not attempt payment with the now-consumed nonce.
+        }
+      } else {
+        createPaymentMutation.mutate(paymentForm.getValues());
+      }
+    }
+  };
 
   return (
     <Popup
@@ -106,15 +179,45 @@ export const BlogAdModal = QueryProvider(({ blogId, show, onClose, onPaymentSucc
           ))}
         </div>
 
-        <PaymentDropIn setNonce={(nonce) => paymentForm.setValue('nonce', nonce)} />
+        {savedCards.length > 0 && (
+          <SavedCardSelector
+            cards={savedCards}
+            selectedToken={selectedCardToken ?? null}
+            onSelect={(token) => {
+              setSelectedCardToken(token);
+              if (token) {
+                paymentForm.setValue('nonce', undefined);
+              }
+            }}
+            onDelete={(token) => deleteCardMutation.mutate(token)}
+            isDeleting={deleteCardMutation.isLoading}
+          />
+        )}
 
-        {showBtn && (
+        {(selectedCardToken === null || savedCards.length === 0) && (
+          <>
+            <PaymentDropIn setNonce={(nonce) => paymentForm.setValue('nonce', nonce)} />
+            {savedCards.length < 5 && (
+              <label className="flex items-center gap-2 mt-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={saveNewCard}
+                  onChange={(e) => setSaveNewCard(e.target.checked)}
+                  className="w-4 h-4 rounded border-gray-300 text-yellow-500 focus:ring-yellow-400"
+                />
+                <span className="text-sm text-gray-600">Lưu thẻ cho lần sau</span>
+              </label>
+            )}
+          </>
+        )}
+
+        {showPayBtn && (
           <div className="flex justify-center mt-6">
             <div className="w-48">
               <QueryButton
                 name="Thanh toán"
-                isLoading={createPaymentMutation.isLoading}
-                action={() => createPaymentMutation.mutate(paymentForm.getValues())}
+                isLoading={createPaymentMutation.isLoading || vaultCardMutation.isLoading}
+                action={handlePay}
               />
             </div>
           </div>
