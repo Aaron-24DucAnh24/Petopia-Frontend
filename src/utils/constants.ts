@@ -38,9 +38,13 @@ export const DOMAIN_ERROR_MESSAGES = {
   '12002': 'Không thể nhận nuôi thú cưng của chính bạn.',
   '12003': 'Bạn đã gửi yêu cầu nhận nuôi thú cưng này rồi.',
   '10010': 'Vui lòng nhập địa chỉ.',
+  '11001': 'Thú cưng không hợp lệ.',
+  '13001': 'Bài viết blog không hợp lệ.',
   '14003': 'Bạn đã lưu tối đa 5 thẻ. Vui lòng xóa thẻ cũ trước khi thêm mới.',
   '14004': 'Không thể lưu thẻ. Vui lòng thử lại.',
   '14005': 'Không thể xóa thẻ. Vui lòng thử lại.',
+  '15001': 'Không tìm thấy bình luận.',
+  '15002': 'Bạn không có quyền xóa bình luận này.',
 };
 
 export const QUERY_KEYS = {

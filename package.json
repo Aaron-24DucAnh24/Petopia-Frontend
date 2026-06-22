@@ -19,7 +19,6 @@
     "cookies-next": "^4.1.0",
     "date-fns": "^4.1.0",
     "framer-motion": "^10.16.16",
-    "fs": "^0.0.1-security",
     "js-cookie": "^3.0.5",
     "mobx": "^6.12.1",
     "mobx-react-lite": "^4.0.7",
