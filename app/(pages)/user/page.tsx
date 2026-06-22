@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 import { Metadata } from 'next';
 import { UserSkeleton } from '@/src/components/user/UserSkeleton';
 import { UserPage } from '@/src/components/user/UserPage';
-import { getCurrentUserServer } from '@/src/services/user.server';
+import { getCurrentUserServer, getUpgradeRequestsServer } from '@/src/services/user.server';
 import { getPetsByUserServer } from '@/src/services/pet.server';
 import { getUserPostsServer } from '@/src/services/post.server';
 import { getBlogsByUserServer } from '@/src/services/blog.server';
@@ -12,6 +12,7 @@ import { IUserInfoResponse } from '@/src/interfaces/user';
 import { IPetResponse } from '@/src/interfaces/pet';
 import { IGetPostResponse } from '@/src/interfaces/post';
 import { IBlogCardResponse } from '@/src/interfaces/blog';
+import { IUpgradeResponse } from '@/src/interfaces/org';
 
 export const metadata: Metadata = {
   title: 'Hồ sơ người dùng - Petopia',
@@ -49,12 +50,18 @@ async function UserPageContent() {
     initialBlogs = await getBlogsByUserServer(userInfo.id);
   } catch { /* non-critical */ }
 
+  let initialUpgrades: IUpgradeResponse[] = [];
+  try {
+    initialUpgrades = await getUpgradeRequestsServer();
+  } catch { /* non-critical */ }
+
   return (
     <UserPage
       userInfo={userInfo}
       initialPets={initialPets}
       initialPosts={initialPosts}
       initialBlogs={initialBlogs}
+      initialUpgrades={initialUpgrades}
     />
   );
 }

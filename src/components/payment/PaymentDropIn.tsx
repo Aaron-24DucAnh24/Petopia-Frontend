@@ -1,7 +1,7 @@
 'use client';
 import { useQuery } from '@/src/utils/hooks';
 import { getPaymentToken } from '@/src/services/payment.api';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { IApiResponse } from '@/src/interfaces/common';
 import { QUERY_KEYS } from '@/src/utils/constants';
 import { Alert } from '../ui/Alert';
@@ -13,6 +13,7 @@ export default function PaymentDropIn({
   setNonce: (nonce: string) => void;
 }) {
   const [clientToken, setClientToken] = useState<string>('');
+  const dropinRef = useRef<braintree.Dropin | null>(null);
   const [alertShow, setAlertShow] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string>('');
   const [alertFailed, setAlertFailed] = useState<boolean>(false);
@@ -34,54 +35,47 @@ export default function PaymentDropIn({
   );
 
   useEffect(() => {
-    if (clientToken) {
-      braintree.create(
-        {
-          authorization: clientToken,
-          container: '#dropin-container',
-          card: {
-            cardholderName: {
-              required: true,
-            },
-            overrides: {
-              styles: {
-                input: {
-                  'font-size': '16px',
-                  'font-family': 'courier, monospace',
-                  color: '#3A3A3A',
-                },
-                ':focus': {
-                  color: 'black',
-                },
-                '.valid': {
-                  color: '#4F8A10',
-                },
-                '.invalid': {
-                  color: '#D8000C',
-                },
-              },
+    if (!clientToken) return;
+
+    braintree.create(
+      {
+        authorization: clientToken,
+        container: '#dropin-container',
+        preselectVaultedPaymentMethod: false,
+        card: {
+          cardholderName: { required: true },
+          overrides: {
+            styles: {
+              input: { 'font-size': '16px', 'font-family': 'courier, monospace', color: '#3A3A3A' },
+              ':focus': { color: 'black' },
+              '.valid': { color: '#4F8A10' },
+              '.invalid': { color: '#D8000C' },
             },
           },
         },
-        (error, dropinInstance) => {
-          if (error) {
-            return;
-          }
-          let submitButton = document.getElementById('payment-btn');
-          submitButton?.addEventListener('click', () => {
-            dropinInstance?.requestPaymentMethod((error, payload) => {
-              if (error) {
-                setAlertMessage('Thẻ không hợp lệ. Vui lòng thử lại.');
-                setAlertFailed(true);
-                setAlertShow(true);
-                return;
-              }
-              setNonce(payload.nonce);
-            });
+      },
+      (error, dropinInstance) => {
+        if (error || !dropinInstance) return;
+        dropinRef.current = dropinInstance;
+        const submitButton = document.getElementById('payment-btn');
+        submitButton?.addEventListener('click', () => {
+          dropinInstance.requestPaymentMethod((err, payload) => {
+            if (err) {
+              setAlertMessage('Thẻ không hợp lệ. Vui lòng thử lại.');
+              setAlertFailed(true);
+              setAlertShow(true);
+              return;
+            }
+            setNonce(payload.nonce);
           });
-        }
-      );
-    }
+        });
+      }
+    );
+
+    return () => {
+      dropinRef.current?.teardown();
+      dropinRef.current = null;
+    };
   }, [clientToken]);
 
   return (

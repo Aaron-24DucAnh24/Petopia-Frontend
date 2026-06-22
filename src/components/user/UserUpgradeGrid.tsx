@@ -8,13 +8,12 @@ import { UpgradeRequestDetailModal, UPGRADE_MODAL_STYLE } from './UpgradeRequest
 import { UpgradeStatusBadge } from './UpgradeStatusBadge';
 import { formatDate } from '@/src/helpers/formatDate';
 import { AddButton } from '../ui/button/AddButton';
-import { QueryProvider } from '../providers/QueryProvider';
 
-interface IUpgradeRequestsPageProps {
+interface IUserUpgradeGridProps {
   initialData: IUpgradeResponse[];
 }
 
-export const UpgradeRequestsPage = QueryProvider(({ initialData }: IUpgradeRequestsPageProps) => {
+export function UserUpgradeGrid({ initialData }: IUserUpgradeGridProps) {
   const router = useRouter();
   const [showCreate, setShowCreate] = useState(false);
   const [selectedRequestId, setSelectedRequestId] = useState<string | null>(null);
@@ -25,7 +24,7 @@ export const UpgradeRequestsPage = QueryProvider(({ initialData }: IUpgradeReque
   };
 
   return (
-    <div className="container max-w-3xl p-5 mx-auto shadow-2xl rounded-2xl mt-8">
+    <>
       <div className="flex items-center gap-3 mb-6">
         <h2 className="text-base font-semibold text-gray-700 uppercase tracking-widest">
           Đơn xác minh tổ chức
@@ -78,6 +77,6 @@ export const UpgradeRequestsPage = QueryProvider(({ initialData }: IUpgradeReque
           router.refresh();
         }}
       />
-    </div>
+    </>
   );
-});
+}

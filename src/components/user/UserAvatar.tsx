@@ -11,10 +11,11 @@ import { useStores } from '@/src/stores';
 interface IUserAvatar {
   image: string;
   setImage: (image: string) => void;
+  containerClassName?: string;
 }
 
 export const UserAvatar = (props: IUserAvatar) => {
-  const { image, setImage } = props;
+  const { image, setImage, containerClassName = 'h-32 w-32 md:h-44 md:w-44' } = props;
   const inputRef = useRef<HTMLInputElement>(null);
   const { userStore } = useStores();
 
@@ -77,7 +78,7 @@ export const UserAvatar = (props: IUserAvatar) => {
 
   return (
     <div
-      className="relative h-32 w-32 md:h-52 md:w-52 md:bottom-20"
+      className={`relative ${containerClassName}`}
       onMouseEnter={() => !isUploadAvatar && setIsEditAvatar(true)}
       onMouseLeave={() => !isUploadAvatar && setIsEditAvatar(false)}>
       <Image

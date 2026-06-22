@@ -11,12 +11,16 @@ export async function GET(request: NextRequest) {
   const refreshToken = cookieStore.get(COOKIES_NAME.REFRESH_TOKEN_SERVER)?.value;
 
   if (!refreshToken) {
-    return NextResponse.redirect(new URL('/login', request.nextUrl.origin));
+    const res = NextResponse.redirect(new URL('/login', request.nextUrl.origin));
+    res.cookies.delete(COOKIES_NAME.REFRESH_TOKEN_SERVER);
+    return res;
   }
 
   const tokens = await refreshServerToken(refreshToken);
   if (!tokens) {
-    return NextResponse.redirect(new URL('/login', request.nextUrl.origin));
+    const res = NextResponse.redirect(new URL('/login', request.nextUrl.origin));
+    res.cookies.delete(COOKIES_NAME.REFRESH_TOKEN_SERVER);
+    return res;
   }
 
   const response = NextResponse.redirect(new URL(returnUrl, request.nextUrl.origin));
