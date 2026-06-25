@@ -53,7 +53,7 @@ export async function refreshAccessToken(): Promise<string> {
   return refreshPromise;
 }
 
-class Http {
+export class Http {
   private instance: AxiosInstance | null = null;
   private urlAPI: string | undefined = process.env.NEXT_PUBLIC_API_ENDPOINT;
 

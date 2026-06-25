@@ -10,8 +10,10 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 import { NavNotificationBlock } from './NavNotificationBlock';
+import { NavChatBlock } from './NavChatBlock';
 
 interface INavProfileBlock {
+  id: string,
   image: string,
   name: string,
   email: string,
@@ -19,7 +21,7 @@ interface INavProfileBlock {
 }
 
 export const NavProfileBlock = (props: INavProfileBlock) => {
-  const { image, name, email, notifications } = props;
+  const { id, image, name, email, notifications } = props;
   const router = useRouter();
 
   // STATES
@@ -48,6 +50,7 @@ export const NavProfileBlock = (props: INavProfileBlock) => {
 
   return (
     <div className="hidden md:flex items-center md:order-2 space-x-3 md:space-x-2 rtl:space-x-reverse">
+      <NavChatBlock currentUserId={id} />
       <NavNotificationBlock initialNotifications={notifications} />
       <div className="flex flex-col relative">
         <button
@@ -80,6 +83,6 @@ export const NavProfileBlock = (props: INavProfileBlock) => {
           </div>
         }
       </div>
-    </div >
+    </div>
   );
 };

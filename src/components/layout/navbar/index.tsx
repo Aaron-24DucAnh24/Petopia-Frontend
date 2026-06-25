@@ -25,6 +25,7 @@ export const Navbar = QueryProvider(({ userContext, notifications }: INavbar) =>
         </Link>
         {userContext
           ? (<NavProfileBlock
+            id={userContext.id}
             name={userContext.name}
             image={userContext.image}
             email={userContext.email}
