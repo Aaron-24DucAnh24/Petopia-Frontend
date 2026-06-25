@@ -1,10 +1,21 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
 import { AxiosResponse } from 'axios';
 import { FaXmark } from 'react-icons/fa6';
 import type { ConversationResponse } from '@/src/interfaces/chat';
+import type { IUserInfoResponse } from '@/src/interfaces/user';
 import { createConversation } from '@/src/services/chat.api';
+import { searchUsersByEmail } from '@/src/services/user.api';
 import { useMutation } from '@/src/utils/hooks';
+import { STATIC_URLS } from '@/src/utils/constants';
+
+interface SearchUser {
+  id: string;
+  name: string;
+  email: string;
+  avatar: string;
+}
 
 interface Props {
   currentUserId: string;
@@ -13,14 +24,48 @@ interface Props {
 }
 
 export function NewConversationModal({ currentUserId, onCreated, onClose }: Props) {
-  const [userId, setUserId] = useState('');
+  const [emailInput, setEmailInput] = useState('');
+  const [results, setResults] = useState<SearchUser[]>([]);
+  const [searching, setSearching] = useState(false);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    if (!emailInput.trim()) {
+      setResults([]);
+      return;
+    }
+    debounceRef.current = setTimeout(async () => {
+      setSearching(true);
+      try {
+        const res = await searchUsersByEmail(emailInput.trim());
+        const data = ((res.data as unknown) as { data: IUserInfoResponse[] }).data;
+        setResults(
+          data
+            .filter((u) => u.id !== currentUserId)
+            .map((u) => {
+              const attrs = u.attributes;
+              const name =
+                attrs?.organizationName ||
+                `${attrs?.firstName || ''} ${attrs?.lastName || ''}`.trim() ||
+                u.email;
+              return { id: u.id, name, email: u.email, avatar: u.image || STATIC_URLS.NO_AVATAR };
+            }),
+        );
+      } catch {
+        setResults([]);
+      } finally {
+        setSearching(false);
+      }
+    }, 300);
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, [emailInput, currentUserId]);
 
   const createMutation = useMutation<ConversationResponse, string>(
     (targetUserId: string) =>
-      createConversation({
-        type: 'direct',
-        participants: [currentUserId, targetUserId],
-      }),
+      createConversation({ type: 'direct', participants: [currentUserId, targetUserId] }),
     {
       onSuccess: (res: AxiosResponse<ConversationResponse>) => {
         onCreated(res.data);
@@ -28,19 +73,6 @@ export function NewConversationModal({ currentUserId, onCreated, onClose }: Prop
       },
     },
   );
-
-  const handleCreate = () => {
-    const target = userId.trim();
-    if (!target || target === currentUserId) return;
-    createMutation.mutate(target);
-  };
-
-  const isSelf = userId.trim() === currentUserId;
-  const errorMessage = createMutation.isError
-    ? 'Không tìm thấy người dùng hoặc đã có lỗi xảy ra.'
-    : isSelf
-      ? 'Không thể tự nhắn tin cho chính mình.'
-      : '';
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
@@ -54,27 +86,54 @@ export function NewConversationModal({ currentUserId, onCreated, onClose }: Prop
 
         <div className="px-4 py-4 space-y-3">
           <div>
-            <label className="text-xs text-gray-500 mb-1 block">ID người dùng</label>
+            <label className="text-xs text-gray-500 mb-1 block">Email người dùng</label>
             <input
               type="text"
-              value={userId}
-              onChange={(e) => setUserId(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleCreate()}
-              placeholder="Nhập ID người dùng..."
+              value={emailInput}
+              onChange={(e) => setEmailInput(e.target.value)}
+              placeholder="Nhập email..."
               className="w-full px-3 py-2 text-sm border border-gray-200 rounded-xl focus:outline-none focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400"
               autoFocus
             />
           </div>
 
-          {errorMessage && <p className="text-xs text-red-500">{errorMessage}</p>}
+          {searching && <p className="text-xs text-gray-400">Đang tìm kiếm...</p>}
 
-          <button
-            onClick={handleCreate}
-            disabled={!userId.trim() || isSelf || createMutation.isLoading}
-            className="w-full py-2 rounded-xl bg-yellow-300 hover:bg-yellow-400 disabled:opacity-40 text-sm font-medium transition-colors"
-          >
-            {createMutation.isLoading ? 'Đang tạo...' : 'Bắt đầu trò chuyện'}
-          </button>
+          {!searching && results.length === 0 && emailInput.trim() && (
+            <p className="text-xs text-gray-400">Không tìm thấy người dùng.</p>
+          )}
+
+          {results.length > 0 && (
+            <div className="border border-gray-100 rounded-xl overflow-hidden max-h-60 overflow-y-auto">
+              {results.map((user) => (
+                <button
+                  key={user.id}
+                  type="button"
+                  onClick={() => createMutation.mutate(user.id)}
+                  disabled={createMutation.isLoading}
+                  className="w-full flex items-center gap-3 px-3 py-2 hover:bg-gray-50 text-left disabled:opacity-40"
+                >
+                  <div className="relative w-8 h-8 flex-shrink-0">
+                    <Image
+                      src={user.avatar}
+                      alt={user.name}
+                      fill
+                      sizes="32px"
+                      className="rounded-full object-cover"
+                    />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium text-gray-800 truncate">{user.name}</p>
+                    <p className="text-xs text-gray-400 truncate">{user.email}</p>
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
+
+          {createMutation.isError && (
+            <p className="text-xs text-red-500">Có lỗi xảy ra khi tạo cuộc trò chuyện.</p>
+          )}
         </div>
       </div>
     </div>

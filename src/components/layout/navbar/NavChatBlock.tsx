@@ -44,6 +44,16 @@ export const NavChatBlock = ({ currentUserId }: Props) => {
     return () => chatWs.off('new_message', handleNewMessage);
   }, [handleNewMessage]);
 
+  // Remove a conversation from the badge when ChatPage opens it
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const { conversationId } = (e as CustomEvent<{ conversationId: string }>).detail;
+      setUnreadConversations((prev) => prev.filter((id) => id !== conversationId));
+    };
+    window.addEventListener('conversation-opened', handler);
+    return () => window.removeEventListener('conversation-opened', handler);
+  }, []);
+
   const unreadCount = unreadConversations.length;
 
   return (

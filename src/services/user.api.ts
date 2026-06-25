@@ -56,3 +56,6 @@ export const report = async (data: IReportRequest) =>
 
 export const getPreReport = async (data: IPreReportRequest) =>
   await http.post('/Report/PreReport', data);
+
+export const searchUsersByEmail = async (email: string) =>
+  await http.get('/User/FindByEmail', { email });

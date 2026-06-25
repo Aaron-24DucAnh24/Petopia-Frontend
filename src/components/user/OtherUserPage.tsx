@@ -1,7 +1,12 @@
 'use client';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import { FaMessage } from 'react-icons/fa6';
 import { IUserInfoResponse } from '@/src/interfaces/user';
 import { STATIC_URLS, REPORT_ENTITY } from '@/src/utils/constants';
-import Image from 'next/image';
+import { userStore } from '@/src/stores/user.store';
+import { createConversation } from '@/src/services/chat.api';
 import { ReportBlock } from '../ui/ReportBlock';
 import { UserInformationBlock } from './UserInformationBlock';
 import { UserRoleName } from './UserRoleName';
@@ -12,6 +17,28 @@ interface IOtherUserPageProps {
 }
 
 export const OtherUserPage = ({ userId, userInfo }: IOtherUserPageProps) => {
+  const router = useRouter();
+  const [chatLoading, setChatLoading] = useState(false);
+
+  const currentUserId = userStore.userContext?.id;
+  const isOwnProfile = currentUserId === userId;
+
+  const handleStartChat = async () => {
+    if (!currentUserId) return;
+    setChatLoading(true);
+    try {
+      const res = await createConversation({
+        type: 'direct',
+        participants: [currentUserId, userId],
+      });
+      router.push(`/chat?conversationId=${res.data.id}`);
+    } catch {
+      // silently ignore — user can retry
+    } finally {
+      setChatLoading(false);
+    }
+  };
+
   return (
     <div className="container max-w-3xl p-5 mx-auto shadow-2xl rounded-2xl mt-36">
       <div className="flex relative md:-mb-10">
@@ -34,7 +61,17 @@ export const OtherUserPage = ({ userId, userInfo }: IOtherUserPageProps) => {
 
       <UserInformationBlock userInfo={userInfo} visible />
 
-      <div className="mt-3 flex justify-end">
+      <div className="mt-3 flex justify-end gap-2">
+        {currentUserId && !isOwnProfile && (
+          <button
+            onClick={handleStartChat}
+            disabled={chatLoading}
+            className="flex items-center gap-2 px-4 py-2 bg-yellow-300 hover:bg-yellow-400 disabled:opacity-50 text-sm font-medium rounded-xl transition-colors"
+          >
+            <FaMessage size={14} />
+            {chatLoading ? 'Đang mở...' : 'Nhắn tin'}
+          </button>
+        )}
         <ReportBlock id={userId} type={REPORT_ENTITY.User} />
       </div>
     </div>

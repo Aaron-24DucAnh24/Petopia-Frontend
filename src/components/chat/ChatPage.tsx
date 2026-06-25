@@ -1,5 +1,5 @@
 'use client';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AxiosResponse } from 'axios';
 import type { ICurrentUserCoreResponse, IUserInfoResponse } from '@/src/interfaces/user';
 import type { ConversationListResponse, ConversationResponse, MessageResponse, WsEvent } from '@/src/interfaces/chat';
@@ -24,7 +24,12 @@ export const ChatPage = QueryProvider(({ userContext, initialConversationId }: P
   const [selectedConversation, setSelectedConversation] = useState<ConversationResponse | null>(null);
   const [showMobileList, setShowMobileList] = useState(true);
   const [showNewModal, setShowNewModal] = useState(false);
-  const [unreadConversationIds, setUnreadConversationIds] = useState<Set<string>>(new Set());
+
+  // Derived from conversations[].unread_count — single source of truth seeded from MongoDB
+  const unreadConversationIds = useMemo(
+    () => new Set(conversations.filter((c) => (c.unread_count ?? 0) > 0).map((c) => c.id)),
+    [conversations],
+  );
 
   // User info cache: userId → { name, image }
   const [userNames, setUserNames] = useState<Record<string, string>>({});
@@ -41,14 +46,9 @@ export const ChatPage = QueryProvider(({ userContext, initialConversationId }: P
       () => listConversations(),
       {
         onSuccess: (res: AxiosResponse<ConversationListResponse>) => {
+          // Items already carry unread_count from MongoDB aggregation
           setConversations(res.data.items);
           setNextCursor(res.data.next_cursor);
-
-          // Seed unread state from the API (survives page reloads)
-          const initialUnread = new Set(
-            res.data.items.filter((c) => (c.unread_count ?? 0) > 0).map((c) => c.id),
-          );
-          setUnreadConversationIds(initialUnread);
 
           res.data.items.forEach((conversation) => {
             if (conversation.type === 'direct') {
@@ -80,7 +80,7 @@ export const ChatPage = QueryProvider(({ userContext, initialConversationId }: P
   };
 
   // ------------------------------------------------------------------
-  // User info cache
+  // User info cache (name + avatar + email for modal suggestions)
   // ------------------------------------------------------------------
   const lookupUser = useCallback(
     async (userId: string) => {
@@ -115,6 +115,10 @@ export const ChatPage = QueryProvider(({ userContext, initialConversationId }: P
   const handleWsNewMessage = useCallback(
     (event: WsEvent) => {
       const msg = event.payload as unknown as MessageResponse;
+      const isUnread =
+        msg.sender_id !== userContext.id &&
+        selectedConversationIdRef.current !== msg.conversation_id;
+
       setConversations((prev) => {
         const idx = prev.findIndex((c) => c.id === msg.conversation_id);
         if (idx === -1) {
@@ -130,15 +134,10 @@ export const ChatPage = QueryProvider(({ userContext, initialConversationId }: P
             sent_at: msg.sent_at,
             message_type: msg.message_type,
           },
+          unread_count: isUnread ? (prev[idx].unread_count ?? 0) + 1 : prev[idx].unread_count,
         };
         return [updated, ...prev.filter((_, i) => i !== idx)];
       });
-      if (
-        msg.sender_id !== userContext.id &&
-        selectedConversationIdRef.current !== msg.conversation_id
-      ) {
-        setUnreadConversationIds((prev) => new Set([...prev, msg.conversation_id]));
-      }
     },
     [refetchConversations, userContext.id],
   );
@@ -152,7 +151,6 @@ export const ChatPage = QueryProvider(({ userContext, initialConversationId }: P
   // Conversation selection helpers
   // ------------------------------------------------------------------
   const handleSelectConversation = (conversation: ConversationResponse) => {
-    // Notify backend that the previous conversation is no longer active
     if (selectedConversationIdRef.current && selectedConversationIdRef.current !== conversation.id) {
       chatWs.send({ type: 'conversation_closed', payload: { conversation_id: selectedConversationIdRef.current } });
     }
@@ -160,11 +158,17 @@ export const ChatPage = QueryProvider(({ userContext, initialConversationId }: P
     chatWs.send({ type: 'conversation_opened', payload: { conversation_id: conversation.id } });
     setSelectedConversation(conversation);
     setShowMobileList(false);
-    setUnreadConversationIds((prev) => {
-      const next = new Set(prev);
-      next.delete(conversation.id);
-      return next;
-    });
+
+    // Clear unread in conversations array (drives the highlight and badge via useMemo)
+    setConversations((prev) =>
+      prev.map((c) => (c.id === conversation.id ? { ...c, unread_count: 0 } : c)),
+    );
+
+    // Let NavChatBlock remove this conversation from its badge
+    window.dispatchEvent(
+      new CustomEvent('conversation-opened', { detail: { conversationId: conversation.id } }),
+    );
+
     if (conversation.type === 'direct') {
       const otherId = conversation.participants.find((p) => p !== userContext.id);
       if (otherId) lookupUser(otherId);
