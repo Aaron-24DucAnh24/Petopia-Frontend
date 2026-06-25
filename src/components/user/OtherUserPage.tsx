@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { FaMessage } from 'react-icons/fa6';
 import { IUserInfoResponse } from '@/src/interfaces/user';
 import { STATIC_URLS, REPORT_ENTITY } from '@/src/utils/constants';
-import { userStore } from '@/src/stores/user.store';
 import { createConversation } from '@/src/services/chat.api';
 import { ReportBlock } from '../ui/ReportBlock';
 import { UserInformationBlock } from './UserInformationBlock';
@@ -14,13 +13,13 @@ import { UserRoleName } from './UserRoleName';
 interface IOtherUserPageProps {
   userId: string;
   userInfo: IUserInfoResponse;
+  currentUserId: string | null;
 }
 
-export const OtherUserPage = ({ userId, userInfo }: IOtherUserPageProps) => {
+export const OtherUserPage = ({ userId, userInfo, currentUserId }: IOtherUserPageProps) => {
   const router = useRouter();
   const [chatLoading, setChatLoading] = useState(false);
 
-  const currentUserId = userStore.userContext?.id;
   const isOwnProfile = currentUserId === userId;
 
   const handleStartChat = async () => {

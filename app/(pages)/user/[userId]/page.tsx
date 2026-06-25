@@ -3,7 +3,7 @@ import { Suspense } from 'react';
 import { Metadata } from 'next';
 import { OtherUserPage } from '@/src/components/user/OtherUserPage';
 import { UserSkeleton } from '@/src/components/user/UserSkeleton';
-import { getOtherUserServer } from '@/src/services/user.server';
+import { getOtherUserServer, getCurrentUserCoreServer } from '@/src/services/user.server';
 import { IUserInfoResponse } from '@/src/interfaces/user';
 
 export const metadata: Metadata = {
@@ -27,5 +27,7 @@ async function OtherUserPageContent({ userId }: { userId: string }) {
     notFound();
   }
 
-  return <OtherUserPage userId={userId} userInfo={userInfo} />;
+  const currentUser = await getCurrentUserCoreServer();
+
+  return <OtherUserPage userId={userId} userInfo={userInfo} currentUserId={currentUser?.id ?? null} />;
 }
