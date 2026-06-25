@@ -10,14 +10,12 @@ import { QUERY_KEYS, STATIC_URLS } from '@/src/utils/constants';
 import { useMutation, useQuery } from '@/src/utils/hooks';
 import { MessageBubble } from './MessageBubble';
 import { MessageInput } from './MessageInput';
-import { ForwardModal } from './ForwardModal';
 
 interface Props {
   conversation: ConversationResponse;
   currentUserId: string;
   displayName: string;
   avatarUrl: string;
-  conversations: ConversationResponse[];
   onBack: () => void;
   onConversationListUpdate: (event: WsEvent) => void;
 }
@@ -27,7 +25,6 @@ export function ChatWindow({
   currentUserId,
   displayName,
   avatarUrl,
-  conversations,
   onBack,
   onConversationListUpdate,
 }: Props) {
@@ -36,7 +33,6 @@ export function ChatWindow({
   const [loadingMore, setLoadingMore] = useState(false);
   const [replyTo, setReplyTo] = useState<MessageResponse | null>(null);
   const [typingUserIds, setTypingUserIds] = useState<string[]>([]);
-  const [forwardMsg, setForwardMsg] = useState<MessageResponse | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const typingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -45,20 +41,25 @@ export function ChatWindow({
   // ------------------------------------------------------------------
   // Messages — initial load
   // ------------------------------------------------------------------
-  const { isLoading } = useQuery<MessageListResponse>(
+  const { isLoading, data: queryData } = useQuery<MessageListResponse>(
     [QUERY_KEYS.GET_MESSAGES, conversation.id],
     () => listMessages(conversation.id),
     {
-      onSuccess: (res: AxiosResponse<MessageListResponse>) => {
-        hasScrolledInitialRef.current = false;
-        setMessages(res.data.items.slice().reverse());
-        setNextCursor(res.data.next_cursor);
-        markRead(conversation.id).catch(() => {});
-      },
       staleTime: Infinity,
       refetchOnWindowFocus: false,
     },
   );
+
+  // onSuccess is not called for cache hits in react-query v3, so we use an
+  // effect on queryData to handle both fresh fetches and cache-served responses.
+  useEffect(() => {
+    if (!queryData) return;
+    hasScrolledInitialRef.current = false;
+    setMessages(queryData.data.items.slice().reverse());
+    setNextCursor(queryData.data.next_cursor);
+    markRead(conversation.id).catch(() => {});
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [queryData]);
 
   const scrollToBottom = (smooth = false) => {
     const container = containerRef.current;
@@ -264,7 +265,6 @@ export function ChatWindow({
               setMessages((prev) => prev.map((m) => (m.id === updated.id ? updated : m)))
             }
             onReply={setReplyTo}
-            onForward={setForwardMsg}
           />
         ))}
         <div ref={bottomRef} />
@@ -277,14 +277,6 @@ export function ChatWindow({
         onTyping={handleTypingSignal}
       />
 
-      {forwardMsg && (
-        <ForwardModal
-          message={forwardMsg}
-          conversations={conversations}
-          currentConversationId={conversation.id}
-          onClose={() => setForwardMsg(null)}
-        />
-      )}
     </div>
   );
 }

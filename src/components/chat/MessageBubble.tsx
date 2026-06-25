@@ -1,12 +1,14 @@
 'use client';
 import { useState } from 'react';
 import { AxiosResponse } from 'axios';
-import { FaReply, FaTrash, FaShare, FaFaceSmile } from 'react-icons/fa6';
+import dynamic from 'next/dynamic';
+import type { EmojiClickData } from 'emoji-picker-react';
+import { FaReply, FaTrash, FaFaceSmile } from 'react-icons/fa6';
 import type { MessageResponse } from '@/src/interfaces/chat';
 import { deleteMessage, toggleReaction } from '@/src/services/chat.api';
 import { useMutation } from '@/src/utils/hooks';
 
-const QUICK_EMOJIS = ['❤️', '😆', '😮', '😢', '👍'];
+const EmojiPicker = dynamic(() => import('emoji-picker-react'), { ssr: false });
 
 interface Props {
   message: MessageResponse;
@@ -14,10 +16,9 @@ interface Props {
   onDeleted: (messageId: string) => void;
   onUpdated: (message: MessageResponse) => void;
   onReply: (message: MessageResponse) => void;
-  onForward: (message: MessageResponse) => void;
 }
 
-export function MessageBubble({ message, isOwn, onDeleted, onUpdated, onReply, onForward }: Props) {
+export function MessageBubble({ message, isOwn, onDeleted, onUpdated, onReply }: Props) {
   const [showActions, setShowActions] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
@@ -37,6 +38,10 @@ export function MessageBubble({ message, isOwn, onDeleted, onUpdated, onReply, o
     },
   );
 
+  const handleReactionEmojiClick = (emojiData: EmojiClickData) => {
+    reactionMutation.mutate(emojiData.emoji);
+  };
+
   const reactionEntries = Object.entries(message.reactions).filter(([, users]) => users.length > 0);
 
   if (message.is_deleted) {
@@ -53,15 +58,16 @@ export function MessageBubble({ message, isOwn, onDeleted, onUpdated, onReply, o
     <div
       className={`flex ${isOwn ? 'justify-end' : 'justify-start'} mb-1 group`}
       onMouseEnter={() => setShowActions(true)}
-      onMouseLeave={() => { setShowActions(false); setShowEmojiPicker(false); }}
+      onMouseLeave={(e) => {
+        const related = e.relatedTarget as Node | null;
+        // Keep open if mouse moves into the emoji picker (which may overflow the bubble)
+        const picker = e.currentTarget.querySelector('.EmojiPickerReact');
+        if (picker && related && picker.contains(related)) return;
+        setShowActions(false);
+        setShowEmojiPicker(false);
+      }}
     >
       <div className={`flex flex-col max-w-[70%] min-w-0 ${isOwn ? 'items-end' : 'items-start'}`}>
-        {message.is_forwarded && (
-          <span className="text-[10px] text-gray-400 mb-0.5 flex items-center gap-1">
-            <FaShare size={9} /> Đã chuyển tiếp
-          </span>
-        )}
-
         {message.reply_to && (
           <div className="text-xs text-gray-500 bg-gray-100 rounded-lg px-2 py-1 mb-0.5 border-l-2 border-yellow-400 max-w-full truncate">
             {message.reply_to.content_preview}
@@ -92,27 +98,18 @@ export function MessageBubble({ message, isOwn, onDeleted, onUpdated, onReply, o
                 <FaFaceSmile size={12} />
               </button>
               {showEmojiPicker && (
-                <div className={`absolute bottom-7 ${isOwn ? 'right-0' : 'left-0'} flex gap-1 bg-white border border-gray-200 rounded-full px-2 py-1 shadow-md z-10`}>
-                  {QUICK_EMOJIS.map((emoji) => (
-                    <button
-                      key={emoji}
-                      onClick={() => reactionMutation.mutate(emoji)}
-                      disabled={reactionMutation.isLoading}
-                      className="hover:scale-125 transition-transform text-base"
-                    >
-                      {emoji}
-                    </button>
-                  ))}
+                <div
+                  className={`absolute bottom-8 ${isOwn ? 'right-0' : 'left-0'} z-50 shadow-lg rounded-xl overflow-hidden`}
+                  onMouseEnter={() => setShowActions(true)}
+                >
+                  <EmojiPicker
+                    onEmojiClick={handleReactionEmojiClick}
+                    height={340}
+                    width={300}
+                  />
                 </div>
               )}
             </div>
-            <button
-              onClick={() => onForward(message)}
-              className="p-1 text-gray-400 hover:text-gray-600 rounded"
-              title="Chuyển tiếp"
-            >
-              <FaShare size={12} />
-            </button>
             {isOwn && (
               <button
                 onClick={() => deleteMutation.mutate(undefined)}

@@ -25,8 +25,6 @@ export interface MessageResponse {
   sent_at: string;
   read_by: string[];
   reply_to: ReplyPreview | null;
-  is_forwarded: boolean;
-  forwarded_from_message_id: string | null;
   reactions: Record<string, string[]>;
   is_deleted: boolean;
 }

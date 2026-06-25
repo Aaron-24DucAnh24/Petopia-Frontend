@@ -230,7 +230,6 @@ export const ChatPage = QueryProvider(({ userContext, initialConversationId }: P
             currentUserId={userContext.id}
             displayName={getDisplayName(selectedConversation)}
             avatarUrl={getAvatarUrl(selectedConversation)}
-            conversations={conversations}
             onBack={() => {
               if (selectedConversationIdRef.current) {
                 chatWs.send({ type: 'conversation_closed', payload: { conversation_id: selectedConversationIdRef.current } });

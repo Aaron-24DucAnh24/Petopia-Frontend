@@ -44,7 +44,3 @@ export const deleteMessage = (messageId: string) =>
 export const toggleReaction = (messageId: string, emoji: string) =>
   chatHttp.post<{ emoji: string }, MessageResponse>(`/messages/${messageId}/reactions`, { emoji });
 
-export const forwardMessage = (messageId: string, targetConversationId: string) =>
-  chatHttp.post<{ target_conversation_id: string }, MessageResponse>(`/messages/${messageId}/forward`, {
-    target_conversation_id: targetConversationId,
-  });

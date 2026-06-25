@@ -1,7 +1,11 @@
 'use client';
-import { useRef, useState, KeyboardEvent } from 'react';
-import { FaPaperPlane, FaXmark } from 'react-icons/fa6';
-import type { MessageResponse, ReplyPreview } from '@/src/interfaces/chat';
+import { useRef, useState, useEffect, KeyboardEvent } from 'react';
+import dynamic from 'next/dynamic';
+import type { EmojiClickData } from 'emoji-picker-react';
+import { FaPaperPlane, FaXmark, FaFaceSmile } from 'react-icons/fa6';
+import type { MessageResponse } from '@/src/interfaces/chat';
+
+const EmojiPicker = dynamic(() => import('emoji-picker-react'), { ssr: false });
 
 interface Props {
   replyTo: MessageResponse | null;
@@ -13,7 +17,37 @@ interface Props {
 export function MessageInput({ replyTo, onCancelReply, onSend, onTyping }: Props) {
   const [text, setText] = useState('');
   const [sending, setSending] = useState(false);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const emojiContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (emojiContainerRef.current && !emojiContainerRef.current.contains(e.target as Node)) {
+        setShowEmojiPicker(false);
+      }
+    };
+    if (showEmojiPicker) document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showEmojiPicker]);
+
+  const handleEmojiClick = (emojiData: EmojiClickData) => {
+    const emoji = emojiData.emoji;
+    const textarea = textareaRef.current;
+    if (!textarea) {
+      setText((prev) => prev + emoji);
+      return;
+    }
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const newText = text.slice(0, start) + emoji + text.slice(end);
+    setText(newText);
+    requestAnimationFrame(() => {
+      textarea.selectionStart = start + emoji.length;
+      textarea.selectionEnd = start + emoji.length;
+      textarea.focus();
+    });
+  };
 
   const handleSend = async () => {
     const trimmed = text.trim();
@@ -58,6 +92,20 @@ export function MessageInput({ replyTo, onCancelReply, onSend, onTyping }: Props
         </div>
       )}
       <div className="flex items-end gap-2">
+        <div ref={emojiContainerRef} className="relative flex-shrink-0">
+          <button
+            onClick={() => setShowEmojiPicker((v) => !v)}
+            className="w-9 h-9 flex items-center justify-center text-gray-400 hover:text-yellow-500 transition-colors"
+            title="Chọn emoji"
+          >
+            <FaFaceSmile size={18} />
+          </button>
+          {showEmojiPicker && (
+            <div className="absolute bottom-11 left-0 z-50 shadow-lg rounded-xl overflow-hidden">
+              <EmojiPicker onEmojiClick={handleEmojiClick} height={380} width={320} />
+            </div>
+          )}
+        </div>
         <textarea
           ref={textareaRef}
           value={text}
