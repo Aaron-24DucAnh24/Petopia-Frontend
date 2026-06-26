@@ -25,10 +25,12 @@ function getConversationDisplayName(
   userNames: Record<string, string>,
 ): string {
   if (conversation.name) return conversation.name;
+
   if (conversation.type === 'direct') {
     const otherId = conversation.participants.find((p) => p !== currentUserId) ?? '';
     return userNames[otherId] ?? `Người dùng ${otherId.slice(-6)}`;
   }
+
   return `Nhóm (${conversation.participants.length})`;
 }
 
@@ -38,18 +40,23 @@ function getConversationAvatarUrl(
   userAvatars: Record<string, string>,
 ): string {
   if (conversation.avatar_url) return conversation.avatar_url;
+
   if (conversation.type === 'direct') {
     const otherId = conversation.participants.find((p) => p !== currentUserId) ?? '';
     return userAvatars[otherId] ?? STATIC_URLS.NO_AVATAR;
   }
+
   return STATIC_URLS.NO_AVATAR;
 }
 
 function getLastMessageText(conversation: ConversationResponse): string {
   const lastMessage = conversation.last_message_preview;
   if (!lastMessage) return 'Chưa có tin nhắn';
+
   if (lastMessage.message_type === 'image') return '📷 Hình ảnh';
+
   if (lastMessage.message_type === 'file') return '📎 Tệp đính kèm';
+
   return lastMessage.content ?? '';
 }
 
@@ -115,9 +122,10 @@ export function ConversationList({
                 <button
                   key={conversation.id}
                   onClick={() => onSelect(conversation)}
-                  className={`w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors text-left ${
-                    isSelected ? 'bg-yellow-50 border-r-2 border-yellow-400' : isUnread ? 'bg-blue-50' : ''
-                  }`}
+                  className={`
+                    w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors text-left
+                    ${isSelected ? 'bg-yellow-50 border-r-2 border-yellow-400' : isUnread ? 'bg-blue-50' : ''}
+                  `}
                 >
                   <div className="relative w-10 h-10 flex-shrink-0">
                     <Image

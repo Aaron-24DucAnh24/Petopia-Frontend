@@ -7,6 +7,7 @@ import { FaReply, FaTrash, FaFaceSmile } from 'react-icons/fa6';
 import type { MessageResponse } from '@/src/interfaces/chat';
 import { deleteMessage, toggleReaction } from '@/src/services/chat.api';
 import { useMutation } from '@/src/utils/hooks';
+import Image from 'next/image';
 
 const EmojiPicker = dynamic(() => import('emoji-picker-react'), { ssr: false });
 
@@ -60,9 +61,9 @@ export function MessageBubble({ message, isOwn, onDeleted, onUpdated, onReply }:
       onMouseEnter={() => setShowActions(true)}
       onMouseLeave={(e) => {
         const related = e.relatedTarget as Node | null;
-        // Keep open if mouse moves into the emoji picker (which may overflow the bubble)
         const picker = e.currentTarget.querySelector('.EmojiPickerReact');
         if (picker && related && picker.contains(related)) return;
+
         setShowActions(false);
         setShowEmojiPicker(false);
       }}
@@ -78,9 +79,8 @@ export function MessageBubble({ message, isOwn, onDeleted, onUpdated, onReply }:
         <div className="relative">
           {/* Action bar — absolutely positioned to avoid affecting bubble layout */}
           <div
-            className={`absolute top-0 bottom-0 flex items-center gap-0.5 transition-opacity z-10 ${
-              showActions ? 'opacity-100' : 'opacity-0 pointer-events-none'
-            } ${isOwn ? 'right-full pr-1' : 'left-full pl-1'}`}
+            className={`absolute top-0 bottom-0 flex items-center gap-0.5 transition-opacity z-10
+              ${showActions ? 'opacity-100' : 'opacity-0 pointer-events-none'} ${isOwn ? 'right-full pr-1' : 'left-full pl-1'}`}
           >
             <button
               onClick={() => onReply(message)}
@@ -124,15 +124,13 @@ export function MessageBubble({ message, isOwn, onDeleted, onUpdated, onReply }:
 
           {/* Bubble */}
           <div
-            className={`px-3 py-2 rounded-2xl text-sm ${
-              isOwn
-                ? 'bg-yellow-300 text-gray-900 rounded-br-sm'
-                : 'bg-white border border-gray-200 text-gray-800 rounded-bl-sm'
-            }`}
+            className={`px-3 py-2 rounded-2xl text-sm ${isOwn
+              ? 'bg-yellow-300 text-gray-900 rounded-br-sm'
+              : 'bg-white border border-gray-200 text-gray-800 rounded-bl-sm'
+              }`}
           >
             {message.message_type === 'image' && message.media_url ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={message.media_url} alt="ảnh" className="max-w-xs rounded-lg" />
+              <Image src={message.media_url} alt="ảnh" className="max-w-xs rounded-lg" />
             ) : (
               <span className="whitespace-pre-wrap break-all">{message.content}</span>
             )}

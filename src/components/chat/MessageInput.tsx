@@ -27,7 +27,9 @@ export function MessageInput({ replyTo, onCancelReply, onSend, onTyping }: Props
         setShowEmojiPicker(false);
       }
     };
+
     if (showEmojiPicker) document.addEventListener('mousedown', handleClickOutside);
+
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [showEmojiPicker]);
 
@@ -38,6 +40,7 @@ export function MessageInput({ replyTo, onCancelReply, onSend, onTyping }: Props
       setText((prev) => prev + emoji);
       return;
     }
+
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
     const newText = text.slice(0, start) + emoji + text.slice(end);
@@ -52,6 +55,7 @@ export function MessageInput({ replyTo, onCancelReply, onSend, onTyping }: Props
   const handleSend = async () => {
     const trimmed = text.trim();
     if (!trimmed || sending) return;
+
     setSending(true);
     try {
       await onSend(trimmed);

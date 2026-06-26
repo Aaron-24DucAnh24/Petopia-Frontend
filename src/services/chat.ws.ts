@@ -18,6 +18,7 @@ class ChatWebSocket {
   connect(): void {
     const token = getCookie(COOKIES_NAME.ACCESS_TOKEN_SERVER) as string | undefined;
     if (!token) return;
+
     this.shouldReconnect = true;
     this._open(token);
   }
@@ -38,6 +39,7 @@ class ChatWebSocket {
 
     this.ws.onclose = () => {
       if (!this.shouldReconnect) return;
+
       this.reconnectTimer = setTimeout(() => {
         const t = getCookie(COOKIES_NAME.ACCESS_TOKEN_SERVER) as string | undefined;
         if (t) this._open(t);
@@ -52,6 +54,7 @@ class ChatWebSocket {
   disconnect(): void {
     this.shouldReconnect = false;
     if (this.reconnectTimer) clearTimeout(this.reconnectTimer);
+
     this.ws?.close();
     this.ws = null;
   }
@@ -64,6 +67,7 @@ class ChatWebSocket {
 
   on(type: WsEventType, handler: WsEventHandler): void {
     if (!this.handlers.has(type)) this.handlers.set(type, new Set());
+
     this.handlers.get(type)!.add(handler);
   }
 

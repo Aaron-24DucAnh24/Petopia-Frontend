@@ -38,9 +38,7 @@ export function ChatWindow({
   const typingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const hasScrolledInitialRef = useRef(false);
 
-  // ------------------------------------------------------------------
   // Messages — initial load
-  // ------------------------------------------------------------------
   const { isLoading, data: queryData } = useQuery<MessageListResponse>(
     [QUERY_KEYS.GET_MESSAGES, conversation.id],
     () => listMessages(conversation.id),
@@ -50,20 +48,21 @@ export function ChatWindow({
     },
   );
 
-  // onSuccess is not called for cache hits in react-query v3, so we use an
-  // effect on queryData to handle both fresh fetches and cache-served responses.
+  // onSuccess is not called for cache hits in react-query v3, so we use an effect on queryData to handle both fresh fetches and cache-served responses.
   useEffect(() => {
     if (!queryData) return;
+
     hasScrolledInitialRef.current = false;
     setMessages(queryData.data.items.slice().reverse());
     setNextCursor(queryData.data.next_cursor);
-    markRead(conversation.id).catch(() => {});
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    markRead(conversation.id).catch(() => { });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [queryData]);
 
   const scrollToBottom = (smooth = false) => {
     const container = containerRef.current;
     if (!container) return;
+
     if (smooth) {
       container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
     } else {
@@ -73,21 +72,21 @@ export function ChatWindow({
 
   useEffect(() => {
     if (messages.length === 0) return;
+
     if (!hasScrolledInitialRef.current) {
       hasScrolledInitialRef.current = true;
       scrollToBottom();
       return;
     }
+
     const lastMsg = messages[messages.length - 1];
     if (lastMsg.sender_id === currentUserId) {
       scrollToBottom(true);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages, currentUserId]);
 
-  // ------------------------------------------------------------------
   // Send message
-  // ------------------------------------------------------------------
   const sendMutation = useMutation<MessageResponse, { content: string; replyToId?: string }>(
     ({ content, replyToId }: { content: string; replyToId?: string }) =>
       sendMessage(conversation.id, {
@@ -97,10 +96,10 @@ export function ChatWindow({
       }),
     {
       onSuccess: (res: AxiosResponse<MessageResponse>) => {
-        const msg = res.data;
-        setMessages((prev) => (prev.some((m) => m.id === msg.id) ? prev : [...prev, msg]));
+        const message = res.data;
+        setMessages((prev) => (prev.some((m) => m.id === message.id) ? prev : [...prev, message]));
         setReplyTo(null);
-        onConversationListUpdate({ type: 'new_message', payload: msg as unknown as Record<string, unknown> });
+        onConversationListUpdate({ type: 'new_message', payload: message as unknown as Record<string, unknown> });
       },
     },
   );
@@ -109,11 +108,10 @@ export function ChatWindow({
     await sendMutation.mutateAsync({ content, replyToId: replyTo?.id });
   };
 
-  // ------------------------------------------------------------------
   // Load older messages
-  // ------------------------------------------------------------------
   const handleLoadMore = async () => {
     if (!nextCursor || loadingMore) return;
+
     setLoadingMore(true);
     try {
       const res = await listMessages(conversation.id, nextCursor);
@@ -130,16 +128,15 @@ export function ChatWindow({
     }
   };
 
-  // ------------------------------------------------------------------
   // WebSocket event handlers
-  // ------------------------------------------------------------------
   const handleNewMessage = useCallback(
     (event: WsEvent) => {
       const msg = event.payload as unknown as MessageResponse;
       if (msg.conversation_id !== conversation.id) return;
+
       setMessages((prev) => (prev.some((m) => m.id === msg.id) ? prev : [...prev, msg]));
       if (msg.sender_id !== currentUserId) {
-        markRead(conversation.id).catch(() => {});
+        markRead(conversation.id).catch(() => { });
       }
     },
     [conversation.id, currentUserId],
@@ -149,6 +146,7 @@ export function ChatWindow({
     (event: WsEvent) => {
       const { message_id, conversation_id } = event.payload as { message_id: string; conversation_id: string };
       if (conversation_id !== conversation.id) return;
+
       setMessages((prev) =>
         prev.map((m) => (m.id === message_id ? { ...m, is_deleted: true, content: null } : m)),
       );
@@ -158,9 +156,10 @@ export function ChatWindow({
 
   const handleReactionUpdated = useCallback(
     (event: WsEvent) => {
-      const msg = event.payload as unknown as MessageResponse;
-      if (msg.conversation_id !== conversation.id) return;
-      setMessages((prev) => prev.map((m) => (m.id === msg.id ? msg : m)));
+      const message = event.payload as unknown as MessageResponse;
+      if (message.conversation_id !== conversation.id) return;
+
+      setMessages((prev) => prev.map((m) => (m.id === message.id ? message : m)));
     },
     [conversation.id],
   );
@@ -169,6 +168,7 @@ export function ChatWindow({
     (event: WsEvent) => {
       const { conversation_id, user_id } = event.payload as { conversation_id: string; user_id: string };
       if (conversation_id !== conversation.id || user_id === currentUserId) return;
+
       setTypingUserIds((prev) => (prev.includes(user_id) ? prev : [...prev, user_id]));
       setTimeout(() => setTypingUserIds((prev) => prev.filter((id) => id !== user_id)), 3000);
     },
@@ -180,6 +180,7 @@ export function ChatWindow({
     chatWs.on('message_deleted', handleMessageDeleted);
     chatWs.on('reaction_updated', handleReactionUpdated);
     chatWs.on('user_typing', handleTyping);
+
     return () => {
       chatWs.off('new_message', handleNewMessage);
       chatWs.off('message_deleted', handleMessageDeleted);
@@ -190,13 +191,12 @@ export function ChatWindow({
 
   const handleTypingSignal = () => {
     if (typingTimerRef.current) return;
+
     chatWs.send({ type: 'user_typing', payload: { conversation_id: conversation.id } });
     typingTimerRef.current = setTimeout(() => { typingTimerRef.current = null; }, 2000);
   };
 
-  // ------------------------------------------------------------------
   // Render
-  // ------------------------------------------------------------------
   return (
     <div className="flex flex-col h-full">
       <div className="flex items-center gap-3 px-4 py-3 border-b border-gray-100 bg-white">
@@ -276,7 +276,6 @@ export function ChatWindow({
         onSend={handleSend}
         onTyping={handleTypingSignal}
       />
-
     </div>
   );
 }

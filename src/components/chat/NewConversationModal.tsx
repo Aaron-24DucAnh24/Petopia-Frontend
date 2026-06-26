@@ -31,10 +31,12 @@ export function NewConversationModal({ currentUserId, onCreated, onClose }: Prop
 
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
+
     if (!emailInput.trim()) {
       setResults([]);
       return;
     }
+
     debounceRef.current = setTimeout(async () => {
       setSearching(true);
       try {
