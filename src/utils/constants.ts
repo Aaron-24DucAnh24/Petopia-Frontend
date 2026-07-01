@@ -3,7 +3,7 @@ import { ValueTextManager } from './ValueTextManager';
 
 export const STATIC_URLS = {
   GIRL_DOG: '/img/girl_dog.webp',
-  GOLDEN_RETRIEVER: '/img/pexels-gilberto-reyes.png',
+  GOLDEN_RETRIEVER: '/img/pexels-gilberto-reyes.webp',
   GOOGLE_LOGIN: 'https://www.svgrepo.com/show/475656/google-color.svg',
   CAT_HERO: '/img/cat_hero.png',
   CAT_INTRO: '/img/cat_intro.png',

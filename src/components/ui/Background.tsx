@@ -12,6 +12,7 @@ export const Background = () => {
             alt="girl and dog"
             src={STATIC_URLS.GIRL_DOG}
             fill={true}
+            priority
           ></Image>
         </div>
       </div>
@@ -22,6 +23,7 @@ export const Background = () => {
             alt="golden_retriever"
             src={STATIC_URLS.GOLDEN_RETRIEVER}
             fill={true}
+            priority
           ></Image>
         </div>
       </div>

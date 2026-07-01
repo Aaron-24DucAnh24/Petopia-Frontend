@@ -8,9 +8,10 @@ import type { MessageResponse, WsEvent } from '@/src/interfaces/chat';
 
 interface Props {
   currentUserId: string;
+  floating?: boolean;
 }
 
-export const NavChatBlock = ({ currentUserId }: Props) => {
+export const NavChatBlock = ({ currentUserId, floating = false }: Props) => {
   const [unreadConversations, setUnreadConversations] = useState<string[]>([]);
 
   // Connect WS and seed initial unread count from the API (survives page reloads)
@@ -60,7 +61,9 @@ export const NavChatBlock = ({ currentUserId }: Props) => {
     <Link
       href="/chat"
       onClick={() => setUnreadConversations([])}
-      className="relative p-2 text-gray-500 hover:text-gray-700 focus:outline-none"
+      className={floating
+        ? 'relative flex items-center justify-center w-12 h-12 rounded-full bg-yellow-300 text-black shadow-lg hover:bg-yellow-400 focus:outline-none'
+        : 'relative p-2 text-gray-500 hover:text-gray-700 focus:outline-none'}
       title="Tin nhắn"
     >
       <FaMessage className="w-5 h-5" />

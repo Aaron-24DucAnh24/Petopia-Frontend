@@ -51,7 +51,7 @@ export const PostListPage = QueryProvider(() => {
   }, [hasMore, query.isFetching]);
 
   return (
-    <div className="w-1/3 mx-auto px-4 py-6 flex flex-col gap-4">
+    <div className="w-full max-w-2xl mx-auto px-4 py-6 flex flex-col gap-4">
       <AdvertisedBlogSection variant="landing" />
       {posts.map((post, index) => (
         <FeedPostCard

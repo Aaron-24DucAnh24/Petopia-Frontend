@@ -5,6 +5,8 @@ import { INotificationResponse } from '@/src/interfaces/notification';
 import { QueryProvider } from '../../providers/QueryProvider';
 import { NavProfileBlock } from './NavProfileBlock';
 import { NavOptionsBlock } from './NavOptionsBlock';
+import { NavCreateMenu } from './NavCreateMenu';
+import { NavChatBlock } from './NavChatBlock';
 import Link from 'next/link';
 
 interface INavbar {
@@ -66,6 +68,13 @@ export const Navbar = QueryProvider(({ userContext, notifications }: INavbar) =>
           setIsOpenMenu={setIsOpenMenu}
           userContext={userContext} />
       </div>
+
+      {userContext && (
+        <div className="md:hidden fixed bottom-5 right-4 z-40 flex flex-col items-end gap-3">
+          <NavChatBlock currentUserId={userContext.id} floating />
+          <NavCreateMenu userContext={userContext} variant="fab" />
+        </div>
+      )}
     </nav>
   );
 });
