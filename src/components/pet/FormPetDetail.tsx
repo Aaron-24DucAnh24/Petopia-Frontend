@@ -53,7 +53,7 @@ export default function FormPetDetail({
       {/* form */}
       <div className="w-full p-5 mb-5 bg-gray-50 rounded-lg overflow-y-auto flex-1 min-h-0">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {/* Tên thú cưng */}
+          {/* Pet name */}
           <div className="flex flex-col space-y-2">
             <label htmlFor="pet-name" className="text-sm font-medium">Tên thú cưng</label>
             <Input
@@ -100,7 +100,7 @@ export default function FormPetDetail({
             />
           )}
 
-          {/* Giới thiệu về thú cưng */}
+          {/* Pet description */}
           <div className="flex flex-col space-y-2 md:col-span-2">
             <label htmlFor="pet-description" className="text-sm font-medium">Giới thiệu về thú cưng</label>
             <textarea
