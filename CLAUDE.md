@@ -14,7 +14,7 @@ Cypress e2e tests live in `cypress/e2e/`. There is no unit test setup — only C
 
 ## Environment
 
-Requires the backend running locally. The API base URL is set via `NEXT_PUBLIC_API_ENDPOINT` in `.env`. The backend repo is at https://github.com/Aaron-24DucAnh24/Petopia-Backend.git.
+Requires the backend and chat service running locally; their setup (and the `.env.local` template) is in the umbrella README: https://github.com/Aaron-24DucAnh24/Petopia#readme. The API base URLs are set via `NEXT_PUBLIC_API_ENDPOINT` and `NEXT_PUBLIC_CHAT_API_ENDPOINT` in `.env.local`.
 
 `next.config.js` whitelists `localhost:9000` and `127.0.0.1:9000` as image sources (MinIO). Images from `127.0.0.1` are intentionally blocked from rendering in the app itself (see `next.config.js` remote patterns — only `localhost:9000` is trusted at runtime).
 

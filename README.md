@@ -2,37 +2,22 @@
 
 A social platform for pet adoption, connecting pet owners with adopters and providing a community space for pet lovers.
 
-## Prerequisites
+## Local development
 
-The backend API must be running locally before starting the frontend.
-Backend repo: https://github.com/Aaron-24DucAnh24/Petopia-Backend.git
+Environment setup (infrastructure, backend, chat service, `.env.local` template) and run instructions for every Petopia service live in the umbrella repository:
 
-Copy `.env.example` to `.env` and set `NEXT_PUBLIC_API_ENDPOINT` to your local API URL.
+**https://github.com/Aaron-24DucAnh24/Petopia#readme**
 
-## Getting Started
-
-```bash
-npm install
-npm run dev
-```
-
-The app runs at http://localhost:3000.
+The frontend needs the backend API and the chat service running locally.
 
 ## Available Scripts
 
 | Command | Description |
 |---|---|
-| `npm run dev` | Start development server |
+| `npm run dev` | Start development server at http://localhost:3000 |
 | `npm run build` | Build for production |
 | `npm run start` | Start production server |
 | `npm run lint` | Run ESLint with auto-fix |
-
-## Sample Admin Account
-
-```
-Email:    anh.bui24ducanh24@hcmut.edu.vn
-Password: 123456789
-```
 
 ## Tech Stack
 
